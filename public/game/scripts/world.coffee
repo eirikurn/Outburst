@@ -9,21 +9,13 @@ class World
     @container.style.height = height + 'px'
     @container.appendChild(@renderer.domElement)
     
-    # TEST OBJECT
-    @test = new THREE.Mesh(
-      new THREE.SphereGeometry(50, 16, 16),
-      new THREE.MeshLambertMaterial(color: 0xCC0000)
-    )
-    @scene.addChild @test 
+    @testPlayer = new Player(@scene)
   
   render: ->
     @renderer.render(@scene, @camera)
   
   update: (delta) ->
-    @test.position.y += delta * 200 if input.up
-    @test.position.y -= delta * 200 if input.down
-    @test.position.x -= delta * 200 if input.left
-    @test.position.x += delta * 200 if input.right
+    @testPlayer.update delta
 
 # export
 @World = World

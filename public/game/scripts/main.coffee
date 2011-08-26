@@ -23,9 +23,10 @@ class Game
     chat = new Chat(@socket)
 
   joinedServer: (data) =>
-    # console.log data
     @player = new Player(new states.PlayerState(data.player), @camera)
     @addEntity(data.player.id, @player)
+    @user.username = "Anonymous " + data.player.id if @user.username == "Anonymous"
+    @socket.emit 'nick', @user.username
 
   addEntity: (id, entity) ->
     @entities[id] = entity
@@ -151,7 +152,7 @@ document.addEventListener 'DOMContentLoaded', =>
     initGame()
       
       
-initGame = (user = name: "Anonymous") ->
+initGame = (user = username: "Anonymous") ->
   window.game = new Game(user)
   
 

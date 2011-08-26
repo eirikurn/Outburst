@@ -31,8 +31,8 @@ class exports.Server
     socket.on 'input', (inputs) => @player_input player, inputs
     socket.on 'disconnect', => @player_disconnect player
     socket.on 'chat', (p) => @player_chat(socket, p)
+    socket.on 'nick', (n) => @player_nick(player, n)
     socket.emit "welcome", player: state, clock: +new Date / 1000
-    socket.emit "chat", [ player: "server", msg: "Welcome to Outburst, gl n hf!"].concat @chatlog
 
   player_disconnect: (player) ->
     index = @players.indexOf player
@@ -45,9 +45,17 @@ class exports.Server
     
   player_chat: (socket, packets) ->
     @chatlog.push p for p in packets
-    @chatlog.shift() if @chatlog.length > 5
+    @chatlog.shift() if @chatlog.length > 8
     socket.broadcast.emit 'chat', packets
     
+  player_nick: (player, nick) ->
+    if player.nick
+      player.socket.broadcast.emit "chat", [ player: "server", msg: player.nick + " is now called " + nick]
+    else
+      player.socket.emit "chat", [ player: "server", msg: "Welcome to Outburst, gl n hf!"].concat @chatlog
+      player.socket.broadcast.emit "chat", [ player: "server", msg: nick + " joined the game"]
+    player.nick = nick
+
 
   # The main "Game Loop"
   tick: =>

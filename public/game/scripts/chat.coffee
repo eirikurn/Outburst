@@ -3,6 +3,7 @@ class Chat
     @container = document.getElementById 'chat'
     @log = document.getElementById 'chatlog'
     @input = document.getElementById 'chatinput'
+    @bar = document.getElementById 'chatbar'
     @form = document.getElementById 'chatform'
     @form.addEventListener 'submit', (ev) =>
       ev.preventDefault()
@@ -15,22 +16,25 @@ class Chat
     # insert chat into container
     document.getElementById('container').appendChild document.getElementById('chat')
     
-    input.handle 13, =>
-      if @input.style.display == "inline"
+    toggle = =>
+      if @bar.style.display == "inline"
         @hide()
       else
         @show()
+        
+    input.handle 13, toggle # enter
+    input.handle 89, toggle # y
       
-    input.handle 27, =>
+    input.handle 27, => # esc
       @hide()
   
   show: ->
     input.keysEnabled = no
-    @input.style.display = "inline"
+    @bar.style.display = "inline"
     @input.focus()
   
   hide: ->
-    @input.style.display = "none"
+    @bar.style.display = "none"
     @input.value = ''
     input.keysEnabled = yes
     
@@ -50,7 +54,7 @@ class Chat
   write: (event) ->
     if @input.value.length > 0
       packet = [
-        player: game.user.name
+        player: game.user.username
         msg: @input.value
       ]
       @add packet

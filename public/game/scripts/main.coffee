@@ -23,7 +23,7 @@ animloop = ->
     
 document.addEventListener 'DOMContentLoaded', ->
   window.input = new Input()
-  window.world = new World window.innerWidth - 10, window.innerHeight - 10
+  window.world = new World()
   animloop()
   
   # show stats

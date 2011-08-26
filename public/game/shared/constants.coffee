@@ -1,11 +1,11 @@
 ((exports)->
 
   # Game loop and network constants
-  exports.TICKS_PER_SECOND = 10
+  exports.TICKS_PER_SECOND = 50
   exports.TIME_PER_TICK = 1 / exports.TICKS_PER_SECOND
 
-  exports.TIME_BETWEEN_UPDATES = 1 / 10
-  exports.TIME_BETWEEN_INPUTS = 1 / 10
+  exports.TIME_BETWEEN_UPDATES = 1 / 25
+  exports.TIME_BETWEEN_INPUTS = 1 / 25
 
   exports.BUFFER_INPUTS = 0.05
   exports.ROLLBACK_TIME = 1

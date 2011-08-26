@@ -16,7 +16,7 @@
     <script>
       // A simple require implementation
       var require = function(module) {
-        var matches = /^(\.\/)?(.+)$/.exec(module)
+        var matches = /^(\.\/)?(.+)(.coffee)?$/.exec(module)
           , obj = window;
         module = matches[2].split('/');
         for (var i = 0; i < module.length; i++) 

@@ -1,5 +1,5 @@
 ((exports)->
-  constants = require './constants'
+  constants = require './constants.coffee'
 
   class exports.State
     constructor: ->

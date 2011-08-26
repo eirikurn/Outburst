@@ -40,7 +40,7 @@ class Input
     @[@keys[event.keyCode]] = on if @keysEnabled
   
   keyup: (event) ->
-    @handlers[event.keyCode]() if @handlers[event.keyCode]
+    @handlers[event.keyCode]() if @keysEnabled and @handlers[event.keyCode]
     @[@keys[event.keyCode]] = off
 
   getState: (s = {}) ->

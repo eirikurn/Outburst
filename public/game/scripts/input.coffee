@@ -40,10 +40,7 @@ class Input
     
   mousemove: (event) ->
     container = document.getElementById "container"
-    
-    @mouse2D.x = ( event.clientX / window.innerWidth ) * 2 - 1
-    @mouse2D.y = - ( event.clientY / window.innerHeight ) * 2 + 1
-    
+
     @mouse2D.x = (event.clientX - container.offsetLeft) / container.clientWidth * 2 - 1
     @mouse2D.y = - (event.clientY - container.offsetTop) / container.clientHeight * 2 + 1
     

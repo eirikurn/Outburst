@@ -30,6 +30,7 @@ class World
   
   update: (delta) ->
     @testPlayer.updatePlayer delta
+    @camera.onFrame(delta)
     @camera.position.x = @testPlayer.position.x
     @camera.position.y = @testPlayer.position.y - 500
     

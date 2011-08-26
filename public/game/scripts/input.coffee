@@ -27,7 +27,7 @@ class Input
     x: 0
     y: 0
     down: false
-    scroll: 0
+    scroll: 1000
     
   keydown: (event) ->
     @[@keys[event.keyCode]] = true
@@ -55,7 +55,8 @@ class Input
     @mouse.down = false
   
   mousescroll: (event) ->
-    @mouse.scroll += event.wheelDeltaY
+    val = @mouse.scroll + (event.wheelDeltaY / 10)
+    @mouse.scroll = val if val > 300 and val <= 1000 
 
 
 # export

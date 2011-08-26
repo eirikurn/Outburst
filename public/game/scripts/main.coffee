@@ -77,6 +77,9 @@ class Game
     @renderer = new THREE.WebGLRenderer()
     @renderer.setSize(@targetWidth, @targetHeight)
     @renderer.setClearColorHex 0xFFFFFF
+    wrapper = document.getElementById 'wrapper'
+    wrapper.style.width = @targetWidth + 'px'
+    wrapper.style.height = @targetHeight + 'px'
     @container = document.getElementById 'container'
     @container.style.width = @targetWidth + 'px'
     @container.style.height = @targetHeight + 'px'

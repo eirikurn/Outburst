@@ -24,6 +24,7 @@
     init: ->
       @walkDirection = 0
       @aimDirection = 0
+      @isMoving = no
       super
 
     applyInput: (input, target = @) ->
@@ -44,10 +45,11 @@
           Math.atan2(deltaY, deltaX)
         else
           @walkDirection or 0
+      target.isMoving = input.right or input.left or input.up or input.down
       target.aimDirection = Math.atan2(input.mouseY - target.y, input.mouseX - target.x)
       target
 
-    @fields = ['x', 'y', 'id', 'walkDirection', 'aimDirection']
+    @fields = ['x', 'y', 'id', 'walkDirection', 'aimDirection', 'isMoving']
 
   class exports.WorldState extends exports.State
     init: (data = {}) ->

@@ -5,6 +5,7 @@ class Input
     document.addEventListener 'mousemove', (ev) => @mousemove(ev)
     document.addEventListener 'mousedown', (ev) => @mousedown(ev)
     document.addEventListener 'mouseup', (ev) => @mouseup(ev)
+    document.addEventListener 'mousewheel', (ev) => @mousescroll(ev)
     document.addEventListener 'DOMMouseScroll', (ev) => @mousescroll(ev)
     
     @windowHalfX = window.innerWidth / 2

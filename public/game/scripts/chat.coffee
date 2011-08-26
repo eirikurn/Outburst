@@ -1,11 +1,13 @@
 class Chat
   constructor: (@socket)->
+    @container = document.getElementById 'chat'
     @log = document.getElementById 'chatlog'
     @input = document.getElementById 'chatinput'
     @form = document.getElementById 'chatform'
     @form.addEventListener 'submit', (ev) =>
       ev.preventDefault()
       @write(ev)
+      false
     , false
     
     @socket.on 'chat', (p) => @add(p)
@@ -25,18 +27,22 @@ class Chat
     @input.focus()
   
   hide: ->
-    input.keysEnabled = yes
     @input.style.display = "none"
     @input.value = ''
+    input.keysEnabled = yes
     
   add: (packets) ->
     for packet in packets
       li = document.createElement 'li'
       if packet.player == "server"
-        li.innerHTML = "<em>" + packet.msg + "</em>"
+        li.innerHTML = packet.msg
+        li.className = "server"
       else
         li.innerHTML = packet.player + ": " + packet.msg
       @log.appendChild li
+      
+    # always scroll to bottom
+    @log.scrollTop = @log.scrollHeight
     
   write: (event) ->
     if @input.value.length > 0

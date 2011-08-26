@@ -1,3 +1,10 @@
+require = (module) ->
+  match = /^(\.\/)?(.+)$/.exec m
+  module = match[2].split '/'
+  obj = window
+  obj = obj[stub] for stub in module
+  return obj
+
 socket = io.connect()
 socket.on 'welcome', (data) ->
   console.log data

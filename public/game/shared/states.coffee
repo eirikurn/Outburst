@@ -44,7 +44,7 @@
           Math.atan2(deltaY, deltaX)
         else
           @walkDirection
-      target.aimDirection = Math.atan2(input.mouseY, input.mouseX)
+      target.aimDirection = Math.atan2(input.mouseY - target.y, input.mouseX - target.x)
       target
 
     @fields = ['x', 'y', 'id', 'walkDirection', 'aimDirection']

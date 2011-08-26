@@ -1,7 +1,5 @@
 class Input
   constructor: (@camera, @worldMap) ->
-    @targetWidth = 1024
-    @targetHeight = 576
     document.addEventListener 'keyup', (ev) => @keyup(ev)
     document.addEventListener 'keydown', (ev) => @keydown(ev)
     document.addEventListener 'mousemove', (ev) => @mousemove(ev)
@@ -9,9 +7,6 @@ class Input
     document.addEventListener 'mouseup', (ev) => @mouseup(ev)
     document.addEventListener 'mousewheel', (ev) => @mousescroll(ev)
     document.addEventListener 'DOMMouseScroll', (ev) => @mousescroll(ev)
-    
-    @windowHalfX = window.innerWidth / 2
-    @windowHalfY = window.innerHeight / 2
     
     @projector = new THREE.Projector()
     @mouse2D = new THREE.Vector3( 0, 10000, 0.5 );
@@ -54,16 +49,6 @@ class Input
     if intersects.length > 0
       @mouse.x = intersects[0].point.x
       @mouse.y = intersects[0].point.y
-    
-    # Imaginary pixels
-    #@mouse.x = Math.round (event.clientX - container.offsetLeft) / container.clientWidth * @targetWidth - @targetWidth / 2
-    #@mouse.y = -Math.round (event.clientY - container.offsetTop) / container.clientHeight * @targetHeight - @targetHeight / 2
-    
-    # Scales
-    #@mouse.x = (event.clientX - container.offsetLeft) / container.clientWidth - .5
-    #@mouse.y = - (event.clientY - container.offsetTop) / container.clientHeight + .5
-    
-    document.getElementById('mouse').innerHTML = 'X: ' + @mouse.x + ', Y: ' + @mouse.y
     
   mousedown: (event) ->
     event.preventDefault()

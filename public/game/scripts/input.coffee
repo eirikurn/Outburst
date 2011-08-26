@@ -28,8 +28,8 @@ class Input
     @[@keys[event.keyCode]] = false
     
   mousemove: (event) ->
-    @mouse.x = event.x
-    @mouse.y = event.y
+    @mouse.x = event.clientX
+    @mouse.y = event.clientY
     
   mousedown: (event) ->
     @mouse.down = true

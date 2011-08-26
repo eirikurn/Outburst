@@ -27,6 +27,9 @@ document.addEventListener 'DOMContentLoaded', ->
   window.input = new Input world.camera, world.map.map
   animloop()
   
+  # Chat messages
+  chat = new Chat()
+  
   # show stats
   stats.domElement.style.position = 'absolute'
   stats.domElement.style.top = '0px'

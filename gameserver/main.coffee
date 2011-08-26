@@ -43,7 +43,7 @@ class exports.Server
     
   player_chat: (socket, packets) ->
     @chatlog.push p for p in packets
-    @chatlog.pop() if @chatlog.length > 5
+    @chatlog.shift() if @chatlog.length > 5
     socket.broadcast.emit 'chat', packets
     
 

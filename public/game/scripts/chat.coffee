@@ -16,7 +16,10 @@ class Chat
     document.getElementById('container').appendChild document.getElementById('chat')
     
     input.handle 13, =>
-      @show()
+      if @input.style.display == "inline"
+        @hide()
+      else
+        @show()
       
     input.handle 27, =>
       @hide()
@@ -53,7 +56,6 @@ class Chat
       @add packet
       @socket.emit 'chat', packet
     @input.value = ''
-    @hide()
     
 # export
 @Chat = Chat

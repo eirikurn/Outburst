@@ -1,13 +1,14 @@
-class Player
-  constructor: (@scene) ->
+class Player extends THREE.Object3D
+  constructor: ->
+    super()
     loader = new THREE.JSONLoader()
     loader.load
       model: "models/figure.js"
       callback: (geo) => 
-        @makeModel(scene, geo)
+        @makeModel(geo)
   
   
-  makeModel: (scene, geometry) ->
+  makeModel: (geometry) ->
     geometry.materials[0][0].shading = THREE.FlatShading
     geometry.materials[0][0].morphTargets = true
     @model = new AnimatedMesh geometry, [ new THREE.MeshFaceMaterial() ],
@@ -17,10 +18,11 @@ class Player
         keyframes: 27
     @model.scale.x = @model.scale.y = @model.scale.z = 20
     @model.rotation.x = 90
-    scene.addObject @model
+    @addChild @model
+    console.log @children.length
     @model.playAnimation "walk"
   
-  update: (delta) -> 
+  updatePlayer: (delta) -> 
     if @model
       moved = input.up or input.down or input.left or input.right
       

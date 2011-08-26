@@ -15,7 +15,8 @@ class World
     
     @map = new Map()
     @scene.addChild(@map)
-    @testPlayer = new Player(@scene)
+    @testPlayer = new Player()
+    @scene.addObject(@testPlayer)
     
     window.onresize = =>
       @resizeToFit()
@@ -26,7 +27,7 @@ class World
     @renderer.render(@scene, @camera)
   
   update: (delta) ->
-    @testPlayer.update delta
+    @testPlayer.updatePlayer delta
     
   resizeToFit: ->
     setWidth = window.innerWidth

@@ -20,7 +20,6 @@ class Player extends THREE.Object3D
     @model.rotation.x = Math.PI/2
     @model.position.z = 100
     @addChild @model
-    console.log @children.length
     @model.playAnimation "walk"
   
   updatePlayer: (delta) -> 

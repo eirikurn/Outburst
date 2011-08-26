@@ -57,6 +57,7 @@ class Game
       e.onFrame(delta) if e.onFrame
 
     @renderer.render @scene, @camera
+    @cursor.onFrame()
     @stats.update()
 
     requestAnimFrame(@onFrame, @container)

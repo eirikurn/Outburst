@@ -8,6 +8,9 @@ class Chat
       @write(ev)
     , false
     
+    # insert chat into container
+    document.getElementById('container').appendChild document.getElementById('chat')
+    
     input.handle 13, =>
       @show()
       

@@ -146,6 +146,7 @@ document.addEventListener 'DOMContentLoaded', =>
         window.location = "/oauth/authenticate"
       else
         twitterUser = JSON.parse res
+        twitterUser.username = twitterUser.screen_name
         initGame(twitterUser)
   else
     # Anonymous lame-o

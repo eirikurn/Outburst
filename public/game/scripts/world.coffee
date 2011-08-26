@@ -9,6 +9,8 @@ class World
     @container.style.height = height + 'px'
     @container.appendChild(@renderer.domElement)
     
+    @map = new Map()
+    @scene.addChild(@map)
     @testPlayer = new Player(@scene)
     @cursor = new Cursor(@scene)
   

@@ -21,7 +21,9 @@ class exports.Server
     @tickTimer = setInterval @tick, 1000 / constants.TICKS_PER_SECOND
 
   player_connect: (socket) ->
-    state = new states.PlayerState x: 0, y: 0, id: @playerIds++
+    console.log "Player connected..."
+    state = new states.PlayerState x: 0, y: 0, id: @playerIds++, seed: (+new Date + @playerIds)
+    # console.log state
     player = new Player(socket, state)
     @players.push player
     @states.head().players.push state

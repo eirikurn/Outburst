@@ -20,6 +20,9 @@ class Input
     38: 'up'
     39: 'right'
     40: 'down'
+    49: 'weapon1'
+    50: 'weapon2'
+    51: 'weapon3'
     65: 'left' # A
     87: 'up' # W
     68: 'right' # D
@@ -48,9 +51,12 @@ class Input
     s.up = @up
     s.down = @down
     s.right = @right
+    s.weapon1 = @weapon1
+    s.weapon2 = @weapon2
+    s.weapon3 = @weapon3
     s.mouseX = @mouse.x
     s.mouseY = @mouse.y
-    s.mouseDown = @mouse.down
+    s.mouseDown = @mouse.isDown
     s
     
   mousemove: (event) ->

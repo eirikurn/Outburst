@@ -8,7 +8,7 @@ var express = require('express')
   , nko = require('nko')('Vzhctm/pgoeQd99c')
   , OAuth= require('oauth').OAuth;
 
-var serverPath = "http://outburst.no.de";
+var serverPath = "http://aranja.nko2.nodeknockout.com";
 
 var oa = new OAuth("https://twitter.com/oauth/request_token",
         "https://twitter.com/oauth/access_token", 

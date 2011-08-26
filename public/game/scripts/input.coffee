@@ -30,6 +30,7 @@ class Input
   mousemove: (event) ->
     @mouse.x = event.clientX
     @mouse.y = event.clientY
+    document.getElementById('mouse').innerHTML = 'X: ' + @mouse.x + ', Y: ' + @mouse.y
     
   mousedown: (event) ->
     @mouse.down = true

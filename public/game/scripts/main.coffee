@@ -14,7 +14,7 @@ socket.on 'welcome', (data) ->
   
 class Camera extends THREE.Camera
   constructor: (width, height) ->
-    super 75, width / height, 1, 10000
+    super 45, width / height, 1, 10000
     @position.z = 1000
     
 class Input
@@ -62,8 +62,8 @@ class World
   update: (delta) ->
     @test.position.y += delta * 200 if input.up
     @test.position.y -= delta * 200 if input.down
-    @test.position.z -= delta * 200 if input.left
-    @test.position.z += delta * 200 if input.right
+    @test.position.x -= delta * 200 if input.left
+    @test.position.x += delta * 200 if input.right
     
 last = +new Date
 animloop = ->

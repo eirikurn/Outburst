@@ -15,7 +15,7 @@ class Game
 
     @initRenderer()
     @initGraphics()
-    @initStats()
+    @initStats() if constants.DISPLAY_STATS
     window.input = @input = new Input @camera, @map.map
     @onFrame()
     
@@ -83,7 +83,7 @@ class Game
     @renderer.render @scene, @camera
     @camera.onFrame()
     @cursor.onFrame()
-    @stats.update()
+    @stats.update() if constants.DISPLAY_STATS
 
     requestAnimFrame(@onFrame, @container)
 

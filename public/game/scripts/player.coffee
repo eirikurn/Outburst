@@ -12,7 +12,7 @@ class PlayerUnit extends THREE.Object3D
     if state.shots
       for shot in state.shots
         game.addShot @, shot
-      
+
     if @model
       @model.rotation.y = state.walkDirection + Math.PI / 2
       @model.isPaused = not state.isMoving

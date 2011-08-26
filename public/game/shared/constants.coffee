@@ -28,15 +28,18 @@
       ammo: 30
       reloadTime: 1.5
       automatic: yes
-      spreadPerShot: 5 * (Math.PI / 180)
-      spreadMax: 20 * (Math.PI / 180)
-      spreadTime: .8
+      spreadPerShot: 2 * (Math.PI / 180)
+      spreadMax: 25 * (Math.PI / 180)
+      spreadTime: 1.5
     shotgun:
       damage: 200
       recoilTime: .75
       ammo: 7
       reloadTime: 2.5
       shards: 8
-      spread: 20 * (Math.PI / 180)
+      spread: 35 * (Math.PI / 180)
+
+  # Client constants
+  exports.DISPLAY_STATS = false
 
 )(if exports? then exports else window["constants"] = {})

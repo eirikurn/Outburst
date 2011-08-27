@@ -31,7 +31,7 @@ class World
   update: (delta) ->
     @testPlayer.updatePlayer delta
     @camera.position.x = @testPlayer.position.x
-    @camera.position.y = @testPlayer.position.y
+    @camera.position.y = @testPlayer.position.y - 500
     
   resizeToFit: ->
     setWidth = window.innerWidth

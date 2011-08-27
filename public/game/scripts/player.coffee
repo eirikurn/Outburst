@@ -14,7 +14,7 @@ class Player extends THREE.Object3D
     @model = new AnimatedMesh geometry, [ new THREE.MeshFaceMaterial() ],
       walk:
         firstKeyframeIndex: 0
-        duration: 1500
+        duration: 850
         keyframes: 27
     @model.scale.x = @model.scale.y = @model.scale.z = 20
     @model.rotation.x = Math.PI/2

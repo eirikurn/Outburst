@@ -1,6 +1,9 @@
 Outburst
 ========
 
-Run ``make`` to start server! :)
+First install dependencies with ``npm``. Then use ``make`` to start server. :)
 
-Then open [http://localhost:8000/game/]()
+    npm update
+    make
+
+Then visit [http://localhost:8000/game/]() to play.

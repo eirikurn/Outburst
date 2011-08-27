@@ -1,8 +1,8 @@
 io = require('socket.io')
 Player = require './player'
 utils = require './shared/utils.coffee'
-constants = require './shared/constants'
-states = require './shared/states'
+constants = require './shared/constants.coffee'
+states = require './shared/states.coffee'
 
 class exports.Server
   constructor: (app) ->

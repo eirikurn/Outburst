@@ -26,7 +26,7 @@
       target
 
   class exports.WorldState extends exports.State
-    init: (timestamp) ->
+    init: ->
       @timestamp = +new Date()
       @players = []
       @enemies = []

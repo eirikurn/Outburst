@@ -20,10 +20,10 @@ class exports.RollingPool
       @array[index] = item = new @cls(false)
       @count++
 
-    item.init.apply arguments
+    item.init.apply item, arguments
     return item
 
-  head: -> @get -1
+  head: -> @item -1
 
-  tail: -> @get 0
+  tail: -> @item 0
 

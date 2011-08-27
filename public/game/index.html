@@ -5,18 +5,23 @@
     <style>
     	html, body { font: 14px/18px Verdana, sans-serif; margin: 0; padding: 0; width: 100%; height: 100%; background: black; cursor: url(images/blank.png), none; overflow: hidden; }
 	    body { display: table; }
+	    a { color: #69b; }
 	    #wrapper { display: table-cell; vertical-align: middle; text-align: center; }
 	    #container { margin: 0 auto; position: relative; }
     	#chat { position: absolute; bottom: 0px; left: 0px; overflow: hidden; text-align: left; }
     	#chat ul { list-style: none; padding: 0 5px; display: block; width: 300px; max-height: 160px; overflow: hidden; margin-bottom: 30px; }
-    	#chat, #chatinput {  font-weight: bold; color: #fff; text-shadow: #000 0.1em 0.1em 0.2em; }
+    	#chat, #chatinput, #votehud {  font-weight: bold; color: #fff; text-shadow: #000 0.1em 0.1em 0.2em; }
     	#chat li.server { color: #ADFFAD; }
     	#chatbar { display: none; position: absolute; bottom: 5px; left: 5px; }
     	#chatbar label { display: inline-block; }
     	#chatinput { display: inline-block; cursive; outline: none; background: transparent; border: 0; width: 250px; font-size: inherit; }
-    	#hud {position: absolute; top: 0; left: 0; height: 30px; width: 300px; background: rgba(0, 0, 0, 0.3); border-bottom-right-radius: 10px; padding: 10px; opacity: 0.8; }
+    	.overlay { position: absolute; background: rgba(0, 0, 0, 0.3); padding: 10px; opacity: 0.8; }
+    	#hud { text-align: left; }
+    	#ammohud { top: 0; left: 0; height: 30px; width: 300px; border-bottom-right-radius: 10px; }
     	#ammo { width: 150px; height: 32px; background: url(images/bullet-empty.png) repeat-x; }
     	#ammoleft { width: 90px; height: 32px; background: url(images/bullet.png) repeat-x; }
+    	#votehud { right: 0; top: 0; width: 110px; height: 25px; border-bottom-left-radius: 10px;}
+    	#votehud iframe { border: 0; width: 100px; height: 30px; display: inline-block; }
     </style>
     <script>
       // A simple require implementation
@@ -68,10 +73,24 @@
 	  		</form>
 	  	</div>
 	  	<div id="hud">
-	  		<div id="ammo">
-	  			<div id="ammoleft"></div>
-	  		</div>
-	  		<div id="nextwave" title="Time to next wave of enemies."></div>
+		  	<div id="ammohud" class="overlay">
+		  		<div id="ammo">
+		  			<div id="ammoleft"></div>
+		  		</div>
+		  		<div id="nextwave" title="Time to next wave of enemies."></div>
+		  	</div>
+		  	<div id="votehud" class="overlay">
+		  		<iframe src="http://nodeknockout.com/iframe/aranja"></iframe>
+		  		<!--div class="g-plusone" data-size="medium" data-annotation="inline"></div>
+		  		<script type="text/javascript">
+				  (function() {
+				    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+				    po.src = 'https://apis.google.com/js/plusone.js';
+				    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+				  })();
+				</script>
+				<iframe src="http://www.facebook.com/plugins/like.php?app_id=244994422205622&amp;href=http%3A%2F%2Faranja.nko2.nodeknockout.com%2F&amp;send=false&amp;layout=button_count&amp;width=75&amp;show_faces=false&amp;action=like&amp;colorscheme=dark&amp;font=verdana&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:75px; height:21px;" allowTransparency="true"></iframe-->
+		  	</div>
 	  	</div>
   	</div>
   </body>

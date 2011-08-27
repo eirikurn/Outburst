@@ -14,6 +14,7 @@ class Input
     
   handlers: {}
   
+  keysEnabled: true
   keys:
     37: 'left'
     38: 'up'
@@ -23,8 +24,12 @@ class Input
     87: 'up' # W
     68: 'right' # D
     83: 'down' # S
-    enabled: true
-    
+
+  left: false
+  up: false
+  right: false
+  down: false
+
   mouse:
     x: 0
     y: 0
@@ -32,18 +37,31 @@ class Input
     scroll: 1000
     
   keydown: (event) ->
-    @[@keys[event.keyCode]] = on if @keys.enabled
+    @[@keys[event.keyCode]] = on if @keysEnabled
   
   keyup: (event) ->
     @handlers[event.keyCode]() if @handlers[event.keyCode]
     @[@keys[event.keyCode]] = off
+
+  getState: (s = {}) ->
+    s.left = @left
+    s.up = @up
+    s.down = @down
+    s.right = @right
+    s.mouseX = @mouse.x
+    s.mouseY = @mouse.y
+    s.mouseDown = @mouse.down
+    s
     
   mousemove: (event) ->
     container = document.getElementById "container"
-
     @mouse2D.x = (event.clientX - container.offsetLeft) / container.clientWidth * 2 - 1
     @mouse2D.y = - (event.clientY - container.offsetTop) / container.clientHeight * 2 + 1
-    
+  
+  onFrame: ->
+    @updateMouse()
+  
+  updateMouse: ->
     mouse3D = @projector.unprojectVector( @mouse2D.clone(), @camera );
     @ray.direction = mouse3D.subSelf( @camera.position ).normalize();
     intersects = @ray.intersectObject ( @worldMap );

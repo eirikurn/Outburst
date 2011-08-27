@@ -111,6 +111,9 @@ class Game
 document.addEventListener 'DOMContentLoaded', ->
   window.game = new Game()
 
+  # Chat messages
+  chat = new Chat()
+
 trace = (message) ->
   console?.log message
 

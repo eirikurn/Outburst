@@ -9,7 +9,7 @@
     init: ->
 
   class exports.UnitState extends exports.State
-    init: (data) ->
+    init: (data = {}) ->
       for k in @constructor.fields
         @[k] = data[k]
 
@@ -26,8 +26,7 @@
       target
 
   class exports.WorldState extends exports.State
-    init: ->
-      @timestamp = +new Date()
+    init: (@timestamp) ->
       @players = []
       @enemies = []
 

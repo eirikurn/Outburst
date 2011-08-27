@@ -16,7 +16,7 @@ class exports.Server
     @states.get()
     @players = []
 
-    @tickTimer = setInterval @tick, 1000 / constants.TICKS_PER_SEC
+    @tickTimer = setInterval @tick, 1000 / constants.TICKS_PER_SECOND
 
   player_connect: (socket) ->
     state = new states.PlayerState x: 0, y: 0
@@ -36,11 +36,21 @@ class exports.Server
   player_state: (data) ->
     player.inputs.push data
 
-  tick: ->
-    world = @states.get()
-    for p in players
+  # The main "Game Loop"
+  tick: =>
+    time = +new Date() / 1000
+    world = @states.get(time)
+
+    # Process player inputs
+    for p in @players
       newState = p.state.clone()
       for i in p.inputs
         newState.applyInput i
       world.players.push p.state
+
+    # Send updates to due players
+    for p in @players
+      if p.lastUpdate + constants.TIME_BETWEEN_UPDATES > time
+        p.lastUpdate += constants.TIME_BETWEEN_UPDATES
+        p.socket.emit 'world', world
 

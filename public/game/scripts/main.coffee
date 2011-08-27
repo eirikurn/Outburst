@@ -5,8 +5,8 @@ require = (module) ->
   obj = obj[stub] for stub in module
   return obj
 
-socket = io.connect()
-socket.on 'welcome', (data) ->
+window.socket = io.connect()
+window.socket.on 'welcome', (data) ->
   console.log data
   
 stats = new Stats()

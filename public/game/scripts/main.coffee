@@ -7,11 +7,16 @@ class Game
 
     @socket = io.connect()
     @socket.on 'welcome', (data) ->
+    @socket.on 'world', @updateFromServer
 
     window.input = @input = new Input()
     @world = new World()
     @initStats()
     @onFrame()
+
+  updateFromServer: (data) =>
+    console.log data
+
 
   onFrame: =>
     now = +new Date / 1000

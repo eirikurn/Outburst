@@ -22,7 +22,12 @@ class Input
     87: 'up' # W
     68: 'right' # D
     83: 'down' # S
-    
+
+  left: false
+  up: false
+  right: false
+  down: false
+
   mouse:
     x: 0
     y: 0
@@ -41,7 +46,7 @@ class Input
     s.down = @down
     s.right = @right
     s.mouseX = @mouse.x
-    s.mouseX = @mouse.y
+    s.mouseY = @mouse.y
     s.mouseDown = @mouse.down
     s
     

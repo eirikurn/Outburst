@@ -25,14 +25,14 @@ class Input
   mouse:
     x: 0
     y: 0
-    down: false
+    isDown: no
     scroll: 1000
     
   keydown: (event) ->
-    @[@keys[event.keyCode]] = true
+    @[@keys[event.keyCode]] = on
   
   keyup: (event) ->
-    @[@keys[event.keyCode]] = false
+    @[@keys[event.keyCode]] = off
     
   mousemove: (event) ->
     container = document.getElementById "container"
@@ -49,11 +49,11 @@ class Input
     
   mousedown: (event) ->
     event.preventDefault()
-    @mouse.down = true
+    @mouse.isDown = yes
     
   mouseup: (event) ->
     event.preventDefault()
-    @mouse.down = false
+    @mouse.isDown = no
   
   mousescroll: (event) ->
     event.preventDefault()

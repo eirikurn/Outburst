@@ -19,7 +19,6 @@ class Game
     @onFrame()
 
   joinedServer: (data) =>
-    console.log data
     @player = new Player(new states.PlayerState(data.player), @camera)
     @addEntity(data.player.id, @player)
 
@@ -41,16 +40,19 @@ class Game
     delta = now - @lastFrame
     @lastFrame = now
 
-    # Capture input state
-    while @lastTick + constants.TIME_PER_TICK <= now
-      @inputs.push @input.getState()
-      @lastTick += constants.TIME_PER_TICK
+    if @player
+      # Capture input state
+      while @lastTick + constants.TIME_PER_TICK <= now
+        input = @input.getState()
+        @inputs.push input
+        @player.applyInput input
+        @lastTick += constants.TIME_PER_TICK
 
-    # Send input to server
-    if @lastSentInputs + constants.TIME_BETWEEN_INPUTS <= now
-      @socket.emit 'input', @inputs
-      @inputs.length = 0
-      @lastSentInputs += constants.TIME_BETWEEN_INPUTS
+      # Send input to server
+      if @lastSentInputs + constants.TIME_BETWEEN_INPUTS <= now
+        @socket.emit 'input', @inputs
+        @inputs.length = 0
+        @lastSentInputs += constants.TIME_BETWEEN_INPUTS
 
     # Update entities
     for k, e of @entities

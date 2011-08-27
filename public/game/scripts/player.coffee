@@ -3,6 +3,7 @@ class PlayerUnit extends THREE.Object3D
     super()
     Loader.getModel "models/figure.js", @makeModel
     @createAimer()
+    @addState(state)
 
   addState: (state) ->
     @position.x = state.x
@@ -43,17 +44,17 @@ class PlayerUnit extends THREE.Object3D
 class Player extends PlayerUnit
   constructor: (state, @camera) ->
     super(state)
-
     @camera.target = this
-    @addState(state)
+    @state = state
 
   addState: (state) ->
-    super
-    @camera.position.x = state.x
-    @camera.position.y = state.y - 500
+    # Ignore server state for now. Validate client predictions later
 
   applyInput: (input) ->
-    # @addState @state.applyInput(input)
+    @state.applyInput input
+    Player.__super__.addState.call this, @state
+    @camera.position.x = @state.x
+    @camera.position.y = @state.y - 500
 
 # export
 @PlayerUnit = PlayerUnit

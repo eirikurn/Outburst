@@ -1,5 +1,7 @@
 class Input
   constructor: ->
+    @targetWidth = 1024
+    @targetHeight = 576
     document.addEventListener 'keyup', (ev) => @keyup(ev)
     document.addEventListener 'keydown', (ev) => @keydown(ev)
     document.addEventListener 'mousemove', (ev) => @mousemove(ev)
@@ -33,8 +35,16 @@ class Input
     @[@keys[event.keyCode]] = false
     
   mousemove: (event) ->
-    @mouse.x = event.clientX - @windowHalfX
-    @mouse.y = -(event.clientY - @windowHalfY)
+    container = document.getElementById "container"
+    
+    # Imaginary pixels
+    @mouse.x = Math.round (event.clientX - container.offsetLeft) / container.clientWidth * @targetWidth - @targetWidth / 2
+    @mouse.y = -Math.round (event.clientY - container.offsetTop) / container.clientHeight * @targetHeight - @targetHeight / 2
+    
+    # Scales
+    #@mouse.x = (event.clientX - container.offsetLeft) / container.clientWidth - .5
+    #@mouse.y = - (event.clientY - container.offsetTop) / container.clientHeight + .5
+    
     document.getElementById('mouse').innerHTML = 'X: ' + @mouse.x + ', Y: ' + @mouse.y
     
   mousedown: (event) ->

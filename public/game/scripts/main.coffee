@@ -25,8 +25,9 @@ class Game
   joinedServer: (data) =>
     @player = new Player(new states.PlayerState(data.player), @camera)
     @addEntity(data.player.id, @player)
-    @user.username = "Anonymous " + data.player.id if @user.username == "Anonymous"
-    @socket.emit 'nick', @user.username
+    @user.nick = "Anonymous " + data.player.id if @user.nick == "Anonymous"
+    @player.setNick @user.nick
+    @socket.emit 'nick', @user.nick
 
   addEntity: (id, entity) ->
     @entities[id] = entity
@@ -104,7 +105,7 @@ class Game
     @scene = new THREE.Scene()
     @camera = new Camera(@targetWidth, @targetHeight)
     @entities = {}
-
+    
     @scene.addChild @map = new Map()
     @scene.addChild @cursor = new Cursor()
     @hud = new Hud()
@@ -159,14 +160,13 @@ document.addEventListener 'DOMContentLoaded', =>
         window.location = "/oauth/authenticate"
       else
         twitterUser = JSON.parse res
-        twitterUser.username = twitterUser.screen_name
-        initGame(twitterUser)
+        initGame(nick: twitterUser.screen_name)
   else
     # Anonymous lame-o
     initGame()
       
       
-initGame = (user = username: "Anonymous") ->
+initGame = (user = nick: "Anonymous") ->
   window.game = new Game(user)
   
 

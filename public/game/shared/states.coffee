@@ -35,6 +35,7 @@
       @spread = 0
       @ammo = constants.WEAPONS[@weapon].ammo
       @shots = []
+      @nick = null
       super
 
     applyInput: (input, target = @) ->
@@ -112,7 +113,7 @@
       target
 
     @fields = ['x', 'y', 'id', 'walkDirection', 'aimDirection', 'isMoving',
-      'seed', 'weapon', 'recoil', 'reload', 'spread', 'ammo', 'shots']
+      'seed', 'weapon', 'recoil', 'reload', 'spread', 'ammo', 'shots', 'nick']
 
   class exports.WorldState extends exports.State
     init: (data = {}) ->

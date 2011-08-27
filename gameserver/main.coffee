@@ -62,12 +62,12 @@ class exports.Server
     socket.broadcast.emit 'chat', packets
     
   player_nick: (player, nick) ->
-    if player.nick
-      player.socket.broadcast.emit "chat", [ player: "server", msg: player.nick + " is now called " + nick]
+    if player.state.nick
+      player.socket.broadcast.emit "chat", [ player: "server", msg: player.state.nick + " is now called " + nick]
     else
       player.socket.emit "chat", [ player: "server", msg: "Welcome to Outburst, gl n hf!"].concat @chatlog
       player.socket.broadcast.emit "chat", [ player: "server", msg: nick + " joined the game"]
-    player.nick = nick
+    player.state.nick = nick
 
   startGame: ->
     console.log "Game starting"

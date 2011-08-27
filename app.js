@@ -5,7 +5,7 @@
 
 var express = require('express')
   , sys = require('sys')
-  , nko = require('nko')('Vzhctm/pgoeQd99c')
+  //, nko = require('nko')('Vzhctm/pgoeQd99c')
   , OAuth= require('oauth').OAuth;
 
 //var serverPath = "http://outburst.no.de";

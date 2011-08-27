@@ -18,7 +18,7 @@ class Game
     @initStats() if constants.DISPLAY_STATS
     window.input = @input = new Input @camera, @map.map
     @onFrame()
-    
+
     # Chat messages
     chat = new Chat(@socket)
 
@@ -33,8 +33,8 @@ class Game
     @entities[id] = entity
     @scene.addObject entity
     
-  addShot: (sourcePlayer, direction) ->
-    shot = new Shot(sourcePlayer.position.x, sourcePlayer.position.y, direction)
+  addShot: (sourcePlayer, state) ->
+    shot = new Shot(state)
     @scene.addObject shot
     @renderShots.push shot
 

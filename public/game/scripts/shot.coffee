@@ -1,8 +1,8 @@
 class Shot extends THREE.Object3D
-  constructor: (@fromX, @fromY, @direction) ->
+  constructor: (@state) ->
     super()
-    @position.x = @fromX
-    @position.y = @fromY
+    @position.x = @state.x
+    @position.y = @state.y
     @time = 0.5
     @timeLeft = @time
     @isAlive = yes
@@ -10,15 +10,15 @@ class Shot extends THREE.Object3D
    
     
   createGraphic: ->
-    @line = new THREE.Mesh(new THREE.CubeGeometry(constants.SHOT_DISTANCE, 2, 2, 1, 1, 1), new THREE.MeshLambertMaterial(color: 0xFFFFFF, opacity: 0.5, transparent: true))
+    @line = new THREE.Mesh(new THREE.CubeGeometry(@state.length, 2, 2, 1, 1, 1), new THREE.MeshLambertMaterial(color: 0xFFFFFF, opacity: 0.5, transparent: true))
     lineContainer = new THREE.Object3D()
     
     @line.rotation.x = Math.PI / 2
     @line.rotation.y = Math.PI / 2
-    @line.position.y = constants.SHOT_DISTANCE / 2 + 110
+    @line.position.y = @state.length / 2 + constants.SHOT_OFFSET_FROM_PLAYER_CENTER
     @line.position.z = 195
     
-    lineContainer.rotation.z = -Math.PI / 2 + @direction
+    lineContainer.rotation.z = -Math.PI / 2 + @state.direction
     
     lineContainer.addChild @line
     @addChild lineContainer

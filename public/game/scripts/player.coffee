@@ -34,7 +34,7 @@ class Player extends THREE.Object3D
     @aimer.rotation.x = Math.PI / 2
     @aimer.rotation.y = Math.PI / 2
     @aimer.position.x = -100
-    @aimer.position.y = 10
+    @aimer.position.z = 10
     @aimerContainer = new THREE.Object3D()
     @aimerContainer.addChild @aimer
     @addChild @aimerContainer

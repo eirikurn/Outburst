@@ -57,7 +57,7 @@ class Chat
   write: (event) ->
     if @input.value.length > 0
       packet = [
-        player: game.user.username
+        player: game.user.nick
         msg: @input.value
       ]
       @add packet

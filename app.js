@@ -8,10 +8,12 @@ var express = require('express')
   , nko = require('nko')('Vzhctm/pgoeQd99c')
   , OAuth= require('oauth').OAuth;
 
+var serverPath = "http://outburst.no.de";
+
 var oa = new OAuth("https://twitter.com/oauth/request_token",
         "https://twitter.com/oauth/access_token", 
         "vg7S2p6MSSUGxsJhDgizMw", "zsrWRYBv3e3KX7emhjAJxuwejOPRo5HfbtL5fiL26Y", 
-        "1.0A", "http://outburst.no.de/oauth/callback", "HMAC-SHA1");
+        "1.0A", serverPath + "/oauth/callback", "HMAC-SHA1");
 
 var app = module.exports = express.createServer();
 
@@ -69,7 +71,9 @@ app.get('/oauth/callback', function(req, res, next){
         } else {
         	console.log("User is authenticated!")
         	console.log(results.screen_name)
-        	res.redirect('/')
+        	req.session.uid = results.user_id;
+        	req.session.uname = results.screen_name;
+        	res.redirect('/game')
         }
         
 	   }

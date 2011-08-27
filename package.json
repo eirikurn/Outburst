@@ -1,9 +1,10 @@
 {
-    "name": "application-name"
+    "name": "Aranja"
   , "version": "0.0.1"
   , "private": true
   , "dependencies": {
-      "coffee-script": ">= 1.0.0"
+      "cluster": ">= 0.7.0"
+    , "coffee-script": ">= 1.0.0"
     , "express": "2.4.6"
     , "jade": ">= 0.0.1"
     , "nko": "*"

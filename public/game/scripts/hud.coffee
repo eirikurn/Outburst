@@ -28,11 +28,27 @@ class Hud
     
   onGameStarted: () ->
     @gameover.style.display = "hidden"
+    @gameover.innerHTML = ""
     @startcheck = yes
     
   onGameOver: () ->
     @gameover.style.display = "inline"
-    @gameover.innerHTML = "You lasted for " + @getTime()
+    p = document.createElement 'p'
+    p.innerText = "You lasted " + @getTime()
+    @gameover.appendChild p
+    
+    a = document.createElement 'a'
+    a.className = 'twitter-share-button'
+    a.dataset["text"] = "I lasted " + @getTime() + " in @Outburst http://aranja.nko2.nodeknockout.com"
+    a.dataset["count"] = "vertical"
+    a.innerText = "Tweet" 
+    po = document.createElement('script')
+    po.type = 'text/javascript'
+    po.async = true
+    po.src = 'http://platform.twitter.com/widgets.js'
+    s = document.getElementsByTagName('script')[0]
+    s.parentNode.insertBefore po, s
+    @gameover.appendChild a
     
   getTime: () ->
     diff = new Date(+new Date - @gamestart)

@@ -23,7 +23,10 @@ class Chat
         @show()
         
     input.handle 13, toggle # enter
-    input.handle 89, toggle # y
+    input.handle 89, ->
+      if not input.keysEnabled
+        return
+      toggle # y
       
     input.handle 27, => # esc
       @hide()

@@ -26,7 +26,7 @@ class Game
     @player = new Player(new states.PlayerState(data.player), @camera)
     @addEntity(data.player.id, @player)
     @user.nick = "Anonymous " + data.player.id if @user.nick == "Anonymous"
-    @player.setNick @user.nick
+    @player.state.nick = @user.nick
     @socket.emit 'nick', @user.nick
 
   addEntity: (id, entity) ->

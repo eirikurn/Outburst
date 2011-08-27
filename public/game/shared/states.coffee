@@ -35,7 +35,7 @@
       @spread = 0
       @ammo = constants.WEAPONS[@weapon].ammo
       @shots = []
-      @nick = null
+      @nick = ""
       super
 
     applyInput: (input, target = @) ->
@@ -64,6 +64,8 @@
 
       # Update animations
       target.isMoving = input.right or input.left or input.up or input.down
+      
+      target.nick = @nick
 
       # Update shots/weapons
       oldWeapon = @weapon

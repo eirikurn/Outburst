@@ -16,6 +16,7 @@ class PlayerUnit extends THREE.Object3D
     @splitModel.onStateUpdate state.walkDirection, state.aimDirection, state.isMoving
     
   setNick: (@nicktext) ->
+    console.log @nicktext
     @removeChild @nick if @nick
     @nick = new Text2D @nicktext
     @nick.position.y = -100

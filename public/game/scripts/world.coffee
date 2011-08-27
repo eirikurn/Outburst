@@ -1,23 +1,49 @@
 class World
-  constructor: (width, height) ->
-    @camera = new Camera(width, height)
+  constructor: () ->
+    @targetWidth = 1024
+    @targetHeight = 576
+    
+    @camera = new Camera(@targetWidth, @targetHeight)
     @scene = new THREE.Scene()
     @renderer = new THREE.WebGLRenderer()
-    @renderer.setSize(width, height)
+    @renderer.setSize(@targetWidth, @targetHeight)
     @container = document.getElementById 'container'
-    @container.style.width = width + 'px'
-    @container.style.height = height + 'px'
+    @container.style.width = @targetWidth + 'px'
+    @container.style.height = @targetHeight + 'px'
     @container.appendChild(@renderer.domElement)
     
     @testPlayer = new Player(@scene)
-    @cursor = new Cursor(@scene)
+    
+    window.onresize = =>
+      @resizeToFit()
+      
+    @resizeToFit()
   
   render: ->
     @renderer.render(@scene, @camera)
   
   update: (delta) ->
     @testPlayer.update delta
-    @cursor.update delta
+    
+  resizeToFit: ->
+    targetRatio = 16 / 9
+    
+    setWidth = window.innerWidth
+    setHeight = Math.floor setWidth * (@targetHeight / @targetWidth)
+    
+    if setWidth > window.innerWidth
+      setWidth = window.innerWidth
+      setHeight = Math.floor setWidth * (@targetHeight / @targetWidth)
+    
+    if setHeight > window.innerHeight - 10
+      setHeight = window.innerHeight - 10
+      setWidth = Math.floor setHeight * (@targetWidth / @targetHeight)
+    
+    @renderer.setSize setWidth, setHeight
+    container = document.getElementById('container')
+    container.style.width = setWidth + "px"
+    container.style.height = setHeight + "px"
+    
 
 # export
 @World = World

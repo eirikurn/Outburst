@@ -39,13 +39,15 @@ class Game
     now = +new Date / 1000
     delta = now - @lastFrame
     @lastFrame = now
+    
+    @input.onFrame()
 
     if @player
       # Capture input state
       while @lastTick + constants.TIME_PER_TICK <= now
-        input = @input.getState()
-        @inputs.push input
-        @player.applyInput input
+        oneState = @input.getState()
+        @inputs.push oneState
+        @player.applyInput oneState
         @lastTick += constants.TIME_PER_TICK
 
       # Send input to server
@@ -57,7 +59,7 @@ class Game
     # Update entities
     for k, e of @entities
       e.onFrame(delta) if e.onFrame
-
+    
     @renderer.render @scene, @camera
     @cursor.onFrame()
     @stats.update()

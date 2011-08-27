@@ -55,10 +55,13 @@ class Input
     
   mousemove: (event) ->
     container = document.getElementById "container"
-
     @mouse2D.x = (event.clientX - container.offsetLeft) / container.clientWidth * 2 - 1
     @mouse2D.y = - (event.clientY - container.offsetTop) / container.clientHeight * 2 + 1
-    
+  
+  onFrame: ->
+    @updateMouse()
+  
+  updateMouse: ->
     mouse3D = @projector.unprojectVector( @mouse2D.clone(), @camera );
     @ray.direction = mouse3D.subSelf( @camera.position ).normalize();
     intersects = @ray.intersectObject ( @worldMap );

@@ -3,6 +3,7 @@ class PlayerUnit extends THREE.Object3D
     super()
     @splitModel = new SplitPlayerModel()
     @addChild @splitModel
+    @id = state.id
     @addState(state)
 
   addState: (state) ->

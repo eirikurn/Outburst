@@ -57,7 +57,15 @@ class Game
         @addEntity(s.id, new Sheep(s))
       else
         @entities[s.id].addState(s)
-    return
+
+    @removeNullEntities(world)
+  
+  removeNullEntities: (world) ->
+    worldEntityIds = (wEntity.id.toString() for wEntity in world.players.concat world.sheeps, world.enemies)
+    for localId of @entities
+      if localId not in worldEntityIds
+        @scene.removeChild @entities[localId]
+        delete @entities[localId]
 
   onFrame: =>
     now = +new Date / 1000
@@ -66,12 +74,15 @@ class Game
     
     @input.onFrame delta
 
-    if @player
+    if @player and @worlds.head()
+      world = @worlds.head()
       # Capture input state
       while @lastTick + constants.TIME_PER_TICK <= now
         oneState = @input.getState()
+        oneState.tick = world.tick
+        @player.applyInput oneState, world
+
         @inputs.push oneState
-        @player.applyInput oneState
         @lastTick += constants.TIME_PER_TICK
 
       # Send input to server

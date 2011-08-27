@@ -105,7 +105,8 @@ class exports.Server
     for p in @players
       newState = p.state.clone()
       for i in p.inputs
-        newState.applyInput i
+        state = @states.item(i.tick - world.tick - 1)
+        newState.applyInput i, state
       p.inputs.length = 0
       world.players.push p.state = newState
     return
@@ -138,6 +139,7 @@ class exports.Server
     time = +new Date / 1000
     world = @states.new(timestamp: time)
     @states.item(-2)?.clone(world)
+    world.tick++
 
     @updatePlayers(world)
     @updateGame(world)

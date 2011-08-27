@@ -1,10 +1,11 @@
 class Input
   constructor: ->
-    document.body.addEventListener 'keyup', (ev) => @keyup(ev)
-    document.body.addEventListener 'keydown', (ev) => @keydown(ev)
-    document.body.addEventListener 'mousemove', (ev) => @mousemove(ev)
-    document.body.addEventListener 'mousedown', (ev) => @mousedown(ev)
-    document.body.addEventListener 'mouseup', (ev) => @mouseup(ev)
+    document.addEventListener 'keyup', (ev) => @keyup(ev)
+    document.addEventListener 'keydown', (ev) => @keydown(ev)
+    document.addEventListener 'mousemove', (ev) => @mousemove(ev)
+    document.addEventListener 'mousedown', (ev) => @mousedown(ev)
+    document.addEventListener 'mouseup', (ev) => @mouseup(ev)
+    document.addEventListener 'DOMMouseScroll', (ev) => @mousescroll(ev)
     
     @windowHalfX = window.innerWidth / 2
     @windowHalfY = window.innerHeight / 2
@@ -23,6 +24,7 @@ class Input
     x: 0
     y: 0
     down: false
+    scroll: 0
     
   keydown: (event) ->
     @[@keys[event.keyCode]] = true
@@ -40,6 +42,9 @@ class Input
     
   mouseup: (event) ->
     @mouse.down = false
+  
+  mousescroll: (event) ->
+    @mouse.scroll += event.wheelDeltaY
 
 
 # export

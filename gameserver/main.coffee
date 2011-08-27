@@ -2,7 +2,7 @@ io = require('socket.io')
 Player = require './player'
 utils = require './shared/utils.coffee'
 constants = require './shared/constants'
-states = require './shared/state'
+states = require './shared/states'
 
 class exports.Server
   constructor: (app) ->
@@ -27,7 +27,7 @@ class exports.Server
 
     socket.on 'input', (inputs) => @player_input player, inputs
     socket.on 'disconnect', => @player_disconnect player
-    socket.emit "welcome", player: player, clock: +new Date / 1000
+    socket.emit "welcome", player: state, clock: +new Date / 1000
 
   player_disconnect: (player) ->
     index = @players.indexOf player
@@ -36,6 +36,7 @@ class exports.Server
 
   player_input: (player, data) ->
     player.inputs.concat data
+    Array::push.apply player.inputs, data
 
   # The main "Game Loop"
   tick: =>
@@ -47,8 +48,8 @@ class exports.Server
       newState = p.state.clone()
       for i in p.inputs
         newState.applyInput i
-      world.players.push p.state
       p.inputs.length = 0
+      world.players.push p.state = newState
 
     # Send updates to due players
     for p in @players

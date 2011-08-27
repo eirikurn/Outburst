@@ -6,28 +6,34 @@ class Game
     @inputs = []
 
     worldCount = constants.INTERPOLATE_FRAMES + 1
-    @worlds = utils.StatePool(state.WorldState, worldCount)
+    @worlds = new utils.StatePool(states.WorldState, worldCount)
 
     @socket = io.connect()
     @socket.on 'welcome', @joinedServer
     @socket.on 'world', @updateFromServer
 
     window.input = @input = new Input()
-    @world = new World()
+    @initRenderer()
+    @initGraphics()
     @initStats()
     @onFrame()
 
   joinedServer: (data) =>
-    @serverTime = data.
+    @player = new Player data.player, @camera
+    @addEntity(data.player.id, @player)
 
+  addEntity: (id, entity) ->
+    @entities[id] = @player
+    @scene.addObject entity
 
   updateFromServer: (data) =>
-    @worlds.get data
-    for p in data.players when p.id != @player.id
+    world = @worlds.new data
+    for p in world.players# when p.id != @player.id
       if not @entities[p.id]
-        @entities[p.id] = new ServerUnit(p)
+        @addEntity(p.id, new Unit(p))
       else
         @entities[p.id].addState(p)
+    return
 
   onFrame: =>
     now = +new Date / 1000
@@ -45,11 +51,54 @@ class Game
       @inputs.length = 0
       @lastSentInputs += constants.TIME_BETWEEN_INPUTS
 
-    @world.update(delta)
-    @world.render()
+    # Update entities
+    for e in @entities
+      e.onFrame(delta) if e.onFrame
+
+    @renderer.render @scene, @camera
     @stats.update()
 
-    requestAnimFrame(@onFrame, @world.container)
+    requestAnimFrame(@onFrame, @container)
+
+  initGraphics: ->
+
+    @scene = new THREE.Scene()
+    @camera = new Camera(@targetWidth, @targetHeight)
+    @entities = {}
+
+    @scene.addChild @map = new Map()
+    @scene.addChild @cursor = new Cursor()
+
+  initRenderer: ->
+    @targetWidth = 1024
+    @targetHeight = 576
+
+    @renderer = new THREE.WebGLRenderer()
+    @renderer.setSize(@targetWidth, @targetHeight)
+    @renderer.setClearColorHex 0xFFFFFF
+    @container = document.getElementById 'container'
+    @container.style.width = @targetWidth + 'px'
+    @container.style.height = @targetHeight + 'px'
+    @container.appendChild(@renderer.domElement)
+
+    window.addEventListener 'resize', => @resizeToFit()
+    @resizeToFit()
+
+  resizeToFit: ->
+    setWidth = window.innerWidth
+    setHeight = Math.floor setWidth * (@targetHeight / @targetWidth)
+
+    if setWidth > window.innerWidth
+      setWidth = window.innerWidth
+      setHeight = Math.floor setWidth * (@targetHeight / @targetWidth)
+
+    if setHeight > window.innerHeight - 3
+      setHeight = window.innerHeight - 3
+      setWidth = Math.floor setHeight * (@targetWidth / @targetHeight)
+
+    @renderer.setSize setWidth, setHeight
+    @container.style.width = setWidth + "px"
+    @container.style.height = setHeight + "px"
 
   initStats: ->
     @stats = new Stats()
@@ -63,12 +112,4 @@ document.addEventListener 'DOMContentLoaded', ->
 
 trace = (message) ->
   console?.log message
-
-# A simple require implementation
-require = (module) ->
-  match = /^(\.\/)?(.+)$/.exec m
-  module = match[2].split '/'
-  obj = window
-  obj = obj[stub] for stub in module
-  return obj
 

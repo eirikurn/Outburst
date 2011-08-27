@@ -9,11 +9,23 @@
     	#mouse { position: absolute; top: 0px; right: 0px; color: red; width: 120px; z-index: 100; }
     	#container { margin: 0 auto; }
     </style>
+    <script>
+      // A simple require implementation
+      var require = function(module) {
+        var matches = /^(\.\/)?(.+)$/.exec(module)
+          , obj = window;
+        module = matches[2].split('/');
+        for (var i = 0; i < module.length; i++) 
+          obj = obj[module[i]]
+        return obj;
+      }
+    </script>
     <!--script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script-->
     <script src="http://mrdoob.github.com/three.js/examples/js/Stats.js"></script>
     <script src="libs/requestAnimFrame.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="libs/three.js"></script>
+    <script src="shared/states.js"></script>
     <script src="shared/constants.js"></script>
     <script src="shared/utils.js"></script>
     <script src="scripts/animatedmesh.js"></script>
@@ -22,7 +34,7 @@
     <script src="scripts/map.js"></script>
     <script src="scripts/cursor.js"></script>
     <script src="scripts/player.js"></script>
-    <script src="scripts/world.js"></script>
+    <script src="scripts/unit.js"></script>
     <script src="scripts/main.js"></script>
   </head>
   <body>

@@ -1,7 +1,7 @@
 io = require('socket.io')
 Player = require './player'
 {RollingPool} = require './utils'
-sharedUtils = require './shared/utils'
+constants = require './shared/constants'
 
 class exports.Server
   constructor: (app) ->
@@ -11,12 +11,15 @@ class exports.Server
 
     @states = new RollingPool()
     @players = []
-    @io.sockets.on 'connection', @player_connect
+    @io.sockets.on 'connection', (s) => @player_connect(s)
 
-  player_connect: (socket) =>
+    @tickTimer = setInterval @tick, constants.TIME_PER_TICK * 1000
+
+  player_connect: (socket) ->
     player = new Player(socket)
     @players.push player
 
+    socket.on 'input', (data) => @player_input player, data
     socket.on 'disconnect', => @player_disconnect player
     socket.emit "welcome", player
 
@@ -24,4 +27,9 @@ class exports.Server
     index = @players.indexOf player
     if index != -1
       @players.splice index, 1
+
+  player_state: (data) ->
+    player.inputs.push data
+
+  tick: ->
 

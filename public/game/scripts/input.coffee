@@ -11,6 +11,7 @@ class Input
     @projector = new THREE.Projector()
     @mouse2D = new THREE.Vector3( 0, 10000, 0.5 );
     @ray = new THREE.Ray( @camera.position, null );
+    @targetScroll = 2000
     
   handlers: {}
   
@@ -37,7 +38,7 @@ class Input
     x: 0
     y: 0
     isDown: no
-    scroll: 1000
+    scroll: 2000
     
   keydown: (event) ->
     @[@keys[event.keyCode]] = on if @keysEnabled
@@ -64,7 +65,8 @@ class Input
     @mouse2D.x = (event.clientX - container.offsetLeft) / container.clientWidth * 2 - 1
     @mouse2D.y = - (event.clientY - container.offsetTop) / container.clientHeight * 2 + 1
   
-  onFrame: ->
+  onFrame: (delta) ->
+    @updateScroll delta
     @updateMouse()
   
   updateMouse: ->
@@ -74,6 +76,16 @@ class Input
     if intersects.length > 0
       @mouse.x = intersects[0].point.x
       @mouse.y = intersects[0].point.y
+  
+  updateScroll: (delta) ->
+    if @mouse.scroll == @targetScroll then return
+    
+    delta = (1 / 5) if delta > (1 / 5)
+    diff = (@targetScroll - @mouse.scroll) * (delta * 5)
+    if Math.abs(diff) < 0.1
+      @mouse.scroll = @targetScroll
+    else
+      @mouse.scroll += diff
     
   mousedown: (event) ->
     event.preventDefault()
@@ -85,8 +97,9 @@ class Input
   
   mousescroll: (event) ->
     event.preventDefault()
-    val = @mouse.scroll + (event.wheelDeltaY / 10)
-    @mouse.scroll = val if val > 300 and val <= 1000
+    @targetScroll += (event.wheelDeltaY)
+    @targetScroll = 400 if @targetScroll < 400
+    @targetScroll = 2000 if @targetScroll > 2000
     
   handle: (keyCode, callback) ->
     @handlers[keyCode] = callback

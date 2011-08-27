@@ -9,6 +9,7 @@ class PlayerUnit extends THREE.Object3D
     @position.x = state.x
     @position.y = state.y
     @aimerContainer.rotation.z = state.aimDirection + Math.PI
+    @isPaused = @model?.isPaused = not state.isMoving
 
     if @model
       @model.rotation.y = state.walkDirection + Math.PI / 2
@@ -29,6 +30,7 @@ class PlayerUnit extends THREE.Object3D
     @model.rotation.x = Math.PI/2
     @model.position.z = 100
     @model.playAnimation "walk"
+    @model.isPaused = @isPaused
     @addChild @model
 
   createAimer: () ->

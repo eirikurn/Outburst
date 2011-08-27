@@ -6,6 +6,7 @@ class Player extends THREE.Object3D
       model: "models/figure.js"
       callback: (geo) => 
         @makeModel(geo)
+    @createAimer()
   
   
   makeModel: (geometry) ->
@@ -23,6 +24,7 @@ class Player extends THREE.Object3D
     @model.playAnimation "walk"
   
   updatePlayer: (delta) -> 
+    @aimerContainer.rotation.z = Math.atan2 -input.mouse.y, -input.mouse.x 
     if @model
       moved = input.up or input.down or input.left or input.right
       
@@ -39,6 +41,16 @@ class Player extends THREE.Object3D
       @lastPos = 
         x: @position.x
         y: @position.y
+    
+  createAimer: () ->
+    @aimer = new THREE.Mesh(new THREE.CylinderGeometry(10, 0, 5, 50, 0, 0), new THREE.MeshLambertMaterial(color: 0xFF0000))
+    @aimer.rotation.x = Math.PI / 2
+    @aimer.rotation.y = Math.PI / 2
+    @aimer.position.x = -100
+    @aimer.position.y = 10
+    @aimerContainer = new THREE.Object3D()
+    @aimerContainer.addChild @aimer
+    @addChild @aimerContainer
   
   
   

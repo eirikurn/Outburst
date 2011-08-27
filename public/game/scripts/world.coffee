@@ -14,9 +14,11 @@ class World
     @container.appendChild(@renderer.domElement)
     
     @map = new Map()
-    @scene.addChild(@map)
+    @cursor = new Cursor()
     @testPlayer = new Player()
-    @scene.addObject(@testPlayer)
+    @scene.addChild(@map)
+    @scene.addChild(@cursor)
+    @scene.addChild(@testPlayer)
     
     @camera.target = @testPlayer
     
@@ -29,7 +31,9 @@ class World
     @renderer.render(@scene, @camera)
   
   update: (delta) ->
+    @cursor.onFrame delta
     @testPlayer.updatePlayer delta
+    @camera.onFrame delta
     @camera.position.x = @testPlayer.position.x
     @camera.position.y = @testPlayer.position.y - 500
     

@@ -2,6 +2,7 @@ socket = io.connect()
 socket.on 'welcome', (data) ->
   console.log data
   
+stats = new Stats()
 last = +new Date
 animloop = ->
   now = +new Date
@@ -11,11 +12,18 @@ animloop = ->
   
   world.update(delta)
   world.render()
+  stats.update()
     
 document.addEventListener 'DOMContentLoaded', ->
   window.input = new Input()
   window.world = new World window.innerWidth - 10, window.innerHeight - 10
   animloop()
+  
+  # show stats
+  stats.domElement.style.position = 'absolute'
+  stats.domElement.style.top = '0px'
+  stats.domElement.style.zIndex = 100
+  document.getElementById('container').appendChild(stats.domElement)
   
 trace = (message) ->
   console?.log message

@@ -26,9 +26,8 @@
       target
 
   class exports.WorldState extends exports.State
-    init: (@timestamp) ->
-      @players = []
-      @enemies = []
-
+    init: (data = {}) ->
+      @timestamp = data.timestamp
+      @players = [new exports.PlayerState(p) for p in data.players or []]
 
 )(if exports? then exports else window["state"] = {})

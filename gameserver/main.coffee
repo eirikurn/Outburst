@@ -13,18 +13,19 @@ class exports.Server
 
     stateCount = Math.round(constants.ROLLBACK_TIME * constants.TICKS_PER_SECOND) + 1
     @states = new RollingPool(states.WorldState, stateCount)
-    @states.get()
+    @states.get(timestamp: +new Date / 1000)
     @players = []
+    @playerIds = 0
 
     @tickTimer = setInterval @tick, 1000 / constants.TICKS_PER_SECOND
 
   player_connect: (socket) ->
-    state = new states.PlayerState x: 0, y: 0
+    state = new states.PlayerState x: 0, y: 0, id: @playerIds++
     player = new Player(socket, state)
     @players.push player
     @states.head().players.push state
 
-    socket.on 'input', (data) => @player_input player, data
+    socket.on 'input', (inputs) => @player_input player, inputs
     socket.on 'disconnect', => @player_disconnect player
     socket.emit "welcome", player
 
@@ -33,13 +34,13 @@ class exports.Server
     if index != -1
       @players.splice index, 1
 
-  player_state: (data) ->
-    player.inputs.push data
+  player_input: (player, data) ->
+    player.inputs.concat data
 
   # The main "Game Loop"
   tick: =>
-    time = +new Date() / 1000
-    world = @states.get(time)
+    time = +new Date / 1000
+    world = @states.get(timestamp: time)
 
     # Process player inputs
     for p in @players
@@ -47,10 +48,11 @@ class exports.Server
       for i in p.inputs
         newState.applyInput i
       world.players.push p.state
+      p.inputs.length = 0
 
     # Send updates to due players
     for p in @players
-      if p.lastUpdate + constants.TIME_BETWEEN_UPDATES > time
+      if p.lastUpdate + constants.TIME_BETWEEN_UPDATES <= time
         p.lastUpdate += constants.TIME_BETWEEN_UPDATES
         p.socket.emit 'world', world
 

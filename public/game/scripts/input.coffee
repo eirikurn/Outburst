@@ -33,6 +33,16 @@ class Input
   
   keyup: (event) ->
     @[@keys[event.keyCode]] = false
+
+  getState: (s = {}) ->
+    s.left = @left
+    s.up = @up
+    s.down = @down
+    s.right = @right
+    s.mouseX = @mouse.x
+    s.mouseX = @mouse.y
+    s.mouseDown = @mouse.down
+    s
     
   mousemove: (event) ->
     container = document.getElementById "container"

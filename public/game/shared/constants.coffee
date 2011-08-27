@@ -4,11 +4,8 @@
   exports.TICKS_PER_SECOND = 60
   exports.TIME_PER_TICK = 1 / exports.TICKS_PER_SECOND
 
-  exports.UPDATES_PER_SECOND = 30
-  exports.TIME_BETWEEN_UPDATES = 1 / exports.UPDATES_PER_SECOND
-
-  exports.INPUTS_PER_SECOND = 30
-  exports.TIME_BETWEEN_INPUTS = 1 / exports.INPUTS_PER_SECOND
+  exports.TIME_BETWEEN_UPDATES = 1 / 30
+  exports.TIME_BETWEEN_INPUTS = 1 / 30
 
   exports.BUFFER_INPUTS = 0.05
   exports.ROLLBACK_TIME = 1

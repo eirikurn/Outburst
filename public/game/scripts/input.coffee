@@ -14,6 +14,7 @@ class Input
     
   handlers: {}
   
+  keysEnabled: true
   keys:
     37: 'left'
     38: 'up'
@@ -23,7 +24,6 @@ class Input
     87: 'up' # W
     68: 'right' # D
     83: 'down' # S
-    enabled: true
 
   left: false
   up: false
@@ -37,7 +37,7 @@ class Input
     scroll: 1000
     
   keydown: (event) ->
-    @[@keys[event.keyCode]] = on if @keys.enabled
+    @[@keys[event.keyCode]] = on if @keysEnabled
   
   keyup: (event) ->
     @handlers[event.keyCode]() if @handlers[event.keyCode]

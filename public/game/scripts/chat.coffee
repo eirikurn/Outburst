@@ -18,12 +18,12 @@ class Chat
       @hide()
   
   show: ->
-    input.keys.enabled = no
+    input.keysEnabled = no
     @input.style.display = "inline"
     @input.focus()
   
   hide: ->
-    input.keys.enabled = yes
+    input.keysEnabled = yes
     @input.style.display = "none"
     @input.value = ''
     

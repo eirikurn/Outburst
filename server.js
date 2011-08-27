@@ -15,6 +15,7 @@ app.configure(function(){
   app.set('view engine', 'jade');
   app.use(express.bodyParser());
   app.use(express.methodOverride());
+  app.use(express.compiler({src: __dirname + '/public', enable: ['coffeescript']}));
   app.use(require('stylus').middleware({ src: __dirname + '/public' }));
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
@@ -38,3 +39,7 @@ app.get('/', function(req, res){
 
 app.listen(process.env.PORT || 8000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+
+var io = require('socket.io').listen(app);
+io.set('log level', 2);
+

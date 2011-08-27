@@ -3,8 +3,9 @@ Player = require './player'
 
 class exports.Server
   constructor: (app) ->
-    @io = require('socket.io').listen app
-    # @io.set 'log level', 2
+    @io = require('socket.io').listen app,
+      'transports': ['websocket']
+      'log level': 2
 
     @players = []
     @io.sockets.on 'connection', @player_connect

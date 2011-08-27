@@ -34,8 +34,8 @@
       deltaY += velocity if input.up
       deltaY -= velocity if input.down
       if deltaX and deltaY
-        deltaX *= 0.707106781
-        deltaY *= 0.707106781
+        deltaX *= 0.707106781 # Math.sin(45°)
+        deltaY *= 0.707106781 # Math.sin(45°)
 
       target.x = @x + deltaX
       target.y = @y + deltaY
@@ -43,8 +43,8 @@
         if deltaX or deltaY
           Math.atan2(deltaY, deltaX)
         else
-          @walkDirection
-      target.aimDirection = Math.atan2(input.mouseY, input.mouseX)
+          @walkDirection or 0
+      target.aimDirection = Math.atan2(input.mouseY - target.y, input.mouseX - target.x)
       target
 
     @fields = ['x', 'y', 'id', 'walkDirection', 'aimDirection']

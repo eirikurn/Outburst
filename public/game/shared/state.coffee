@@ -1,4 +1,5 @@
 ((exports)->
+  constants = require './constants'
 
   class exports.UnitState
     constructor: (data) ->
@@ -13,8 +14,8 @@
 
   class exports.PlayerState extends exports.UnitState
     applyInput: (input, target = @) ->
-      target.x = @x + input.moveX
-      target.y = @y + input.moveY
+      target.x = @x + input.moveX * constants.PLAYER_SPEED
+      target.y = @y + input.moveY * constants.PLAYER_SPEED
 
 
 )(if exports? then exports else window["state"] = {})

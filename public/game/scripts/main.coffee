@@ -1,3 +1,10 @@
+require = (module) ->
+  match = /^(\.\/)?(.+)$/.exec m
+  module = match[2].split '/'
+  obj = window
+  obj = obj[stub] for stub in module
+  return obj
+
 requestAnimFrame = (->
   window.requestAnimationFrame || 
   window.webkitRequestAnimationFrame || 

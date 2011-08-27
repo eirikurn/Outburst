@@ -5,6 +5,9 @@ class Input
     document.body.addEventListener 'mousemove', (ev) => @mousemove(ev)
     document.body.addEventListener 'mousedown', (ev) => @mousedown(ev)
     document.body.addEventListener 'mouseup', (ev) => @mouseup(ev)
+    
+    @windowHalfX = window.innerWidth / 2
+    @windowHalfY = window.innerHeight / 2
   
   keys:
     37: 'left'
@@ -28,8 +31,8 @@ class Input
     @[@keys[event.keyCode]] = false
     
   mousemove: (event) ->
-    @mouse.x = event.clientX
-    @mouse.y = event.clientY
+    @mouse.x = event.clientX - @windowHalfX
+    @mouse.y = -(event.clientY - @windowHalfY)
     document.getElementById('mouse').innerHTML = 'X: ' + @mouse.x + ', Y: ' + @mouse.y
     
   mousedown: (event) ->

@@ -3,15 +3,17 @@ class Game
     @lastFrame = +new Date / 1000
     @lastTick = +new Date / 1000
     @lastSentInputs = +new Date / 1000
-    @inputs = []
+    @inputs = {count: 0}
     @renderShots = []
 
     worldCount = constants.INTERPOLATE_FRAMES + 1
     @worlds = new utils.StatePool(states.WorldState, worldCount)
 
     @socket = io.connect()
+    utils.addCompression(@socket)
+
     @socket.on 'welcome', @joinedServer
-    @socket.on 'world', @updateFromServer
+    @socket.compressed.on 'world', @updateFromServer
 
     @initRenderer()
     @initGraphics()
@@ -23,6 +25,7 @@ class Game
     chat = new Chat(@socket)
 
   joinedServer: (data) =>
+    console.log "ROFL??"
     @player = new Player(new states.PlayerState(data.player), @camera)
     @addEntity(data.player.id, @player)
     @user.nick = "Anonymous " + data.player.id if @user.nick == "Anonymous"
@@ -40,32 +43,36 @@ class Game
 
   updateFromServer: (data) =>
     world = @worlds.new data
-    for p in world.players# when p.id != @player.id
-      if not @entities[p.id]
-        @addEntity(p.id, new PlayerUnit(p))
+    for id, p of world.players
+      if not @entities[id]
+        @addEntity(id, new PlayerUnit(p))
       else
-        @entities[p.id].addState(p)
+        @entities[id].addState(p)
 
-    for e in world.enemies
-      if not @entities[e.id]
-        @addEntity(e.id, new Enemy(e))
+    for id, e of world.enemies
+      if not @entities[id]
+        @addEntity(id, new Enemy(e))
       else
-        @entities[e.id].addState(e)
+        @entities[id].addState(e)
 
-    for s in world.sheeps
-      if not @entities[s.id]
-        @addEntity(s.id, new Sheep(s))
+    for id, s of world.sheeps
+      if not @entities[id]
+        @addEntity(id, new Sheep(s))
       else
-        @entities[s.id].addState(s)
+        @entities[id].addState(s)
 
     @removeNullEntities(world)
   
   removeNullEntities: (world) ->
-    worldEntityIds = (wEntity.id.toString() for wEntity in world.players.concat world.sheeps, world.enemies)
-    for localId of @entities
-      if localId not in worldEntityIds
-        @scene.removeChild @entities[localId]
-        delete @entities[localId]
+    players = world.players
+    enemies = world.enemies
+    sheeps = world.sheeps
+
+    for id of @entities
+      if id not of players and id not of enemies and id not of sheeps
+        @scene.removeChild @entities[id]
+        delete @entities[id]
+    return
 
   onFrame: =>
     now = +new Date / 1000
@@ -82,13 +89,13 @@ class Game
         oneState.tick = world.tick
         @player.applyInput oneState, world
 
-        @inputs.push oneState
+        @inputs[@inputs.count++] = oneState
         @lastTick += constants.TIME_PER_TICK
 
       # Send input to server
       if @lastSentInputs + constants.TIME_BETWEEN_INPUTS <= now
-        @socket.emit 'input', @inputs
-        @inputs.length = 0
+        @socket.compressed.emit 'input', @inputs
+        @inputs = {count: 0}
         @lastSentInputs += constants.TIME_BETWEEN_INPUTS
 
     # Update entities

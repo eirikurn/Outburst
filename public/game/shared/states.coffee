@@ -21,6 +21,11 @@
     @fields = ['x', 'y', 'id']
 
   class exports.PlayerState extends exports.UnitState
+    init: ->
+      @walkDirection = 0
+      @aimDirection = 0
+      super
+
     applyInput: (input, target = @) ->
       velocity = constants.PLAYER_SPEED * constants.TIME_PER_TICK
       deltaX = 0; deltaY = 0
@@ -34,7 +39,15 @@
 
       target.x = @x + deltaX
       target.y = @y + deltaY
+      target.walkDirection =
+        if deltaX or deltaY
+          Math.atan2(deltaY, deltaX)
+        else
+          @walkDirection
+      target.aimDirection = Math.atan2(input.mouseY, input.mouseX)
       target
+
+    @fields = ['x', 'y', 'id', 'walkDirection', 'aimDirection']
 
   class exports.WorldState extends exports.State
     init: (data = {}) ->

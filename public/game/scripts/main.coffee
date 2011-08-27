@@ -19,7 +19,7 @@ class Game
     @onFrame()
 
   joinedServer: (data) =>
-    @player = new Player data.player, @camera
+    @player = new Player(new states.PlayerState(data.player), @camera)
     @addEntity(data.player.id, @player)
 
   addEntity: (id, entity) ->
@@ -52,7 +52,7 @@ class Game
       @lastSentInputs += constants.TIME_BETWEEN_INPUTS
 
     # Update entities
-    for e in @entities
+    for k, e of @entities
       e.onFrame(delta) if e.onFrame
 
     @renderer.render @scene, @camera
@@ -108,7 +108,7 @@ class Game
     document.getElementById('container').appendChild(@stats.domElement)
 
 document.addEventListener 'DOMContentLoaded', ->
-  @game = new Game()
+  window.game = new Game()
 
 trace = (message) ->
   console?.log message

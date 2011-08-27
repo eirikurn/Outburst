@@ -1,6 +1,9 @@
 class Player extends THREE.Object3D
   constructor: ->
     super()
+    @gun =
+      coolDown: 0.2
+      currentCoolDown: 0
     loader = new THREE.JSONLoader()
     loader.load
       model: "models/figure.js"
@@ -28,6 +31,7 @@ class Player extends THREE.Object3D
     @updateRotation(delta)
     @updateAimer(delta)
     @updateAnimation(delta)
+    @updateGun(delta)
     
   createAimer: () ->
     @aimer = new THREE.Mesh(new THREE.CylinderGeometry(10, 0, 5, 50, 0, 0), new THREE.MeshLambertMaterial(color: 0xFF0000))
@@ -61,7 +65,29 @@ class Player extends THREE.Object3D
       @model.updateAnimation (delta)
       @model.isPaused = not (input.up or input.down or input.left or input.right)
   
-  
+  updateGun: (delta) ->
+    if input.mouse.isDown
+      if @gun.currentCoolDown <= 0
+        @shoot()
+        @gun.currentCoolDown = @gun.coolDown
+      else
+        @gun.currentCoolDown -= delta
+        
+  shoot: ->
+    console.log "pew"
+    
   
 # export
 @Player = Player
+
+
+
+
+
+
+
+
+
+
+
+

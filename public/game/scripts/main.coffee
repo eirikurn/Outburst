@@ -106,7 +106,7 @@ class Game
     
     @camera.onFrame()
     @renderer.render @scene, @camera
-    @cursor.onFrame()
+    @cursor.onFrame @camera, if @player then @player.state else null
     #@stats.update() if constants.DISPLAY_STATS
 
     requestAnimFrame(@onFrame, @container)

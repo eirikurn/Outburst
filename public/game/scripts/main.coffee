@@ -19,18 +19,19 @@ class Game
     @onFrame()
 
   joinedServer: (data) =>
+    console.log data
     @player = new Player(new states.PlayerState(data.player), @camera)
     @addEntity(data.player.id, @player)
 
   addEntity: (id, entity) ->
-    @entities[id] = @player
+    @entities[id] = entity
     @scene.addObject entity
 
   updateFromServer: (data) =>
     world = @worlds.new data
     for p in world.players# when p.id != @player.id
       if not @entities[p.id]
-        @addEntity(p.id, new Unit(p))
+        @addEntity(p.id, new PlayerUnit(p))
       else
         @entities[p.id].addState(p)
     return

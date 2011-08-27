@@ -10,12 +10,14 @@ class World
     @container.appendChild(@renderer.domElement)
     
     @testPlayer = new Player(@scene)
+    @cursor = new Cursor(@scene)
   
   render: ->
     @renderer.render(@scene, @camera)
   
   update: (delta) ->
     @testPlayer.update delta
+    @cursor.update delta
 
 # export
 @World = World

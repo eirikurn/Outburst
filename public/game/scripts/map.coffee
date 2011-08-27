@@ -26,10 +26,10 @@ class Map extends THREE.Object3D
     @waypointSize = constants.MAP.waypointSize
     
     # Add roads
-    previous = constants.MAP.enemySpawn
-    for waypoint in constants.MAP.waypoints
-      @addRoad previous, waypoint
-      previous = waypoint
+    #previous = constants.MAP.enemySpawn
+    #for waypoint in constants.MAP.waypoints
+    #  @addRoad previous, waypoint
+    #  previous = waypoint
       
     # Add corners
     @addCorner constants.MAP.enemySpawn
@@ -43,12 +43,11 @@ class Map extends THREE.Object3D
     mesh = new THREE.Mesh plane, material
     mesh.position.x = pos[0]
     mesh.position.y = pos[1]
-    mesh.position.z = 15
+    mesh.position.z = 5
     @addChild mesh
     
   addRoad: (from, to) ->
-    
-    z = if @odd = !@odd then 10 else 5
+    z = if @odd = !@odd then 4 else 3
     road = new Road @roadTexture, from, to, z
     @addChild road
     

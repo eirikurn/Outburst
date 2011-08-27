@@ -2,23 +2,27 @@ io = require('socket.io')
 Player = require './player'
 {RollingPool} = require './utils'
 constants = require './shared/constants'
+state = require './shared/state'
 
 class exports.Server
   constructor: (app) ->
     @io = require('socket.io').listen app,
       'transports': ['websocket']
       'log level': 2
-
-    @states = new RollingPool()
-    @players = []
     @io.sockets.on 'connection', (s) => @player_connect(s)
 
-    @tickTimer = setInterval @tick, constants.TIME_PER_TICK * 1000
+    stateCount = Math.round(constants.ROLLBACK_TIME * constants.TICKS_PER_SECOND) + 1
+    @states = new RollingPool(state.WorldState, stateCount)
+    @states.get()
+    @players = []
+
+    @tickTimer = setInterval @tick, 1000 / constants.TICKS_PER_SEC
 
   player_connect: (socket) ->
     state = new state.PlayerState x: 0, y: 0
     player = new Player(socket, state)
     @players.push player
+    @states.head().players.push state
 
     socket.on 'input', (data) => @player_input player, data
     socket.on 'disconnect', => @player_disconnect player
@@ -33,5 +37,13 @@ class exports.Server
     player.inputs.push data
 
   tick: ->
+    world = @states.get()
+    for p in players
+      newState = p.state.clone()
+      for i in p.inputs
+        newState.applyInput i
+      world.players.push p.state
+
+
 
 

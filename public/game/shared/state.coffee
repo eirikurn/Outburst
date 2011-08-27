@@ -1,8 +1,15 @@
 ((exports)->
   constants = require './constants'
 
-  class exports.UnitState
-    constructor: (data) ->
+  class exports.State
+    constructor: ->
+      if arguments[0] != false
+        @init.apply this, arguments
+
+    init: ->
+
+  class exports.UnitState extends exports.State
+    init: (data) ->
       for k in @constructor.fields
         @[k] = data[k]
 
@@ -16,9 +23,11 @@
     applyInput: (input, target = @) ->
       target.x = @x + input.moveX * constants.PLAYER_SPEED
       target.y = @y + input.moveY * constants.PLAYER_SPEED
+      target
 
-  class exports.WorldState
-    constructor: (data) ->
+  class exports.WorldState extends exports.State
+    init: (timestamp) ->
+      @timestamp = +new Date()
       @players = []
       @enemies = []
 

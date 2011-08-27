@@ -1,9 +1,8 @@
 
 # An object pool that implements a fixed sliding window.
 class exports.RollingPool
-  constructor: (@capacity=20, cls=(-> {})) ->
+  constructor: (@cls, @capacity=20) ->
     @array = new Array @capacity
-    @array[i] = new cls() for i in [0...capacity]
     @start = 0
     @count = 0
 
@@ -13,9 +12,18 @@ class exports.RollingPool
     return @array[(@start + index)%@capacity]
 
   get: ->
-    item = @array[(@start + @count)%@capacity]
-    if @count < @capacity
-      @count++
-    else
+    index = (@start + @count) % @capacity
+    item = @array[index]
+    if item
       @start = (@start + 1) % @capacity
+    else
+      @array[index] = item = new @cls(false)
+      @count++
+
+    item.init.apply arguments
+    return item
+
+  head: -> @get -1
+
+  tail: -> @get 0
 

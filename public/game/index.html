@@ -22,6 +22,8 @@
     	#ammoleft { width: 90px; height: 32px; background: url(images/bullet.png) repeat-x; }
     	#votehud { right: 0; top: 0; width: 110px; height: 25px; border-bottom-left-radius: 10px;}
     	#votehud iframe { border: 0; width: 100px; height: 30px; display: inline-block; }
+    	#score { top: 50px; left: 0; border-bottom-right-radius: 10px; }
+    	#gameover { display: none; }
     </style>
     <script>
       // A simple require implementation
@@ -94,6 +96,10 @@
 				</script>
 				<iframe src="http://www.facebook.com/plugins/like.php?app_id=244994422205622&amp;href=http%3A%2F%2Faranja.nko2.nodeknockout.com%2F&amp;send=false&amp;layout=button_count&amp;width=75&amp;show_faces=false&amp;action=like&amp;colorscheme=dark&amp;font=verdana&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:75px; height:21px;" allowTransparency="true"></iframe-->
 		  	</div>
+		  	<div id="score" class="overlay">
+		  		0:00
+		  	</div>
+
 		  	<div id="gameover" class="overlay">
 		  		You lost!
 		  	</div>

@@ -5,8 +5,11 @@ class Game
     @lastSentInputs = +new Date / 1000
     @inputs = []
 
+    worldCount = constants.INTERPOLATE_FRAMES + 1
+    @worlds = utils.StatePool(state.WorldState, worldCount)
+
     @socket = io.connect()
-    @socket.on 'welcome', (data) ->
+    @socket.on 'welcome', @joinedServer
     @socket.on 'world', @updateFromServer
 
     window.input = @input = new Input()
@@ -14,9 +17,17 @@ class Game
     @initStats()
     @onFrame()
 
-  updateFromServer: (data) =>
-    console.log data
+  joinedServer: (data) =>
+    @serverTime = data.
 
+
+  updateFromServer: (data) =>
+    @worlds.get data
+    for p in data.players when p.id != @player.id
+      if not @entities[p.id]
+        @entities[p.id] = new ServerUnit(p)
+      else
+        @entities[p.id].addState(p)
 
   onFrame: =>
     now = +new Date / 1000

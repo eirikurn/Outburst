@@ -10,6 +10,8 @@
   exports.BUFFER_INPUTS = 0.05
   exports.ROLLBACK_TIME = 1
 
+  exports.INTERPOLATE_FRAMES = 2
+
   # Gameplay constants
   exports.PLAYER_SPEED = 200
 

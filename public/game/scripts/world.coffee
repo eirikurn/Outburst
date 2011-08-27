@@ -17,7 +17,7 @@ class World
     @scene.addChild(@map)
     @testPlayer = new Player()
     @scene.addObject(@testPlayer)
-    
+
     @camera.target = @testPlayer
     
     window.onresize = =>

@@ -1,6 +1,6 @@
 io = require('socket.io')
 Player = require './player'
-{RollingPool} = require './utils'
+utils = require './shared/utils.coffee'
 constants = require './shared/constants'
 states = require './shared/state'
 
@@ -12,8 +12,8 @@ class exports.Server
     @io.sockets.on 'connection', (s) => @player_connect(s)
 
     stateCount = Math.round(constants.ROLLBACK_TIME * constants.TICKS_PER_SECOND) + 1
-    @states = new RollingPool(states.WorldState, stateCount)
-    @states.get(timestamp: +new Date / 1000)
+    @states = new utils.StatePool(states.WorldState, stateCount)
+    @states.new(timestamp: +new Date / 1000)
     @players = []
     @playerIds = 0
 
@@ -27,7 +27,7 @@ class exports.Server
 
     socket.on 'input', (inputs) => @player_input player, inputs
     socket.on 'disconnect', => @player_disconnect player
-    socket.emit "welcome", player
+    socket.emit "welcome", player: player, clock: +new Date / 1000
 
   player_disconnect: (player) ->
     index = @players.indexOf player
@@ -40,7 +40,7 @@ class exports.Server
   # The main "Game Loop"
   tick: =>
     time = +new Date / 1000
-    world = @states.get(timestamp: time)
+    world = @states.new(timestamp: time)
 
     # Process player inputs
     for p in @players
@@ -53,6 +53,6 @@ class exports.Server
     # Send updates to due players
     for p in @players
       if p.lastUpdate + constants.TIME_BETWEEN_UPDATES <= time
-        p.lastUpdate += constants.TIME_BETWEEN_UPDATES
+        p.lastUpdate = Math.max time, p.lastUpdate + constants.TIME_BETWEEN_UPDATES
         p.socket.emit 'world', world
 

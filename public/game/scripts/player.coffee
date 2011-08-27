@@ -41,11 +41,16 @@ class Player extends THREE.Object3D
     @model.position.z = 100
     @model.playAnimation "walk"
     @addChild @model
-  
-  updateAnimation: (delta) ->
-    if @model
-      @model.updateAnimation (delta)
-      @model.isPaused = not (input.up or input.down or input.left or input.right)
-  
+
+  createAimer: () ->
+    @aimer = new THREE.Mesh(new THREE.CylinderGeometry(10, 0, 5, 50, 0, 0), new THREE.MeshLambertMaterial(color: 0xFF0000))
+    @aimer.rotation.x = Math.PI / 2
+    @aimer.rotation.y = Math.PI / 2
+    @aimer.position.x = -100
+    @aimer.position.z = 10
+    @aimerContainer = new THREE.Object3D()
+    @aimerContainer.addChild @aimer
+    @addChild @aimerContainer
+
 # export
 @Player = Player

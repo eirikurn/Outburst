@@ -108,15 +108,8 @@ class Game
     document.getElementById('container').appendChild(@stats.domElement)
 
 document.addEventListener 'DOMContentLoaded', ->
-<<<<<<< HEAD
   window.game = new Game()
 
-=======
-  world = new World()
-  window.world = world
-  window.input = new Input world.camera, world.map.map
-  animloop()
->>>>>>> origin/master
 trace = (message) ->
   console?.log message
 

@@ -1,6 +1,6 @@
 Outburst
 ========
 
-Run make to start server! :)
+Run ``make`` to start server! :)
 
-Then open http://localhost:8000/game/
+Then open [http://localhost:8000/game/]()

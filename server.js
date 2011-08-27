@@ -15,7 +15,7 @@ var cluster = cluster(app)
   .use(cluster.stats())
   .use(cluster.pidfiles('pids'))
   .use(cluster.cli())
-  .in('development').use(cluster.reload(['server', 'app.js', 'server.js'], { extensions: ['.js', '.coffee'] }))
+  .in('development').use(cluster.reload(['gameserver', 'app.js', 'server.js'], { extensions: ['.js', '.coffee'] }))
   .in('all')
     .listen(process.env.PORT || 8000);
 

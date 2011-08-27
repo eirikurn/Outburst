@@ -37,6 +37,5 @@ app.get('/', function(req, res){
   });
 });
 
-// var io = require('socket.io').listen(app);
-// io.set('log level', 2);
-
+var Server = require('./gameserver/main').Server
+  , server = new Server(app);

@@ -11,6 +11,8 @@ class Input
     @projector = new THREE.Projector()
     @mouse2D = new THREE.Vector3( 0, 10000, 0.5 );
     @ray = new THREE.Ray( @camera.position, null );
+    
+  handlers: {}
   
   keys:
     37: 'left'
@@ -21,6 +23,7 @@ class Input
     87: 'up' # W
     68: 'right' # D
     83: 'down' # S
+    enabled: true
     
   mouse:
     x: 0
@@ -29,9 +32,10 @@ class Input
     scroll: 1000
     
   keydown: (event) ->
-    @[@keys[event.keyCode]] = on
+    @[@keys[event.keyCode]] = on if @keys.enabled
   
   keyup: (event) ->
+    @handlers[event.keyCode]() if @handlers[event.keyCode]
     @[@keys[event.keyCode]] = off
     
   mousemove: (event) ->
@@ -58,7 +62,10 @@ class Input
   mousescroll: (event) ->
     event.preventDefault()
     val = @mouse.scroll + (event.wheelDeltaY / 10)
-    @mouse.scroll = val if val > 300 and val <= 1000 
+    @mouse.scroll = val if val > 300 and val <= 1000
+    
+  handle: (keyCode, callback) ->
+    @handlers[keyCode] = callback
 
 
 # export

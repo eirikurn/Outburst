@@ -31,6 +31,8 @@ class Player extends PlayerUnit
     Player.__super__.addState.call this, @state
     @camera.position.x = @state.x
     @camera.position.y = @state.y - 800
+    
+    game.hud.onPlayerState @state
 
 # export
 @PlayerUnit = PlayerUnit

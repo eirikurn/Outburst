@@ -95,6 +95,7 @@ class Game
 
     @scene.addChild @map = new Map()
     @scene.addChild @cursor = new Cursor()
+    @hud = new Hud()
 
   initRenderer: ->
     @targetWidth = 1024

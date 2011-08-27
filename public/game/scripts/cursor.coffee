@@ -1,10 +1,10 @@
-class Cursor
-  constructor: (scene) ->
+class Cursor extends THREE.Object3D
+  constructor: ->
     @model = new THREE.Mesh(
       new THREE.SphereGeometry(30, 8, 8),
       new THREE.MeshLambertMaterial(color: 0x00FFFF)
     )
-    scene.addChild @model
+    @addChild @model
   
   update: (delta) ->
     @model.position.x = input.mouse.x

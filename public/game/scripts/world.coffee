@@ -13,7 +13,12 @@ class World
     @container.style.height = @targetHeight + 'px'
     @container.appendChild(@renderer.domElement)
     
-    @testPlayer = new Player(@scene)
+    @map = new Map()
+    @scene.addChild(@map)
+    @testPlayer = new Player()
+    @scene.addObject(@testPlayer)
+    
+    @camera.target = @testPlayer
     
     window.onresize = =>
       @resizeToFit()
@@ -24,7 +29,9 @@ class World
     @renderer.render(@scene, @camera)
   
   update: (delta) ->
-    @testPlayer.update delta
+    @testPlayer.updatePlayer delta
+    @camera.position.x = @testPlayer.position.x
+    @camera.position.y = @testPlayer.position.y - 500
     
   resizeToFit: ->
     setWidth = window.innerWidth

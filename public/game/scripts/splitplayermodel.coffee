@@ -14,7 +14,7 @@ class SplitPlayerModel extends THREE.Object3D
         keyframes: 1
       walk:
         firstKeyframeIndex: 1
-        duration: 1500
+        duration: 600
         keyframes: 24
     @legs.scale.x = @legs.scale.y = @legs.scale.z = 10
     @legs.rotation.x = Math.PI / 2

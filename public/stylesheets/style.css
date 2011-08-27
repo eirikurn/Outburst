@@ -18,6 +18,14 @@ h2 {
 p {
   margin: 5px 0;
 }
+#vote {
+  position: absolute;
+  top: 42px;
+  right: 20px;
+  border: 0;
+  width: 100px;
+  height: 30px;
+}
 #wrapper {
   width: 100%;
   height: 100%;
@@ -26,6 +34,7 @@ p {
   box-sizing: border-box;
 }
 #box {
+  position: relative;
   width: 800px;
   margin: 0 auto;
   padding: 20px;
@@ -46,6 +55,13 @@ ul {
 }
 ul.people a {
   font-weight: bold;
+}
+#theteam,
+#controls {
+  display: table-cell;
+}
+#controls {
+  padding-left: 70px;
 }
 img.avatar {
   vertical-align: middle;

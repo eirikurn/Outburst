@@ -36,17 +36,16 @@ app.configure(function(){
 });
 
 app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
 app.configure('production', function(){
-  app.use(express.errorHandler()); 
+  app.use(express.errorHandler());
 });
-
 
 // Routes
 app.get('/', function(req, res){
-  res.render('index');
+  res.render('index', { layout: false });
 });
 
 app.get('/oauth/user', function(req, res){

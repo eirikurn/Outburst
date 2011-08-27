@@ -107,7 +107,7 @@ class Game
     @camera.onFrame()
     @renderer.render @scene, @camera
     @cursor.onFrame()
-    @stats.update() if constants.DISPLAY_STATS
+    #@stats.update() if constants.DISPLAY_STATS
 
     requestAnimFrame(@onFrame, @container)
 
@@ -156,6 +156,7 @@ class Game
     @container.style.height = setHeight + "px"
 
   initStats: ->
+    return
     @stats = new Stats()
     @stats.domElement.style.position = 'absolute'
     @stats.domElement.style.top = '0px'

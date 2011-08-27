@@ -24,11 +24,8 @@ class exports.Server
     @isStarted = false
     @spawnTimer = 0
     @remainingSpawns = 0
-    @entityIds = 0
-    @playerIds = 1000
-    
-    for i in [1..3]
-      @spawnSheep()
+    @entityIds = 1000
+    @playerIds = 0
 
     @tickTimer = setInterval @tick, 1000 / constants.TICKS_PER_SECOND
 
@@ -72,6 +69,14 @@ class exports.Server
   startGame: ->
     console.log "Game starting"
     @spawnTimer = constants.FIRST_WAVE
+    state = @states.head()
+    state.wave = 0
+    state.lives = constants.START_LIVES
+    @sheeps.length = 0
+
+    for i in [1..state.lives]
+      @spawnSheep()
+
     setTimeout =>
       @io.sockets.emit "chat", [ player: "server", msg: "Game starts in " + (constants.FIRST_WAVE - 2) + " seconds" ]
     , 2000
@@ -109,11 +114,13 @@ class exports.Server
     for e in @enemies
       state = e.onTick()
       world.enemies.push state if state
+    return
   
   updateSheep: (world) ->
     for s in @sheeps
       state = s.onTick()
       world.sheeps.push state if state
+    return
 
   # The main "Game Loop"
   tick: =>
@@ -160,12 +167,12 @@ class exports.Server
   
   spawnSheep: ->
     direction = Math.random() * Math.PI * 2
-    distance = Math.random() * constants.MAP.sheepSpawnArea
+    distance = Math.random() * constants.MAP.waypointSize
     delta = [
       Math.sin(direction) * distance
       Math.cos(direction) * distance
     ]
-    startX = constants.MAP.sheepSpawn[0] + delta[0]
-    startY = constants.MAP.sheepSpawn[1] + delta[1]
+    startX = constants.MAP.base[0] + delta[0]
+    startY = constants.MAP.base[1] + delta[1]
     sheep = new Sheep( x: startX, y: startY, hp: constants.SHEEP_HEALTH, id: ++@entityIds, direction: Math.random() * Math.PI * 2)
     @sheeps.push sheep

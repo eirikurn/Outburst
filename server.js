@@ -4,24 +4,11 @@
  * Module dependencies.
  */
 
-var cluster = require('cluster')
-  , coffee = require('coffee-script')
+var coffee = require('coffee-script')
   , nko = require('nko')('Vzhctm/pgoeQd99c')
   , app = require('./app')
   , port = process.env.PORT || 8000;
 
-// var cluster = cluster(app)
-//   .use(cluster.logger('logs'))
-//   .use(cluster.stats())
-//   .use(cluster.pidfiles('pids'))
-//   .use(cluster.cli())
-//   .set('workers', 1)
-//   .in('development').use(cluster.reload(['gameserver', 'app.js', 'server.js'], { extensions: ['.js', '.coffee'] }))
-//   .in('all')
-//     .listen(process.env.PORT || 8000);
 app.listen(process.env.PORT || 8000);
-
-if (cluster.isMaster) {
-  console.log("Express server listening on port %d in %s mode", port, app.settings.env);
-}
+console.log("Express server listening on port %d in %s mode", port, app.settings.env);
 

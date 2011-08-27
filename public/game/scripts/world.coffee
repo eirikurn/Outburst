@@ -18,6 +18,8 @@ class World
     @testPlayer = new Player()
     @scene.addObject(@testPlayer)
     
+    @camera.target = @testPlayer
+    
     window.onresize = =>
       @resizeToFit()
       
@@ -28,6 +30,8 @@ class World
   
   update: (delta) ->
     @testPlayer.updatePlayer delta
+    @camera.position.x = @testPlayer.position.x
+    @camera.position.y = @testPlayer.position.y
     
   resizeToFit: ->
     setWidth = window.innerWidth

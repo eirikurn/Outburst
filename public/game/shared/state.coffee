@@ -10,12 +10,17 @@
       for k in @constructor.fields
         target[k] = @[k]
 
-  exports.UnitState = ['x', 'y']
+    @fields = ['x', 'y']
 
   class exports.PlayerState extends exports.UnitState
     applyInput: (input, target = @) ->
       target.x = @x + input.moveX * constants.PLAYER_SPEED
       target.y = @y + input.moveY * constants.PLAYER_SPEED
+
+  class exports.WorldState
+    constructor: (data) ->
+      @players = []
+      @enemies = []
 
 
 )(if exports? then exports else window["state"] = {})

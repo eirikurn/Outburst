@@ -16,7 +16,8 @@ class exports.Server
     @tickTimer = setInterval @tick, constants.TIME_PER_TICK * 1000
 
   player_connect: (socket) ->
-    player = new Player(socket)
+    state = new state.PlayerState x: 0, y: 0
+    player = new Player(socket, state)
     @players.push player
 
     socket.on 'input', (data) => @player_input player, data
@@ -32,4 +33,5 @@ class exports.Server
     player.inputs.push data
 
   tick: ->
+
 

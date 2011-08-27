@@ -1,6 +1,6 @@
 
 class Player
-  constructor: (@socket) ->
+  constructor: (@socket, @state) ->
     @inputs = []
 
   toJSON: ->

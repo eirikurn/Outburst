@@ -7,6 +7,7 @@ class World
     @scene = new THREE.Scene()
     @renderer = new THREE.WebGLRenderer()
     @renderer.setSize(@targetWidth, @targetHeight)
+    @renderer.setClearColorHex 0xFFFFFF
     @container = document.getElementById 'container'
     @container.style.width = @targetWidth + 'px'
     @container.style.height = @targetHeight + 'px'
@@ -26,8 +27,6 @@ class World
     @testPlayer.update delta
     
   resizeToFit: ->
-    targetRatio = 16 / 9
-    
     setWidth = window.innerWidth
     setHeight = Math.floor setWidth * (@targetHeight / @targetWidth)
     
@@ -35,8 +34,8 @@ class World
       setWidth = window.innerWidth
       setHeight = Math.floor setWidth * (@targetHeight / @targetWidth)
     
-    if setHeight > window.innerHeight - 10
-      setHeight = window.innerHeight - 10
+    if setHeight > window.innerHeight - 3
+      setHeight = window.innerHeight - 3
       setWidth = Math.floor setHeight * (@targetWidth / @targetHeight)
     
     @renderer.setSize setWidth, setHeight

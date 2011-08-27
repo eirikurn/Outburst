@@ -80,4 +80,5 @@ document.addEventListener 'DOMContentLoaded', ->
   window.world = new World window.innerWidth - 10, window.innerHeight - 10
   animloop()
   
-
+trace = (message) ->
+  console?.log message

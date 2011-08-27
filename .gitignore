@@ -2,3 +2,4 @@ node_modules
 *.swp
 logs
 pids
+.project

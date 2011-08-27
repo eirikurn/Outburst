@@ -22,8 +22,9 @@ animloop = ->
   stats.update()
     
 document.addEventListener 'DOMContentLoaded', ->
-  window.input = new Input()
-  window.world = new World()
+  world = new World()
+  window.world = world
+  window.input = new Input world.camera, world.map.map
   animloop()
   
   # show stats

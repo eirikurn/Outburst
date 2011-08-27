@@ -1,5 +1,5 @@
 class Input
-  constructor: ->
+  constructor: (@camera, @worldMap) ->
     @targetWidth = 1024
     @targetHeight = 576
     document.addEventListener 'keyup', (ev) => @keyup(ev)
@@ -12,6 +12,10 @@ class Input
     
     @windowHalfX = window.innerWidth / 2
     @windowHalfY = window.innerHeight / 2
+    
+    @projector = new THREE.Projector()
+    @mouse2D = new THREE.Vector3( 0, 10000, 0.5 );
+    @ray = new THREE.Ray( @camera.position, null );
   
   keys:
     37: 'left'
@@ -38,9 +42,22 @@ class Input
   mousemove: (event) ->
     container = document.getElementById "container"
     
+    @mouse2D.x = ( event.clientX / window.innerWidth ) * 2 - 1
+    @mouse2D.y = - ( event.clientY / window.innerHeight ) * 2 + 1
+    
+    @mouse2D.x = (event.clientX - container.offsetLeft) / container.clientWidth * 2 - 1
+    @mouse2D.y = - (event.clientY - container.offsetTop) / container.clientHeight * 2 + 1
+    
+    mouse3D = @projector.unprojectVector( @mouse2D.clone(), @camera );
+    @ray.direction = mouse3D.subSelf( @camera.position ).normalize();
+    intersects = @ray.intersectObject ( @worldMap );
+    if intersects.length > 0
+      @mouse.x = intersects[0].point.x
+      @mouse.y = intersects[0].point.y
+    
     # Imaginary pixels
-    @mouse.x = Math.round (event.clientX - container.offsetLeft) / container.clientWidth * @targetWidth - @targetWidth / 2
-    @mouse.y = -Math.round (event.clientY - container.offsetTop) / container.clientHeight * @targetHeight - @targetHeight / 2
+    #@mouse.x = Math.round (event.clientX - container.offsetLeft) / container.clientWidth * @targetWidth - @targetWidth / 2
+    #@mouse.y = -Math.round (event.clientY - container.offsetTop) / container.clientHeight * @targetHeight - @targetHeight / 2
     
     # Scales
     #@mouse.x = (event.clientX - container.offsetLeft) / container.clientWidth - .5
@@ -49,12 +66,15 @@ class Input
     document.getElementById('mouse').innerHTML = 'X: ' + @mouse.x + ', Y: ' + @mouse.y
     
   mousedown: (event) ->
+    event.preventDefault()
     @mouse.down = true
     
   mouseup: (event) ->
+    event.preventDefault()
     @mouse.down = false
   
   mousescroll: (event) ->
+    event.preventDefault()
     val = @mouse.scroll + (event.wheelDeltaY / 10)
     @mouse.scroll = val if val > 300 and val <= 1000 
 

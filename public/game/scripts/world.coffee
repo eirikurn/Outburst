@@ -21,11 +21,10 @@ class World
     @scene.addChild(@testPlayer)
     
     @camera.target = @testPlayer
-    
-    window.onresize = =>
-      @resizeToFit()
-      
+
+    window.addEventListener 'resize', => @resizeToFit()
     @resizeToFit()
+    
   
   render: ->
     @renderer.render(@scene, @camera)
@@ -36,6 +35,7 @@ class World
     @camera.onFrame delta
     @camera.position.x = @testPlayer.position.x
     @camera.position.y = @testPlayer.position.y - 500
+    
     
   resizeToFit: ->
     setWidth = window.innerWidth

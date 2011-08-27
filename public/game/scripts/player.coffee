@@ -24,23 +24,10 @@ class Player extends THREE.Object3D
     @model.playAnimation "walk"
   
   updatePlayer: (delta) -> 
-    @aimerContainer.rotation.z = Math.atan2 -input.mouse.y, -input.mouse.x 
-    if @model
-      moved = input.up or input.down or input.left or input.right
-      
-      @position.y += delta * 200 if input.up
-      @position.y -= delta * 200 if input.down
-      @position.x -= delta * 200 if input.left
-      @position.x += delta * 200 if input.right
-      @model.updateAnimation (delta)
-      @model.isPaused = not moved
-      
-      if @lastPos and moved
-        @model.rotation.y = Math.atan2 @position.x - @lastPos.x, @lastPos.y - @position.y
-        
-      @lastPos = 
-        x: @position.x
-        y: @position.y
+    @updatePosition(delta)
+    @updateRotation(delta)
+    @updateAimer(delta)
+    @updateAnimation(delta)
     
   createAimer: () ->
     @aimer = new THREE.Mesh(new THREE.CylinderGeometry(10, 0, 5, 50, 0, 0), new THREE.MeshLambertMaterial(color: 0xFF0000))
@@ -51,6 +38,28 @@ class Player extends THREE.Object3D
     @aimerContainer = new THREE.Object3D()
     @aimerContainer.addChild @aimer
     @addChild @aimerContainer
+    
+  updateAimer: (delta) ->
+    @aimerContainer.rotation.z = Math.atan2 @position.y-input.mouse.y, @position.x-input.mouse.x 
+  
+  updatePosition: (delta) ->
+    @lastPos = 
+      x: @position.x
+      y: @position.y
+      
+    @position.y += delta * 200 if input.up
+    @position.y -= delta * 200 if input.down
+    @position.x -= delta * 200 if input.left
+    @position.x += delta * 200 if input.right
+  
+  updateRotation: (delta) ->
+    if @lastPos and (input.up or input.down or input.left or input.right)
+      @model.rotation.y = Math.atan2 @position.x - @lastPos.x, @lastPos.y - @position.y
+      
+  updateAnimation: (delta) ->
+    if @model
+      @model.updateAnimation (delta)
+      @model.isPaused = not (input.up or input.down or input.left or input.right)
   
   
   

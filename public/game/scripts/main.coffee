@@ -1,13 +1,3 @@
-requestAnimFrame = (->
-  window.requestAnimationFrame || 
-  window.webkitRequestAnimationFrame || 
-  window.mozRequestAnimationFrame    || 
-  window.oRequestAnimationFrame      || 
-  window.msRequestAnimationFrame     || 
-  (callback, element) ->
-    window.setTimeout(callback, 1000 / 60)
-)()
-
 socket = io.connect()
 socket.on 'welcome', (data) ->
   console.log data

@@ -1,5 +1,5 @@
 class Game
-  constructor: (@twitterUser)->
+  constructor: (@user)->
     @lastFrame = +new Date / 1000
     @lastTick = +new Date / 1000
     @lastSentInputs = +new Date / 1000
@@ -17,6 +17,9 @@ class Game
     @initStats()
     window.input = @input = new Input @camera, @map.map
     @onFrame()
+    
+    # Chat messages
+    chat = new Chat(@socket)
 
   joinedServer: (data) =>
     # console.log data
@@ -133,12 +136,8 @@ document.addEventListener 'DOMContentLoaded', =>
     initGame()
       
       
-initGame = (twitterUser = null) ->
-  window.game = new Game(twitterUser)
-  
-  # Chat messages
-  chat = new Chat()
-  
+initGame = (user = name: "Anonymous") ->
+  window.game = new Game(user)
   
 
 trace = (message) ->

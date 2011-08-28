@@ -14,6 +14,7 @@ class exports.Server
     stateCount = Math.round(constants.ROLLBACK_TIME * constants.TICKS_PER_SECOND) + 1
     @states = new utils.StatePool(states.WorldState, stateCount)
     @states.new(timestamp: +new Date / 1000)
+    @chatlog = []
     @players = []
     @playerIds = 0
 
@@ -29,7 +30,9 @@ class exports.Server
 
     socket.on 'input', (inputs) => @player_input player, inputs
     socket.on 'disconnect', => @player_disconnect player
+    socket.on 'chat', (p) => @player_chat(socket, p)
     socket.emit "welcome", player: state, clock: +new Date / 1000
+    socket.emit "chat", [ player: "server", msg: "Welcome to Outburst, gl n hf!"].concat @chatlog
 
   player_disconnect: (player) ->
     index = @players.indexOf player
@@ -39,6 +42,12 @@ class exports.Server
   player_input: (player, data) ->
     player.inputs.concat data
     Array::push.apply player.inputs, data
+    
+  player_chat: (socket, packets) ->
+    @chatlog.push p for p in packets
+    @chatlog.pop() if @chatlog.length > 5
+    socket.broadcast.emit 'chat', packets
+    
 
   # The main "Game Loop"
   tick: =>

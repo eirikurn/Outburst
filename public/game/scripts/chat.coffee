@@ -1,5 +1,5 @@
 class Chat
-  constructor: ->
+  constructor: (@socket)->
     @log = document.getElementById 'chatlog'
     @input = document.getElementById 'chatinput'
     @form = document.getElementById 'chatform'
@@ -7,6 +7,8 @@ class Chat
       ev.preventDefault()
       @write(ev)
     , false
+    
+    @socket.on 'chat', (p) => @add(p)
     
     # insert chat into container
     document.getElementById('container').appendChild document.getElementById('chat')
@@ -27,13 +29,23 @@ class Chat
     @input.style.display = "none"
     @input.value = ''
     
-  add: (message) ->
-    li = document.createElement 'li'
-    li.innerHTML = message
-    @log.appendChild li
+  add: (packets) ->
+    for packet in packets
+      li = document.createElement 'li'
+      if packet.player == "server"
+        li.innerHTML = "<em>" + packet.msg + "</em>"
+      else
+        li.innerHTML = packet.player + ": " + packet.msg
+      @log.appendChild li
     
   write: (event) ->
-    @add @input.value if @input.value.length > 0
+    if @input.value.length > 0
+      packet = [
+        player: game.user.name
+        msg: @input.value
+      ]
+      @add packet
+      @socket.emit 'chat', packet
     @input.value = ''
     @hide()
     

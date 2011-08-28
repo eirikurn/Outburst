@@ -19,7 +19,7 @@
     @fields = []
 
   class exports.EnemyState extends exports.State
-    @fields = ['x', 'y', 'id', 'hp']
+    @fields = ['x', 'y', 'id', 'hp', 'direction']
 
   class exports.PlayerState extends exports.State
     init: ->

@@ -22,6 +22,7 @@ class Enemy
     newState = @state.clone()
     newState.x += @velocity[0] * constants.TIME_PER_TICK * 0.1
     newState.y += @velocity[1] * constants.TIME_PER_TICK * 0.1
+    newState.direction = Math.atan2 @velocity[1], @velocity[0]
     return @state = newState
 
 module.exports = Enemy

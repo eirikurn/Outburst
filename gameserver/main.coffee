@@ -85,7 +85,7 @@ class exports.Server
       if @remainingSpawns == 0
         ++world.wave
         @remainingSpawns = constants.ENEMIES_PER_WAVE
-        console.log "Starting wave #{world.state}"
+        console.log "Starting wave #{world.wave}"
       @spawnEnemy()
       if --@remainingSpawns
         @spawnTimer = constants.SPAWN_RATE
@@ -120,6 +120,7 @@ class exports.Server
 
     time = +new Date / 1000
     world = @states.new(timestamp: time)
+    @states.item(-2)?.clone(world)
 
     @updatePlayers(world)
     @updateGame(world)

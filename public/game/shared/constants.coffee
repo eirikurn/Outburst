@@ -45,7 +45,7 @@
 
   # Server constants
   exports.FIRST_WAVE = 4 # 12
-  exports.WAVE_INTERVAL = 30
+  exports.WAVE_INTERVAL = 5
   exports.SPAWN_RATE = 0.4
   exports.START_LIVES = 10
 

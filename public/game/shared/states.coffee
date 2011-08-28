@@ -20,6 +20,9 @@
 
   class exports.EnemyState extends exports.State
     @fields = ['x', 'y', 'id', 'hp', 'direction']
+    
+  class exports.SheepState extends exports.State
+    @fields = ['x', 'y', 'id', 'hp', 'direction']
 
   class exports.PlayerState extends exports.State
     init: ->
@@ -117,6 +120,7 @@
       data.lives or= 0
       @players = (new exports.PlayerState(p) for p in data.players or [])
       @enemies = (new exports.EnemyState(e) for e in data.enemies or [])
+      @sheeps = (new exports.SheepState(s) for s in data.sheeps or [])
       super
 
     @fields = ['lives', 'wave']

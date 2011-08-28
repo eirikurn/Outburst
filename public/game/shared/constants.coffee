@@ -53,6 +53,8 @@
   exports.ENEMY_SPEED = 300
   exports.ENEMY_BASE_HP = 40
   exports.ENEMY_HP_PER_WAVE = 30
+  
+  exports.SHEEP_HEALTH = 100
 
   # MAP
   exports.MAP_SIZE = [10000, 10000]
@@ -60,6 +62,8 @@
     base: [0, -3500]           #bottom center
     playerSpawn: [1000, -3500] #at base entrance
     enemySpawn: [-3500, 3500]  #top left
+    sheepSpawn: [0, 0] # center
+    sheepSpawnArea: 500
     waypointSize: 750
     waypoints: [
       [-3500, -3500] # top left

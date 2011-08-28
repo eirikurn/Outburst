@@ -2,7 +2,7 @@ class Sheep extends THREE.Object3D
   constructor: (state) ->
     super()
     Loader.getModel "models/sheep.js", @makeModel
-    @addStage state
+    @addState state
   
   addState: (state) ->
     @position.x = state.x

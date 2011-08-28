@@ -17,7 +17,7 @@ class Enemy extends THREE.Object3D
         duration: 5000
         keyframes: 12
         
-    @robot.scale.x = @robot.scale.y = @robot.scale.z = 40
+    @robot.scale.x = @robot.scale.y = @robot.scale.z = 60
     @robot.position.z = 1
     @robot.rotation.x = Math.PI / 2
     @robot.rotation.y = Math.PI / 2

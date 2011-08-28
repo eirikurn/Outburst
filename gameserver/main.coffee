@@ -2,6 +2,7 @@ require './threejs'
 io = require('socket.io')
 Player = require './player'
 Enemy = require './enemy'
+Sheep = require './sheep'
 utils = require './shared/utils.coffee'
 constants = require './shared/constants.coffee'
 states = require './shared/states.coffee'
@@ -19,11 +20,15 @@ class exports.Server
     @chatlog = []
     @players = []
     @enemies = []
+    @sheeps = []
     @isStarted = false
     @spawnTimer = 0
     @remainingSpawns = 0
-    @enemyIds = 0
+    @entityIds = 0
     @playerIds = 1000
+    
+    for i in [1..3]
+      @spawnSheep()
 
     @tickTimer = setInterval @tick, 1000 / constants.TICKS_PER_SECOND
 
@@ -104,6 +109,11 @@ class exports.Server
     for e in @enemies
       state = e.onTick()
       world.enemies.push state if state
+  
+  updateSheep: (world) ->
+    for s in @sheeps
+      state = s.onTick()
+      world.sheeps.push state if state
 
   # The main "Game Loop"
   tick: =>
@@ -125,6 +135,7 @@ class exports.Server
     @updatePlayers(world)
     @updateGame(world)
     @updateEnemies(world)
+    @updateSheep(world)
 
     # Send updates to due players
     for p in @players
@@ -143,6 +154,18 @@ class exports.Server
     startY = constants.MAP.enemySpawn[1] + delta[1]
     hp = constants.ENEMY_BASE_HP + constants.ENEMY_HP_PER_WAVE * wave
 
-    enemy = new Enemy(x: startX, y: startY, hp: hp, id: ++@enemyIds, waypointDelta: delta)
+    enemy = new Enemy(x: startX, y: startY, hp: hp, id: ++@entityIds, waypointDelta: delta)
     @enemies.push enemy
     return enemy
+  
+  spawnSheep: ->
+    direction = Math.random() * Math.PI * 2
+    distance = Math.random() * constants.MAP.sheepSpawnArea
+    delta = [
+      Math.sin(direction) * distance
+      Math.cos(direction) * distance
+    ]
+    startX = constants.MAP.sheepSpawn[0] + delta[0]
+    startY = constants.MAP.sheepSpawn[1] + delta[1]
+    sheep = new Sheep( x: startX, y: startY, hp: constants.SHEEP_HEALTH, id: ++@entityIds, direction: Math.random() * Math.PI * 2)
+    @sheeps.push sheep

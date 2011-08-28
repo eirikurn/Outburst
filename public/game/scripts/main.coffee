@@ -25,7 +25,6 @@ class Game
     chat = new Chat(@socket)
 
   joinedServer: (data) =>
-    console.log "ROFL??"
     @player = new Player(new states.PlayerState(data.player), @camera)
     @addEntity(data.player.id, @player)
     @user.nick = "Anonymous " + data.player.id if @user.nick == "Anonymous"

@@ -66,12 +66,15 @@ class Game
     
     @input.onFrame delta
 
-    if @player
+    if @player and @worlds.head()
+      world = @worlds.head()
       # Capture input state
       while @lastTick + constants.TIME_PER_TICK <= now
         oneState = @input.getState()
+        oneState.tick = world.tick
+        @player.applyInput oneState, world
+
         @inputs.push oneState
-        @player.applyInput oneState
         @lastTick += constants.TIME_PER_TICK
 
       # Send input to server

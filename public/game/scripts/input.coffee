@@ -89,11 +89,11 @@ class Input
     
   mousedown: (event) ->
     event.preventDefault()
-    @mouse.isDown = yes
+    @mouse.isDown = yes if event.button == 0
     
   mouseup: (event) ->
     event.preventDefault()
-    @mouse.isDown = no
+    @mouse.isDown = no if event.button == 0
   
   mousescroll: (event) ->
     event.preventDefault()

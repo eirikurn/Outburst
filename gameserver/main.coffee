@@ -22,7 +22,7 @@ class exports.Server
   player_connect: (socket) ->
     console.log "Player connected..."
     state = new states.PlayerState x: 0, y: 0, id: @playerIds++, seed: (+new Date + @playerIds)
-    console.log state
+    # console.log state
     player = new Player(socket, state)
     @players.push player
     @states.head().players.push state

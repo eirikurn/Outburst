@@ -80,8 +80,12 @@ class exports.Server
   spawnEnemy: (wave) ->
     direction = Math.random() * Math.PI * 2
     distance = Math.random() * constants.MAP.weypointSize
-    startX = constants.MAP.enemySpawn[0] + Math.sin(direction) * distance
-    startY = constants.MAP.enemySpawn[1] + Math.cos(direction) * distance
+    waypointDelta = [
+      Math.sin(direction) * distance
+      Math.cos(direction) * distance
+    ]
+    startX = constants.MAP.enemySpawn[0] + waypointDelta[0]
+    startY = constants.MAP.enemySpawn[1] + waypointDelta[1]
     hp = constants.ENEMY_BASE_HP + constants.ENEMY_HP_PER_WAVE * wave
     new Enemy(x: startX, y: startY, hp: hp, waypointDistance: distance, waypointDirection: direction)
 
@@ -95,6 +99,20 @@ class exports.Server
         @spawnTimer = constants.SPAWN_RATE
       else
         @spawnTimer = constants.WAVE_INTERVAL
+
+  updatePlayers: (world) ->
+    for p in @players
+      newState = p.state.clone()
+      for i in p.inputs
+        newState.applyInput i
+      p.inputs.length = 0
+      world.players.push p.state = newState
+    return
+
+  updateEnemies: (world) ->
+    for e in @enemies
+      state = @enemies.update()
+      world.enemies.push state if state
 
   # The main "Game Loop"
   tick: =>
@@ -111,15 +129,9 @@ class exports.Server
     time = +new Date / 1000
     world = @states.new(timestamp: time)
 
-    # Process player inputs
-    for p in @players
-      newState = p.state.clone()
-      for i in p.inputs
-        newState.applyInput i
-      p.inputs.length = 0
-      world.players.push p.state = newState
-
-    @updateGame()
+    @updatePlayers(world)
+    @updateGame(world)
+    @updateEnemies(world)
 
     # Send updates to due players
     for p in @players

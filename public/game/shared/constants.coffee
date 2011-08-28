@@ -44,11 +44,12 @@
   exports.DISPLAY_STATS = false
 
   # Server constants
-  exports.START_WAVE = 17
+  exports.START_WAVE = 4 # 12
   exports.WAVE_INTERVAL = 30
   exports.SPAWN_RATE = 0.4
   exports.START_LIVES = 10
 
+  exports.ENEMY_SPEED = 300
   exports.ENEMY_BASE_HP = 40
   exports.ENEMY_HP_PER_WAVE = 30
 

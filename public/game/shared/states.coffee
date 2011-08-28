@@ -35,10 +35,9 @@
       @spread = 0
       @ammo = constants.WEAPONS[@weapon].ammo
       @shots = []
-      @nick = ""
       super
 
-    applyInput: (input, world, target = @) ->
+    applyInput: (input, target = @) ->
       velocity = constants.PLAYER_SPEED * constants.TIME_PER_TICK
       deltaX = 0; deltaY = 0
       deltaX += velocity if input.right
@@ -64,8 +63,6 @@
 
       # Update animations
       target.isMoving = input.right or input.left or input.up or input.down
-      
-      target.nick = @nick
 
       # Update shots/weapons
       oldWeapon = @weapon
@@ -128,8 +125,9 @@
       @enemies[k] = new exports.EnemyState(e) for k, e of data.enemies or {}
       @sheeps = {}
       @sheeps[k] = new exports.SheepState(s) for k, s of data.sheeps or {}
+
       super
 
-    @fields = ['lives', 'wave', 'tick']
+    @fields = ['lives', 'wave']
 
 )(if exports? then exports else window["states"] = {})

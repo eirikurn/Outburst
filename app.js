@@ -105,7 +105,7 @@ app.get('/oauth/callback', function(req, res, next){
         	req.session.uname = results.screen_name;
         	req.session.accestoken = oauth_access_token;
         	req.session.accesstokensecret = oauth_access_token_secret;
-        	res.redirect('/game')
+        	res.redirect('/game/?loggedIn')
         }
         
 	   }

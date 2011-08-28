@@ -118,17 +118,21 @@ class Game
     document.getElementById('container').appendChild(@stats.domElement)
 
 document.addEventListener 'DOMContentLoaded', =>
-  # initGame()
-  # return # Uncomment these lines to skip twitter authentication
-  microAjax "/oauth/user", (res) ->
-    if res == "error"
-      window.location = "/oauth/authenticate"
-    else
-      twitterUser = JSON.parse res
-      initGame(twitterUser)
+  # If user was just redirected from twitter
+  if document.location.href.indexOf("loggedIn") != -1
+    # Try to authenticate user
+    microAjax "/oauth/user", (res) ->
+      if res == "error" 
+        window.location = "/oauth/authenticate"
+      else
+        twitterUser = JSON.parse res
+        initGame(twitterUser)
+  else
+    # Anonymous lame-o
+    initGame()
       
       
-initGame = (twitterUser = {}) ->
+initGame = (twitterUser = null) ->
   window.game = new Game(twitterUser)
   
   # Chat messages

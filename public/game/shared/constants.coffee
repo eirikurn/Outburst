@@ -39,4 +39,7 @@
       shards: 8
       spread: 35 * (Math.PI / 180)
 
+  # Client constants
+  exports.DISPLAY_STATS = false
+
 )(if exports? then exports else window["constants"] = {})

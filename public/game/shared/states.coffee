@@ -86,7 +86,6 @@
         target.ammo = activeWeapon.ammo
       if activeWeapon.automatic and @spread
         deltaSpread = activeWeapon.spreadMax / (activeWeapon.spreadTime / constants.TIME_PER_TICK)
-        console.log deltaSpread
         target.spread = Math.max @spread - deltaSpread, 0
         target.spread
 

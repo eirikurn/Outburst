@@ -61,6 +61,7 @@ class Game
       e.onFrame(delta) if e.onFrame
     
     @renderer.render @scene, @camera
+    @camera.onFrame()
     @cursor.onFrame()
     @stats.update()
 

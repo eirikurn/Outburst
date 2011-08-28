@@ -9,7 +9,8 @@ var express = require('express')
   , OAuth= require('oauth').OAuth;
 
 //var serverPath = "http://outburst.no.de";
-var serverPath = "http://192.168.100.38:8000";
+//var serverPath = "http://192.168.100.38:8000";
+var serverPath = "http://aranja.nko2.nodeknockout.com";
 
 var oa = new OAuth("https://twitter.com/oauth/request_token",
         "https://twitter.com/oauth/access_token", 

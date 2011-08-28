@@ -6,7 +6,7 @@ states = require './shared/states.coffee'
 
 class exports.Server
   constructor: (app) ->
-    @io = require('socket.io').listen app,
+    @io = io.listen app,
       'transports': ['websocket']
       'log level': 2
     @io.sockets.on 'connection', (s) => @player_connect(s)
@@ -20,6 +20,7 @@ class exports.Server
     @tickTimer = setInterval @tick, 1000 / constants.TICKS_PER_SECOND
 
   player_connect: (socket) ->
+    console.log "Player connected..."
     state = new states.PlayerState x: 0, y: 0, id: @playerIds++
     player = new Player(socket, state)
     @players.push player

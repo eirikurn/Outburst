@@ -107,6 +107,7 @@ class Game
     @camera.onFrame()
     @renderer.render @scene, @camera
     @cursor.onFrame @camera, if @player then @player.state else null
+    @hud.onFrame()
     #@stats.update() if constants.DISPLAY_STATS
 
     requestAnimFrame(@onFrame, @container)
@@ -119,7 +120,7 @@ class Game
     
     @scene.addChild @map = new Map()
     @scene.addChild @cursor = new Cursor()
-    @hud = new Hud()
+    @hud = new Hud(@socket)
 
   initRenderer: ->
     @targetWidth = 1024

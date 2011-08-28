@@ -12,7 +12,7 @@
 
   exports.INTERPOLATE_FRAMES = 2
 
-  # Gameplay constants
+  # Shared gameplay constants
   exports.PLAYER_SPEED = 600
   exports.SHOT_DISTANCE = 2000
 
@@ -42,5 +42,31 @@
 
   # Client constants
   exports.DISPLAY_STATS = false
+
+  # Server constants
+  exports.FIRST_WAVE = 4 # 12?
+  exports.WAVE_INTERVAL = 10 # 30?
+  exports.SPAWN_RATE = 0.4
+  exports.START_LIVES = 10
+
+  exports.ENEMIES_PER_WAVE = 15
+  exports.ENEMY_SPEED = 300
+  exports.ENEMY_BASE_HP = 40
+  exports.ENEMY_HP_PER_WAVE = 30
+
+  # MAP
+  exports.MAP_SIZE = [10000, 10000]
+  exports.MAP =
+    base: [0, -3500]           #bottom center
+    playerSpawn: [1000, -3500] #at base entrance
+    enemySpawn: [-3500, 3500]  #top left
+    waypointSize: 750
+    waypoints: [
+      [-3500, -3500] # top left
+      [0, 0]         # center
+      [3500, 0]      # right
+      [3500, -3500]  # bottom right
+      [0, -3500]     # base
+    ]
 
 )(if exports? then exports else window["constants"] = {})

@@ -7,9 +7,6 @@
       if arguments[0] != false
         @init.apply this, arguments
 
-    init: ->
-
-  class exports.UnitState extends exports.State
     init: (data = {}) ->
       for k in @constructor.fields when data[k]?
         @[k] = data[k]
@@ -19,9 +16,12 @@
         target[k] = @[k]
       target
 
-    @fields = ['x', 'y', 'id']
+    @fields = []
 
-  class exports.PlayerState extends exports.UnitState
+  class exports.EnemyState extends exports.State
+    @fields = ['x', 'y', 'id', 'hp', 'direction']
+
+  class exports.PlayerState extends exports.State
     init: ->
       @walkDirection = 0
       @aimDirection = 0
@@ -98,7 +98,6 @@
         rnd = random.generator(@seed)
         spread = activeWeapon.spread
         createShot = -> target.aimDirection + (rnd() * spread) - (spread/2)
-        # createShot = -> d = target.aimDirection + (rnd() * spread) - (spread/2); console.log d; d
         if activeWeapon.shards
           target.shots.push createShot() for i in [0...activeWeapon.shards]
         else if activeWeapon.automatic
@@ -114,7 +113,12 @@
 
   class exports.WorldState extends exports.State
     init: (data = {}) ->
-      @timestamp = data.timestamp
+      data.wave or= 0
+      data.lives or= 0
       @players = (new exports.PlayerState(p) for p in data.players or [])
+      @enemies = (new exports.EnemyState(e) for e in data.enemies or [])
+      super
+
+    @fields = ['lives', 'wave']
 
 )(if exports? then exports else window["states"] = {})

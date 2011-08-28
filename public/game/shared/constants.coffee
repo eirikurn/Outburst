@@ -17,7 +17,7 @@
   exports.SHOT_DISTANCE = 2000
   exports.SHOT_OFFSET_FROM_PLAYER_CENTER = 105
   
-  exports.ENEMY_RADIUS = 70
+  exports.ENEMY_RADIUS = 100
 
   exports.WEAPONS =
     pistol:

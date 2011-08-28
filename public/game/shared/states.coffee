@@ -123,9 +123,13 @@
         y: target.y + constants.SHOT_OFFSET_FROM_PLAYER_CENTER * Math.sin direction
 
       #distance = @calculateIntersection start, direction, world
-      distance = @shotHitsObject { x: 500, y: 600 }, 100, start, direction
+      
+      
+      distance = @shotHitsObject { x: -1000, y: 10 }, 100, start, direction
+      if distance == -1
+        distance = @shotHitsObject { x: 500, y: 600 }, 100, start, direction
+      
       distance = constants.SHOT_DISTANCE if distance == -1
-      #targetLocation, targetRadius, shotStart, direction
         
       returnData = 
         direction: direction
@@ -137,17 +141,17 @@
       minLength = constants.SHOT_DISTANCE
       hitEnemy = null
       
-      for enemy in world.enemies
-        hitLength = @shotHitsObject { x: enemy.x, y: enemy.y }, constants.ENEMY_RADIUS, shotStart, direction
-        if hitLength =! -1
+      for enemy in world.sheeps
+        hitLength = @shotHitsObject({ x: enemy.x, y: enemy.y }, constants.ENEMY_RADIUS, shotStart, direction)
+        if hitLength != -1
           if hitLength < minLength
             minLength = hitLength
             hitEnemy = enemy
        
-        if hitEnemy
-          hitEnemt.hp -= 1 # or some constant
+      if hitEnemy
+        hitEnemy.hp -= 1 # or some constant
         
-        return minLength
+      return minLength
         
       
     shotHitsObject: (targetLocation, targetRadius, shotStart, direction) ->

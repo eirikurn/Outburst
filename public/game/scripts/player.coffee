@@ -36,8 +36,8 @@ class Player extends PlayerUnit
   addState: (state) ->
     # Ignore server state for now. Validate client predictions later
 
-  applyInput: (input) ->
-    @state.applyInput input
+  applyInput: (input, world) ->
+    @state.applyInput input, world
     Player.__super__.addState.call this, @state
     @camera.position.x = @state.x
     @camera.position.y = @state.y - 800

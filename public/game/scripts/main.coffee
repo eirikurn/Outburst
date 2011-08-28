@@ -72,6 +72,7 @@ class Game
       if id not of players and id not of enemies and id not of sheeps
         @scene.removeChild @entities[id]
         delete @entities[id]
+    return
 
   onFrame: =>
     now = +new Date / 1000

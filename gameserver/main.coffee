@@ -151,7 +151,7 @@ class exports.Server
     for p in @players
       if p.lastUpdate + constants.TIME_BETWEEN_UPDATES <= time
         p.lastUpdate = Math.max time, p.lastUpdate + constants.TIME_BETWEEN_UPDATES
-        p.socket.emit 'world', world
+        p.socket.compressed.emit 'world', world
 
   spawnEnemy: (wave) ->
     direction = Math.random() * Math.PI * 2

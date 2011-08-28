@@ -5,24 +5,37 @@ class Enemy
   constructor: (data) ->
     @state = new EnemyState(data)
     @hp = data.hp
-    @waypointDelta = data.waypointDelta
+    @waypointDelta = new THREE.Vector2().set(data.waypointDelta...)
     @currentWaypoint = 0
-    @velocity = [0, 0]
+    @velocity = new THREE.Vector2()
+    @distance = 0
+    @target = null
     @findNextWaypoint()
 
   findNextWaypoint: ->
     @target = constants.MAP.waypoints[@currentWaypoint++]
-    return unless @target
-    @target[0] += @waypointDelta[0]
-    @target[1] += @waypointDelta[1]
-    @velocity = [@target[0] - @state.x, @target[1] - @state.y]
+    if not @target
+      @velocity = new THREE.Vector2()
+      return
+
+    @target = new THREE.Vector2().set(@target...)
+    @target.addSelf(@waypointDelta)
+    toTarget = new THREE.Vector2().sub(@target, new THREE.Vector2(@state.x, @state.y))
+    @distance = toTarget.lengthSq()
+    @velocity = toTarget.setLength(constants.ENEMY_SPEED * constants.TIME_PER_TICK)
+
     @target
 
   onTick: (world) ->
     newState = @state.clone()
-    newState.x += @velocity[0] * constants.TIME_PER_TICK * 0.1
-    newState.y += @velocity[1] * constants.TIME_PER_TICK * 0.1
-    newState.direction = Math.atan2 @velocity[1], @velocity[0]
+    newState.x += @velocity.x
+    newState.y += @velocity.y
+    if @velocity.lengthSq()
+      newState.direction = Math.atan2(@velocity.y, @velocity.x)
+
+    @distance -= @velocity.lengthSq()
+    if @distance < 0 then @findNextWaypoint()
+
     return @state = newState
 
 module.exports = Enemy

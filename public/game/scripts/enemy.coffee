@@ -1,7 +1,8 @@
 class Enemy extends THREE.Object3D
-  constructor: ->
+  constructor: (state) ->
     super()
     Loader.getModel "models/robot.js", @makeModel
+    @addState(state)
     
   addState: (state) ->
     @position.x = state.x

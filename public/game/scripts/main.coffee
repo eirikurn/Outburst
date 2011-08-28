@@ -18,9 +18,6 @@ class Game
     @initStats() if constants.DISPLAY_STATS
     window.input = @input = new Input @camera, @map.map
     @onFrame()
-
-    robot = new Enemy()
-    @scene.addObject robot
     
     # Chat messages
     chat = new Chat(@socket)
@@ -51,7 +48,7 @@ class Game
     for e in world.enemies
       if not @entities[e.id]
         # TODO
-        # @addEntity(e.id, new EnemyUnit(e))
+        @addEntity(e.id, new Enemy(e))
       else
         @entities[e.id].addState(e)
     return

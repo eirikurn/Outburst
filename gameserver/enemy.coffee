@@ -15,13 +15,13 @@ class Enemy
     return unless @target
     @target[0] += @waypointDelta[0]
     @target[1] += @waypointDelta[1]
-    @velocity = [@target.x - @state.x, @target[1] - @state.y]
+    @velocity = [@target[0] - @state.x, @target[1] - @state.y]
     @target
 
   onTick: (world) ->
     newState = @state.clone()
-    newState.x += @velocity[0]
-    newState.y += @velocity[1]
+    newState.x += @velocity[0] * constants.TIME_PER_TICK * 0.1
+    newState.y += @velocity[1] * constants.TIME_PER_TICK * 0.1
     return @state = newState
 
 module.exports = Enemy

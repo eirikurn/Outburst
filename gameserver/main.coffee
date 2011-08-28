@@ -86,7 +86,7 @@ class exports.Server
         ++world.wave
         @remainingSpawns = constants.ENEMIES_PER_WAVE
         console.log "Starting wave #{world.wave}"
-      @spawnEnemy()
+      @spawnEnemy(world.wave)
       if --@remainingSpawns
         @spawnTimer = constants.SPAWN_RATE
       else
@@ -117,6 +117,7 @@ class exports.Server
     else if @players.length == 0
       @isStarted = false
       @endGame()
+      return
 
     time = +new Date / 1000
     world = @states.new(timestamp: time)
@@ -134,7 +135,7 @@ class exports.Server
 
   spawnEnemy: (wave) ->
     direction = Math.random() * Math.PI * 2
-    distance = Math.random() * constants.MAP.weypointSize
+    distance = Math.random() * constants.MAP.waypointSize
     delta = [
       Math.sin(direction) * distance
       Math.cos(direction) * distance

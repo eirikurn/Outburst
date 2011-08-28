@@ -3,17 +3,17 @@ class Game
     @lastFrame = +new Date / 1000
     @lastTick = +new Date / 1000
     @lastSentInputs = +new Date / 1000
-    @inputs = []
+    @inputs = {}
     @renderShots = []
 
     worldCount = constants.INTERPOLATE_FRAMES + 1
     @worlds = new utils.StatePool(states.WorldState, worldCount)
 
     @socket = io.connect()
-    @socket = new utils.CompressionSocket(@socket, ['input', 'world'])
+    utils.addCompression(@socket)
 
     @socket.on 'welcome', @joinedServer
-    @socket.on 'world', @updateFromServer
+    @socket.compressed.on 'world', @updateFromServer
 
     @initRenderer()
     @initGraphics()
@@ -25,6 +25,7 @@ class Game
     chat = new Chat(@socket)
 
   joinedServer: (data) =>
+    console.log "ROFL??"
     @player = new Player(new states.PlayerState(data.player), @camera)
     @addEntity(data.player.id, @player)
     @user.nick = "Anonymous " + data.player.id if @user.nick == "Anonymous"
@@ -87,13 +88,14 @@ class Game
         oneState.tick = world.tick
         @player.applyInput oneState, world
 
-        @inputs.push oneState
+        @inputs[@inputs.count++] = oneState
         @lastTick += constants.TIME_PER_TICK
 
       # Send input to server
       if @lastSentInputs + constants.TIME_BETWEEN_INPUTS <= now
-        @socket.emit 'input', @inputs
-        @inputs.length = 0
+        @socket.compressed.emit 'input', @inputs
+        @inputs.count = 0
+        delete @inputs[k] for k of @inputs when k != "count"
         @lastSentInputs += constants.TIME_BETWEEN_INPUTS
 
     # Update entities

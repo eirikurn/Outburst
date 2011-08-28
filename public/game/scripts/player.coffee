@@ -9,7 +9,7 @@ class PlayerUnit extends THREE.Object3D
     @position.x = state.x
     @position.y = state.y
     @aimerContainer.rotation.z = state.aimDirection + Math.PI
-    
+
     if @model
       @model.rotation.y = state.walkDirection + Math.PI / 2
       @model.isPaused = not state.isMoving

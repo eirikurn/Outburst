@@ -21,13 +21,12 @@ class PlayerUnit extends THREE.Object3D
     @model.updateAnimation (delta) if @model
 
   makeModel: (geometry) =>
-    geometry.materials[0][0].shading = THREE.FlatShading
-    geometry.materials[0][0].morphTargets = true
-    @model = new AnimatedMesh geometry, [ new THREE.MeshFaceMaterial() ],
+    material = new THREE.MeshBasicMaterial( { map: geometry.materials[0][0].map, morphTargets: true });
+    @model = new AnimatedMesh geometry, material,
       walk:
         firstKeyframeIndex: 0
-        duration: 850
-        keyframes: 3
+        duration: 1500
+        keyframes: 24
     @model.scale.x = @model.scale.y = @model.scale.z = 10
     @model.rotation.x = Math.PI/2
     @model.position.z = 100

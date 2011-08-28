@@ -26,11 +26,6 @@ class AnimatedMesh extends THREE.Mesh
       @morphTargetInfluences[ keyframe ] = 0
       @lastKeyframe = @currentKeyframe
       @currentKeyframe = keyframe
-    
-    console.log "--"
-    for mkeyframe in @morphTargetInfluences
-      console.log "F: " + mkeyframe
-    
       
     @morphTargetInfluences[ keyframe ] = ( @time % @interpolation ) / @interpolation
     @morphTargetInfluences[ @lastKeyframe ] = 1 - @morphTargetInfluences[ keyframe ]

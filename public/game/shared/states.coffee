@@ -200,11 +200,16 @@
     init: (data = {}) ->
       data.wave or= 0
       data.lives or= 0
-      @players = (new exports.PlayerState(p) for p in data.players or [])
-      @enemies = (new exports.EnemyState(e) for e in data.enemies or [])
-      @sheeps = (new exports.SheepState(s) for s in data.sheeps or [])
+      data.tick or= 0
+      @players = {}
+      @players[k] = new exports.PlayerState(p) for k, p of data.players or {}
+      @enemies = {}
+      @enemies[k] = new exports.EnemyState(e) for k, e of data.enemies or {}
+      @sheeps = {}
+      @sheeps[k] = new exports.SheepState(s) for k, s of data.sheeps or {}
+
       super
 
-    @fields = ['lives', 'wave']
+    @fields = ['lives', 'wave', 'tick']
 
 )(if exports? then exports else window["states"] = {})

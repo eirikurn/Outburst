@@ -31,19 +31,21 @@ class exports.Server
     @tickTimer = setInterval @tick, 1000 / constants.TICKS_PER_SECOND
 
   player_connect: (socket) ->
+    utils.addCompression socket
+
     startX = Math.random() * 400 - 200
     startY = Math.random() * 400 - 200
     state = new states.PlayerState x: startX, y: startY, id: ++@playerIds, seed: (+new Date + @playerIds)
     # console.log state
     player = new Player(socket, state)
     @players.push player
-    @states.head().players.push state
+    @states.head().players[state.id] = state
 
-    socket.on 'input', (inputs) => @player_input player, inputs
+    socket.compressed.on 'input', (inputs) => @player_input player, inputs
     socket.on 'disconnect', => @player_disconnect player
     socket.on 'chat', (p) => @player_chat(socket, p)
     socket.on 'nick', (n) => @player_nick(player, n)
-    socket.emit "welcome", player: state, clock: +new Date / 1000
+    socket.compressed.emit "welcome", player: state, clock: +new Date / 1000
 
   player_disconnect: (player) ->
     index = @players.indexOf player
@@ -51,8 +53,7 @@ class exports.Server
       @players.splice index, 1
 
   player_input: (player, data) ->
-    player.inputs.concat data
-    Array::push.apply player.inputs, data
+    player.inputs.push v for k, v of data when k != "count"
     
   player_chat: (socket, packets) ->
     @chatlog.push p for p in packets
@@ -135,14 +136,14 @@ class exports.Server
         state = @states.item(i.tick - world.tick - 1)
         newState.applyInput i, world, state
       p.inputs.length = 0
-      world.players.push p.state = newState
+      world.players[newState.id] = p.state = newState
     return
 
   updateEnemies: (world) ->
     for e in @enemies
       state = e.onTick()
       if state
-        world.enemies.push state
+        world.enemies[state.id] = state
       else
         if @sheeps.length > 0
           @sheeps.pop() # DIE DIE
@@ -151,7 +152,7 @@ class exports.Server
   updateSheep: (world) ->
     for s in @sheeps
       state = s.onTick()
-      world.sheeps.push state if state
+      world.sheeps[state.id] = state if state
     return
 
   # The main "Game Loop"
@@ -185,7 +186,7 @@ class exports.Server
     for p in @players
       if p.lastUpdate + constants.TIME_BETWEEN_UPDATES <= time
         p.lastUpdate = Math.max time, p.lastUpdate + constants.TIME_BETWEEN_UPDATES
-        p.socket.emit 'world', world
+        p.socket.compressed.emit 'world', world
 
   spawnEnemy: (wave) ->
     direction = Math.random() * Math.PI * 2

@@ -57,16 +57,16 @@
   # MAP
   exports.MAP_SIZE = [10000, 10000]
   exports.MAP =
-    base: [0, -3500]           #bottom center
-    playerSpawn: [1000, -3500] #at base entrance
-    enemySpawn: [-3500, 3500]  #top left
-    waypointSize: 750
+    base: [0, -1500]           #bottom center
+    playerSpawn: [500, -1500] #at base entrance
+    enemySpawn: [-1500, 1500]  #top left
+    waypointSize: 500
     waypoints: [
-      [-3500, -3500] # top left
+      [-1500, -1500] # top left
       [0, 0]         # center
-      [3500, 0]      # right
-      [3500, -3500]  # bottom right
-      [0, -3500]     # base
+      [1500, 0]      # right
+      [1500, -1500]  # bottom right
+      [0, -1500]     # base
     ]
 
 )(if exports? then exports else window["constants"] = {})

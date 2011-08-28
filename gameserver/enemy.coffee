@@ -9,7 +9,7 @@ class Enemy
     @currentWaypoint = 0
     @velocity = new THREE.Vector2()
     @distance = 0
-    @target = null
+    @direction = 0
     @findNextWaypoint()
 
   findNextWaypoint: ->
@@ -23,6 +23,7 @@ class Enemy
     toTarget = new THREE.Vector2().sub(@target, new THREE.Vector2(@state.x, @state.y))
     @distance = toTarget.lengthSq()
     @velocity = toTarget.setLength(constants.ENEMY_SPEED * constants.TIME_PER_TICK)
+    @direction = Math.atan2(@velocity.y, @velocity.x)
 
     @target
 
@@ -30,8 +31,7 @@ class Enemy
     newState = @state.clone()
     newState.x += @velocity.x
     newState.y += @velocity.y
-    if @velocity.lengthSq()
-      newState.direction = Math.atan2(@velocity.y, @velocity.x)
+    newState.direction = @direction
 
     @distance -= @velocity.lengthSq()
     if @distance < 0 then @findNextWaypoint()

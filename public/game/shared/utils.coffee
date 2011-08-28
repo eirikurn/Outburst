@@ -31,21 +31,21 @@
   objToString = Object.prototype.toString
   class exports.DeltaCompressor
 
-    type: (o) -> objToString.call o
+    typeOf: (o) -> objToString.call o
 
     getDelta: (json, old) ->
       delta = {}
       changed = false
       for k, old_v of old
-        if not json[k]?
+        if k not of json
           delta._r or= []
           delta._r.push k
 
       for k, new_v of json
         old_v = old[k]
-        type = @type new_v
+        type = @typeOf new_v
 
-        if not old_v?
+        if k not of old
           delta[k] = new_v
           changed = true
 
@@ -71,7 +71,22 @@
 
       return [delta, changed]
 
-    applyDelta: (delta, old) ->
+    applyDelta: (delta, old={}) ->
+      _r = delta._r
+
+      for k in delta._r or []
+        delete old[k]
+      delete old._r
+
+      for k, new_v of delta when k != '_r'
+        type = @typeOf new_v
+
+        if type == "[object Object]"
+          old[k] = @applyDelta(new_v, old[k])
+        else
+          old[k] = new_v
+
+      return old
 
     compressPacket: (json) ->
       if not @lastOut
@@ -82,10 +97,6 @@
       return delta
 
     uncompressPacket: (json) ->
-      if not @lastIn
-        return @lastIn = json
-
-      json = @applyDelta json, @lastIn
-      return @lastIn = json
+      return @lastIn = @applyDelta json, @lastIn
 
 )(if exports? then exports else window["utils"] = {})

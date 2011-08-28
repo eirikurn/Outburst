@@ -139,6 +139,7 @@ class exports.Server
     time = +new Date / 1000
     world = @states.new(timestamp: time)
     @states.item(-2)?.clone(world)
+    world.tick++
 
     @updatePlayers(world)
     @updateGame(world)

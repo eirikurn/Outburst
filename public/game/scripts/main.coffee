@@ -1,5 +1,5 @@
 class Game
-  constructor: ->
+  constructor: (@twitterUser)->
     @lastFrame = +new Date / 1000
     @lastTick = +new Date / 1000
     @lastSentInputs = +new Date / 1000
@@ -116,11 +116,24 @@ class Game
     @stats.domElement.style.zIndex = 100
     document.getElementById('container').appendChild(@stats.domElement)
 
-document.addEventListener 'DOMContentLoaded', ->
-  window.game = new Game()
-
+document.addEventListener 'DOMContentLoaded', =>
+  # initGame()
+  # return # Uncomment these lines to skip twitter authentication
+  microAjax "/oauth/user", (res) ->
+    if res == "error"
+      window.location = "/oauth/authenticate"
+    else
+      twitterUser = JSON.parse res
+      initGame(twitterUser)
+      
+      
+initGame = (twitterUser = {}) ->
+  window.game = new Game(twitterUser)
+  
   # Chat messages
   chat = new Chat()
+  
+  
 
 trace = (message) ->
   console?.log message

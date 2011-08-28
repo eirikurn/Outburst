@@ -10,7 +10,7 @@ class Shot extends THREE.Object3D
    
     
   createGraphic: ->
-    @line = new THREE.Mesh(new THREE.CubeGeometry(1000, 2, 2, 1, 1, 1), new THREE.MeshLambertMaterial(color: 0xFF0000, opacity: 0.5, transparent: true))
+    @line = new THREE.Mesh(new THREE.CubeGeometry(1000, 2, 2, 1, 1, 1), new THREE.MeshLambertMaterial(color: 0xFFFFFF, opacity: 0.5, transparent: true))
     lineContainer = new THREE.Object3D()
     
     @line.rotation.x = Math.PI / 2

@@ -4,11 +4,12 @@ class AnimatedMesh extends THREE.Mesh
   
   playAnimation: (animationName) ->
     throw "'#{animationName}' animation does not exist." if animationName not of @animations
-    # Reset the current morph target
-    @morphTargetInfluences[ @lastKeyframe ] = 0 if @lastKeyframe
-    @morphTargetInfluences[0] = 1
+    @resetMorphs()
+    
     # Init
     @currentAnimation = @animations[animationName]
+    @morphTargetInfluences[@currentAnimation.firstKeyFrameIndex] = 1
+    
     @interpolation = @currentAnimation.duration / @currentAnimation.keyframes
     
     @time = @currentAnimation.duration / @currentAnimation.keyframes
@@ -17,6 +18,9 @@ class AnimatedMesh extends THREE.Mesh
     
   updateAnimation: (delta) ->
     if not @currentAnimation or @isPaused then return
+    # Don't update one frame animations
+    if @currentAnimation.duration <= 0 or @currentAnimation.keyframes <= 1 then return
+    
     @time = (@time + delta * 1000) % @currentAnimation.duration
     keyframe = @currentAnimation.firstKeyframeIndex + Math.floor( @time / @interpolation )
     
@@ -29,6 +33,10 @@ class AnimatedMesh extends THREE.Mesh
       
     @morphTargetInfluences[ keyframe ] = ( @time % @interpolation ) / @interpolation
     @morphTargetInfluences[ @lastKeyframe ] = 1 - @morphTargetInfluences[ keyframe ]
+  
+  resetMorphs: ->
+    for i in [0..@morphTargetInfluences.length]
+      @morphTargetInfluences[i] = 0
 
 # export
 @AnimatedMesh = AnimatedMesh

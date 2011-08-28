@@ -15,8 +15,8 @@ class Shot extends THREE.Object3D
     
     @line.rotation.x = Math.PI / 2
     @line.rotation.y = Math.PI / 2
-    @line.position.y = constants.SHOT_DISTANCE / 2 + 50
-    @line.position.z = 120
+    @line.position.y = constants.SHOT_DISTANCE / 2 + 110
+    @line.position.z = 195
     
     lineContainer.rotation.z = -Math.PI / 2 + @direction
     

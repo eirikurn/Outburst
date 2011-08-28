@@ -1,7 +1,8 @@
 class PlayerUnit extends THREE.Object3D
   constructor: (state) ->
     super()
-    Loader.getModel "models/svenn.js", @makeModel
+    @splitModel = new SplitPlayerModel()
+    @addChild @splitModel
     @createAimer()
     @addState(state)
 
@@ -13,26 +14,11 @@ class PlayerUnit extends THREE.Object3D
       for shot in state.shots
         game.addShot @, shot
 
-    if @model
-      @model.rotation.y = state.walkDirection + Math.PI / 2
-      @model.isPaused = not state.isMoving
+    @splitModel.onStateUpdate state.walkDirection, state.aimDirection, state.isMoving
 
   onFrame: (delta) ->
-    @model.updateAnimation (delta) if @model
+    @splitModel.onFrame delta
 
-  makeModel: (geometry) =>
-    material = new THREE.MeshBasicMaterial( { map: geometry.materials[0][0].map, morphTargets: true });
-    @model = new AnimatedMesh geometry, material,
-      walk:
-        firstKeyframeIndex: 0
-        duration: 1500
-        keyframes: 24
-    @model.scale.x = @model.scale.y = @model.scale.z = 10
-    @model.rotation.x = Math.PI/2
-    @model.position.z = 100
-    @model.playAnimation "walk"
-    @model.isPaused = yes
-    @addChild @model
 
   createAimer: () ->
     @aimer = new THREE.Mesh(new THREE.CylinderGeometry(10, 0, 5, 50, 0, 0), new THREE.MeshLambertMaterial(color: 0xFF0000))

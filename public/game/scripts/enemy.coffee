@@ -7,6 +7,7 @@ class Enemy extends THREE.Object3D
   addState: (state) ->
     @position.x = state.x
     @position.y = state.y
+    @rotation.z = state.direction
   
   makeModel: (geometry) =>
     material = new THREE.MeshBasicMaterial( { map: geometry.materials[0][0].map, morphTargets: true });
@@ -21,6 +22,7 @@ class Enemy extends THREE.Object3D
     @robot.scale.x = @robot.scale.y = @robot.scale.z = 40
     @robot.position.z = 1
     @robot.rotation.x = Math.PI / 2
+    @robot.rotation.y = Math.PI / 2
     @robot.playAnimation "walk"
     
     @addChild @robot

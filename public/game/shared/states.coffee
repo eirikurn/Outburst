@@ -103,16 +103,85 @@
         # Create shot
         rnd = random.generator(@seed)
         spread = activeWeapon.spread
-        createShot = -> target.aimDirection + (rnd() * spread) - (spread/2)
         if activeWeapon.shards
-          target.shots.push createShot() for i in [0...activeWeapon.shards]
+          target.shots.push @createShot(world, target, spread, rnd) for i in [0...activeWeapon.shards]
         else if activeWeapon.automatic
           spread = target.spread = Math.min(activeWeapon.spreadPerShot + (oldSpread or 0), activeWeapon.spreadMax)
-          target.shots.push createShot()
+          target.shots.push @createShot(world, target, spread, rnd)
         else
-          target.shots.push createShot()
+          target.shots.push @createShot(world, target, spread, rnd)
 
       target
+      
+    vecDot: (vec1, vec2) ->
+      vec1.x * vec2.x + vec1.y * vec2.y;
+    
+    createShot: (world, target, spread, rnd) ->
+      direction = target.aimDirection + (rnd() * spread) - (spread/2)
+      start =
+        x: target.x + constants.SHOT_OFFSET_FROM_PLAYER_CENTER * Math.cos direction
+        y: target.y + constants.SHOT_OFFSET_FROM_PLAYER_CENTER * Math.sin direction
+
+      distance = @calculateIntersection start, direction, world
+        
+      returnData = 
+        direction: direction
+        length: distance
+        x: start.x
+        y: start.y
+    
+    calculateIntersection: (shotStart, direction, world) ->
+      minLength = constants.SHOT_DISTANCE
+      hitEnemy = null
+      
+      for enemy in world.enemies
+        hitLength = @shotHitsObject { x: enemy.x, y: enemy.y }, constants.ENEMY_RADIUS, shotStart, direction
+        if hitLength =! -1
+          if hitLength < minLength
+            minLength = hitLength
+            hitEnemy = enemy
+       
+        if hitEnemy
+          hitEnemt.hp -= 1 # or some constant
+        
+        return minLength
+        
+      
+    shotHitsObject: (targetLocation, targetRadius, shotStart, direction) ->
+      end = 
+        x: shotStart.x + constants.SHOT_DISTANCE * Math.cos direction
+        y: shotStart.y + constants.SHOT_DISTANCE * Math.sin direction
+      
+      distance = constants.SHOT_DISTANCE
+      
+      # d = L - E ; // Direction vector of ray, from start to end
+      d =
+        x: end.x - shotStart.x
+        y: end.y - shotStart.y
+      # f = E - C ; // Vector from center sphere to ray start
+      f =
+        x: shotStart.x - targetLocation.x
+        y: shotStart.y - targetLocation.x
+      
+      a = @vecDot d, d
+      b = 2 * @vecDot f, d
+      c = @vecDot(f, f) - targetRadius*targetRadius
+      discriminant = b * b - 4 * a * c
+      
+      if discriminant < 0
+        return -1
+      else
+        discriminant = Math.sqrt discriminant
+        t1 = (-b + discriminant) / (2 * a)
+        t2 = (-b - discriminant) / (2 * a)
+        
+        if t1 >= 0 and t1 <= 1 or t2 >= 0 and t2 <= 1
+          console.log "COLLISION!", t1, t2
+          distance = constants.SHOT_DISTANCE * Math.min t1, t2
+          return distance
+        else
+          return -1
+      
 
     @fields = ['x', 'y', 'id', 'walkDirection', 'aimDirection', 'isMoving',
       'seed', 'weapon', 'recoil', 'reload', 'spread', 'ammo', 'shots', 'nick']

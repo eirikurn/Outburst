@@ -15,6 +15,9 @@
   # Shared gameplay constants
   exports.PLAYER_SPEED = 600
   exports.SHOT_DISTANCE = 2000
+  exports.SHOT_OFFSET_FROM_PLAYER_CENTER = 105
+  
+  exports.ENEMY_RADIUS = 70
 
   exports.WEAPONS =
     pistol:
@@ -55,6 +58,7 @@
   exports.ENEMY_HP_PER_WAVE = 30
   
   exports.SHEEP_HEALTH = 100
+
 
   # MAP
   exports.MAP_SIZE = [10000, 10000]

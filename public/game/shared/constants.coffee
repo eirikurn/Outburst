@@ -68,9 +68,9 @@
     enemySpawn: [-1500, 1500]  #top left
     waypointSize: 500
     waypoints: [
-      #[-1500, -1500] # top left
-     # [0, 0]         # center
-      #[1500, 0]      # right
+      [-1500, -1500] # top left
+      [0, 0]         # center
+      [1500, 0]      # right
       [1500, -1500]  # bottom right
       [0, -1500]     # base
     ]

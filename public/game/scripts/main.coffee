@@ -47,10 +47,15 @@ class Game
 
     for e in world.enemies
       if not @entities[e.id]
-        # TODO
         @addEntity(e.id, new Enemy(e))
       else
         @entities[e.id].addState(e)
+
+    for s in world.sheeps
+      if not @entities[s.id]
+        @addEntity(s.id, new Sheep(s))
+      else
+        @entities[s.id].addState(s)
     return
 
   onFrame: =>

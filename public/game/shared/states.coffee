@@ -122,7 +122,10 @@
         x: target.x + constants.SHOT_OFFSET_FROM_PLAYER_CENTER * Math.cos direction
         y: target.y + constants.SHOT_OFFSET_FROM_PLAYER_CENTER * Math.sin direction
 
-      distance = @calculateIntersection start, direction, world
+      #distance = @calculateIntersection start, direction, world
+      distance = @shotHitsObject { x: 500, y: 600 }, 100, start, direction
+      distance = constants.SHOT_DISTANCE if distance == -1
+      #targetLocation, targetRadius, shotStart, direction
         
       returnData = 
         direction: direction
@@ -176,8 +179,16 @@
         t2 = (-b - discriminant) / (2 * a)
         
         if t1 >= 0 and t1 <= 1 or t2 >= 0 and t2 <= 1
-          console.log "COLLISION!", t1, t2
-          distance = constants.SHOT_DISTANCE * Math.min t1, t2
+          sca = 0
+          if t1 >= 0 and t1 <= 1 or t2 >= 0 and t2 <= 1
+            sca = Math.min t1, t2
+          else if t1 >= 0 and t1 <= 1
+            sca = t1
+          else
+            sca = t2
+            
+          console.log "COLLISION!", sca
+          distance = constants.SHOT_DISTANCE * sca
           return distance
         else
           return -1

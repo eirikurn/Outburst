@@ -10,7 +10,7 @@ class Sheep extends THREE.Object3D
     @rotation.z = state.direction
     
   makeModel: (geometry) =>
-    material = new THREE.MeshBasicMaterial( )
+    material = new THREE.MeshBasicMaterial( { map: geometry.materials[0][0].map })
     @sheep = new THREE.Mesh geometry, material
     @sheep.scale.x = @sheep.scale.y = @sheep.scale.z = 40
     @sheep.position.z = 35

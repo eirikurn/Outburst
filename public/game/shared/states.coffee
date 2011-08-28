@@ -97,8 +97,8 @@
         # Create shot
         rnd = random.generator(@seed)
         spread = activeWeapon.spread
-        createShot = -> target.aimDirection + rnd() * spread
-        # createShot = -> d = target.aimDirection + rnd() * spread; console.log d; d
+        createShot = -> target.aimDirection + (rnd() * spread) - (spread/2)
+        # createShot = -> d = target.aimDirection + (rnd() * spread) - (spread/2); console.log d; d
         if activeWeapon.shards
           target.shots.push createShot() for i in [0...activeWeapon.shards]
         else if activeWeapon.automatic

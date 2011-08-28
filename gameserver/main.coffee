@@ -22,8 +22,8 @@ class exports.Server
     @isStarted = false
     @spawnTimer = 0
     @remainingSpawns = 0
-    @enemyIds = 0
-    @playerIds = 1000
+    @enemyIds = 1000
+    @playerIds = 0
 
     @tickTimer = setInterval @tick, 1000 / constants.TICKS_PER_SECOND
 

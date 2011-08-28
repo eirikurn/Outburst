@@ -21,19 +21,21 @@ class Enemy
     @target = new THREE.Vector2().set(@target...)
     @target.addSelf(@waypointDelta)
     toTarget = new THREE.Vector2().sub(@target, new THREE.Vector2(@state.x, @state.y))
-    @distance = toTarget.lengthSq()
+    @distance = toTarget.length()
     @velocity = toTarget.setLength(constants.ENEMY_SPEED * constants.TIME_PER_TICK)
     @direction = Math.atan2(@velocity.y, @velocity.x)
 
     @target
 
   onTick: (world) ->
+    return null if not @target
+
     newState = @state.clone()
     newState.x += @velocity.x
     newState.y += @velocity.y
     newState.direction = @direction
 
-    @distance -= @velocity.lengthSq()
+    @distance -= constants.ENEMY_SPEED * constants.TIME_PER_TICK
     if @distance < 0 then @findNextWaypoint()
 
     return @state = newState

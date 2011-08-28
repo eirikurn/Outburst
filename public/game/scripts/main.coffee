@@ -57,7 +57,15 @@ class Game
         @addEntity(s.id, new Sheep(s))
       else
         @entities[s.id].addState(s)
-    return
+
+    @removeNullEntities(world)
+  
+  removeNullEntities: (world) ->
+    worldEntityIds = (wEntity.id.toString() for wEntity in world.players.concat world.sheeps, world.enemies)
+    for localId of @entities
+      if localId not in worldEntityIds
+        @scene.removeChild @entities[localId]
+        delete @entities[localId]
 
   onFrame: =>
     now = +new Date / 1000

@@ -24,9 +24,9 @@ class exports.Server
     @isStarted = false
     @spawnTimer = 0
     @remainingSpawns = 0
-    @entityIds = 0
-    @playerIds = 1000
-    
+    @enemyIds = 1000
+    @playerIds = 0
+
     for i in [1..3]
       @spawnSheep()
 
@@ -160,12 +160,12 @@ class exports.Server
   
   spawnSheep: ->
     direction = Math.random() * Math.PI * 2
-    distance = Math.random() * constants.MAP.sheepSpawnArea
+    distance = Math.random() * constants.MAP.waypointSize
     delta = [
       Math.sin(direction) * distance
       Math.cos(direction) * distance
     ]
-    startX = constants.MAP.sheepSpawn[0] + delta[0]
-    startY = constants.MAP.sheepSpawn[1] + delta[1]
+    startX = constants.MAP.base[0] + delta[0]
+    startY = constants.MAP.base[1] + delta[1]
     sheep = new Sheep( x: startX, y: startY, hp: constants.SHEEP_HEALTH, id: ++@entityIds, direction: Math.random() * Math.PI * 2)
     @sheeps.push sheep

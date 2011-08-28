@@ -49,6 +49,9 @@
   exports.SPAWN_RATE = 0.4
   exports.START_LIVES = 10
 
+  exports.ENEMY_BASE_HP = 40
+  exports.ENEMY_HP_PER_WAVE = 30
+
   # MAP
   exports.MAP_SIZE = [10000, 10000]
   exports.MAP =

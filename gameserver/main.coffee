@@ -64,24 +64,37 @@ class exports.Server
     player.nick = nick
 
   startGame: ->
+    console.log "Game starting"
     @spawnTimer = constants.START_WAVE
     setTimeout =>
       @io.sockets.emit "chat", [ player: "server", msg: "Game starts in " + (constants.START_WAVE - 2) + " seconds" ]
     , 2000
 
   endGame: ->
+    console.log "Game ending"
     @enemies.length = 0
     @spawnTimer = 0
     if @players.length
       setTimeout (=> @startGame()), 3000
 
+  spawnEnemy: (wave) ->
+    direction = Math.random() * Math.PI * 2
+    distance = Math.random() * constants.MAP.weypointSize
+    startX = constants.MAP.enemySpawn[0] + Math.sin(direction) * distance
+    startY = constants.MAP.enemySpawn[1] + Math.cos(direction) * distance
+    hp = constants.ENEMY_BASE_HP + constants.ENEMY_HP_PER_WAVE * wave
+    new Enemy(x: startX, y: startY, hp: hp, waypointDistance: distance, waypointDirection: direction)
+
   updateGame: (world) ->
     @spawnTimer = Math.max(0, @spawnTimer - constants.TIME_PER_TICK)
-    if not @spawnTimer
+    if not @spawnTimer and @remainingSpawns
       @spawnTimer = constants.WAVE_INTERVAL
-      @enemies.push new UnitState()
-
-
+      @enemies.push spawnEnemy()
+      @remainingSpawns--
+      if @remainingSpawns
+        @spawnTimer = constants.SPAWN_RATE
+      else
+        @spawnTimer = constants.WAVE_INTERVAL
 
   # The main "Game Loop"
   tick: =>

@@ -119,5 +119,6 @@
       @enemies = (new exports.UnitState(e) for e in data.enemies or [])
       @nextWave = data.nextWave
       @lives = data.lives or constants.START_LIVES
+      @wave = data.wave = 1
 
 )(if exports? then exports else window["states"] = {})

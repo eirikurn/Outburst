@@ -3,7 +3,7 @@ class Game
     @lastFrame = +new Date / 1000
     @lastTick = +new Date / 1000
     @lastSentInputs = +new Date / 1000
-    @inputs = {}
+    @inputs = {count: 0}
     @renderShots = []
 
     worldCount = constants.INTERPOLATE_FRAMES + 1
@@ -95,8 +95,7 @@ class Game
       # Send input to server
       if @lastSentInputs + constants.TIME_BETWEEN_INPUTS <= now
         @socket.compressed.emit 'input', @inputs
-        @inputs.count = 0
-        delete @inputs[k] for k of @inputs when k != "count"
+        @inputs = {count: 0}
         @lastSentInputs += constants.TIME_BETWEEN_INPUTS
 
     # Update entities

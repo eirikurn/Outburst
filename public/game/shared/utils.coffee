@@ -51,7 +51,7 @@
       for k, old_v of old
         if k not of json
           delta._r or= []
-          delta._r.push k
+          delta._r.push k.toString()
 
       for k, new_v of json
         old_v = old[k]
@@ -102,10 +102,12 @@
 
     compress: (type, json) ->
       if type not of @lastOut
+        console.log json
         return @lastOut[type] = json
       [delta, changed] = @getDelta(json, @lastOut[type])
       @lastOut[type] = json
 
+      console.log delta
       return delta
 
     uncompress: (type, json) ->

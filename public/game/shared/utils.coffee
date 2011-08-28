@@ -29,8 +29,34 @@
     tail: -> @item 0
 
   objToString = Object.prototype.toString
-  class exports.DeltaCompressor
 
+  class exports.CompressionSocket
+    constructor: (@socket, messageTypes) ->
+      @lastIn = {}
+      @lastOut = {}
+      for t in messageTypes
+        @lastOut[t] = @lastIn[t] = null
+
+      @broadcast = @socket.broadcast
+
+    on: (type, cb) ->
+      if type of @lastIn
+        @socket.on type, (args...) =>
+          args[0] = @uncompress(type, args[0])
+          cb.apply null, args
+
+      else
+        @socket.on.apply @socket, arguments
+
+    emit: (args...) ->
+      [type, data] = args
+
+      if type of @lastOut
+        args[1] = @compress(args[0], args[1])
+
+      @socket.emit.apply @socket, args
+
+    # Logic
     typeOf: (o) -> objToString.call o
 
     getDelta: (json, old) ->
@@ -88,15 +114,15 @@
 
       return old
 
-    compressPacket: (json) ->
-      if not @lastOut
-        return @lastOut = json
-      [delta, changed] = @getDelta(json, @lastOut)
-      @lastOut = json
+    compress: (type, json) ->
+      if not @lastOut[type]
+        return @lastOut[type] = json
+      [delta, changed] = @getDelta(json, @lastOut[type])
+      @lastOut[type] = json
 
       return delta
 
-    uncompressPacket: (json) ->
-      return @lastIn = @applyDelta json, @lastIn
+    uncompress: (type, json) ->
+      return @lastIn[type] = @applyDelta json, @lastIn[type]
 
 )(if exports? then exports else window["utils"] = {})

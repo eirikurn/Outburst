@@ -10,6 +10,8 @@ class Game
     @worlds = new utils.StatePool(states.WorldState, worldCount)
 
     @socket = io.connect()
+    @socket = new utils.CompressionSocket(@socket, ['input', 'world'])
+
     @socket.on 'welcome', @joinedServer
     @socket.on 'world', @updateFromServer
 

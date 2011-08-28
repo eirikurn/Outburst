@@ -40,32 +40,35 @@ class Game
 
   updateFromServer: (data) =>
     world = @worlds.new data
-    for p in world.players# when p.id != @player.id
-      if not @entities[p.id]
-        @addEntity(p.id, new PlayerUnit(p))
+    for id, p of world.players
+      if not @entities[id]
+        @addEntity(id, new PlayerUnit(p))
       else
-        @entities[p.id].addState(p)
+        @entities[id].addState(p)
 
-    for e in world.enemies
-      if not @entities[e.id]
-        @addEntity(e.id, new Enemy(e))
+    for id, e of world.enemies
+      if not @entities[id]
+        @addEntity(id, new Enemy(e))
       else
-        @entities[e.id].addState(e)
+        @entities[id].addState(e)
 
-    for s in world.sheeps
-      if not @entities[s.id]
-        @addEntity(s.id, new Sheep(s))
+    for id, s of world.sheeps
+      if not @entities[id]
+        @addEntity(id, new Sheep(s))
       else
-        @entities[s.id].addState(s)
+        @entities[id].addState(s)
 
     @removeNullEntities(world)
   
   removeNullEntities: (world) ->
-    worldEntityIds = (wEntity.id.toString() for wEntity in world.players.concat world.sheeps, world.enemies)
-    for localId of @entities
-      if localId not in worldEntityIds
-        @scene.removeChild @entities[localId]
-        delete @entities[localId]
+    players = world.players
+    enemies = world.enemies
+    sheeps = world.sheeps
+
+    for id of @entities
+      if id not of players and id not of enemies and id not of sheeps
+        @scene.removeChild @entities[id]
+        delete @entities[id]
 
   onFrame: =>
     now = +new Date / 1000

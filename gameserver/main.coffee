@@ -36,7 +36,7 @@ class exports.Server
     # console.log state
     player = new Player(socket, state)
     @players.push player
-    @states.head().players.push state
+    @states.head().players[state.id] = state
 
     socket.on 'input', (inputs) => @player_input player, inputs
     socket.on 'disconnect', => @player_disconnect player
@@ -108,19 +108,19 @@ class exports.Server
         state = @states.item(i.tick - world.tick - 1)
         newState.applyInput i, state
       p.inputs.length = 0
-      world.players.push p.state = newState
+      world.players[newState.id] = p.state = newState
     return
 
   updateEnemies: (world) ->
     for e in @enemies
       state = e.onTick()
-      world.enemies.push state if state
+      world.enemies[state.id] = state if state
     return
   
   updateSheep: (world) ->
     for s in @sheeps
       state = s.onTick()
-      world.sheeps.push state if state
+      world.sheeps[state.id] = state if state
     return
 
   # The main "Game Loop"

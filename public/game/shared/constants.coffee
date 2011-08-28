@@ -28,9 +28,9 @@
       ammo: 30
       reloadTime: 1.5
       automatic: yes
-      spreadPerShot: 3 * (Math.PI / 180)
-      spreadMax: 35 * (Math.PI / 180)
-      spreadTime: 2
+      spreadPerShot: 2 * (Math.PI / 180)
+      spreadMax: 25 * (Math.PI / 180)
+      spreadTime: 1.5
     shotgun:
       damage: 200
       recoilTime: .75

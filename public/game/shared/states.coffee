@@ -210,6 +210,6 @@
 
       super
 
-    @fields = ['lives', 'wave']
+    @fields = ['lives', 'wave', 'tick']
 
 )(if exports? then exports else window["states"] = {})

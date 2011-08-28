@@ -102,12 +102,10 @@
 
     compress: (type, json) ->
       if type not of @lastOut
-        console.log json
         return @lastOut[type] = json
       [delta, changed] = @getDelta(json, @lastOut[type])
       @lastOut[type] = json
 
-      console.log delta
       return delta
 
     uncompress: (type, json) ->

@@ -47,7 +47,7 @@
   exports.FIRST_WAVE = 4 # 12?
   exports.WAVE_INTERVAL = 10 # 30?
   exports.SPAWN_RATE = 0.4
-  exports.START_LIVES = 10
+  exports.START_LIVES = 6
 
   exports.ENEMIES_PER_WAVE = 15
   exports.ENEMY_SPEED = 300

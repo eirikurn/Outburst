@@ -37,7 +37,10 @@
       @shots = []
       super
 
-    applyInput: (input, target = @) ->
+    applyInput: (input, world, target = @) ->
+      if !world
+        console.log "world IS NULL in appyInput in states.coffee!!"
+        return
       velocity = constants.PLAYER_SPEED * constants.TIME_PER_TICK
       deltaX = 0; deltaY = 0
       deltaX += velocity if input.right
@@ -119,14 +122,7 @@
         x: target.x + constants.SHOT_OFFSET_FROM_PLAYER_CENTER * Math.cos direction
         y: target.y + constants.SHOT_OFFSET_FROM_PLAYER_CENTER * Math.sin direction
 
-      #distance = @calculateIntersection start, direction, world
-      
-      
-      distance = @shotHitsObject { x: -1000, y: 10 }, 100, start, direction
-      if distance == -1
-        distance = @shotHitsObject { x: 500, y: 600 }, 100, start, direction
-      
-      distance = constants.SHOT_DISTANCE if distance == -1
+      distance = @calculateIntersection start, direction, world
         
       returnData = 
         direction: direction
@@ -134,11 +130,13 @@
         x: start.x
         y: start.y
     
+    
+    
     calculateIntersection: (shotStart, direction, world) ->
       minLength = constants.SHOT_DISTANCE
       hitEnemy = null
       
-      for enemy in world.sheeps
+      for enemy in world.enemies
         hitLength = @shotHitsObject({ x: enemy.x, y: enemy.y }, constants.ENEMY_RADIUS, shotStart, direction)
         if hitLength != -1
           if hitLength < minLength
@@ -146,7 +144,8 @@
             hitEnemy = enemy
        
       if hitEnemy
-        hitEnemy.hp -= 1 # or some constant
+        hitEnemy.hp -= 10 # or some constant
+        # EIKI TODO!! þetta er ekki að virka
         
       return minLength
         
@@ -165,7 +164,7 @@
       # f = E - C ; // Vector from center sphere to ray start
       f =
         x: shotStart.x - targetLocation.x
-        y: shotStart.y - targetLocation.x
+        y: shotStart.y - targetLocation.y
       
       a = @vecDot d, d
       b = 2 * @vecDot f, d

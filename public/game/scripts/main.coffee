@@ -18,25 +18,7 @@ class Game
     @initStats() if constants.DISPLAY_STATS
     window.input = @input = new Input @camera, @map.map
     @onFrame()
-    
-    # ZERO ball
-    ball = new THREE.Mesh(new THREE.SphereGeometry(10, 10, 10), new THREE.MeshLambertMaterial(color: 0xFF0000))
-    ball.position.x = 0
-    ball.position.y = 0
-    @scene.addChild ball
-    
-    # Create the upper demo ball
-    ball = new THREE.Mesh(new THREE.SphereGeometry(100, 10, 10), new THREE.MeshLambertMaterial(color: 0xFFFFFF))
-    ball.position.x = -1000
-    ball.position.y = 10
-    @scene.addChild ball
-    
-    # Create the lower demo ball
-    ball = new THREE.Mesh(new THREE.SphereGeometry(100, 10, 10), new THREE.MeshLambertMaterial(color: 0xFFFFFF))
-    ball.position.x = 500
-    ball.position.y = 600
-    @scene.addChild ball
-    
+
     # Chat messages
     chat = new Chat(@socket)
 

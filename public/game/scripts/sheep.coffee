@@ -3,9 +3,6 @@ class Sheep extends THREE.Object3D
     super()
     Loader.getModel "models/sheep.js", @makeModel
     @addState state
-    
-    ball = new THREE.Mesh(new THREE.SphereGeometry(100, 10, 10), new THREE.MeshLambertMaterial(color: 0xFFFFFF))
-    @addChild ball
   
   addState: (state) ->
     @position.x = state.x

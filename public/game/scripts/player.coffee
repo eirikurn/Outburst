@@ -1,7 +1,7 @@
 class PlayerUnit extends THREE.Object3D
   constructor: (state) ->
     super()
-    Loader.getModel "models/figure.js", @makeModel
+    Loader.getModel "models/svenn.js", @makeModel
     @createAimer()
     @addState(state)
 
@@ -27,8 +27,8 @@ class PlayerUnit extends THREE.Object3D
       walk:
         firstKeyframeIndex: 0
         duration: 850
-        keyframes: 27
-    @model.scale.x = @model.scale.y = @model.scale.z = 20
+        keyframes: 3
+    @model.scale.x = @model.scale.y = @model.scale.z = 10
     @model.rotation.x = Math.PI/2
     @model.position.z = 100
     @model.playAnimation "walk"

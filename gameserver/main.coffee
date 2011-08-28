@@ -69,6 +69,7 @@ class exports.Server
     player.state.nick = nick
 
   startGame: ->
+    if @gameIsOver then return
     console.log "Game starting"
     @spawnTimer = constants.FIRST_WAVE
     state = @states.head()
@@ -102,13 +103,14 @@ class exports.Server
     @enemies.length = 0
     @spawnTimer = 0
     @io.sockets.emit "chat", [ player: "server", msg: "GAME OVER :(" ]
-    @io.sockets.emit "gameover" 
+    #@io.sockets.emit "gameover" 
     
     setTimeout =>
       @io.sockets.emit "chat", [ player: "server", msg: "Restarting in 10 seconds" ]
     , 5000
     
     setTimeout =>
+      console.log "game no longer over"
       @isGameOver = no
       @startGame()
     , 10000
@@ -116,7 +118,6 @@ class exports.Server
     
 
   updateGame: (world) ->
-    if @isGameOver then return
     @spawnTimer = Math.max(0, @spawnTimer - constants.TIME_PER_TICK)
     if @spawnTimer == 0
       if @remainingSpawns == 0
@@ -157,20 +158,20 @@ class exports.Server
 
   # The main "Game Loop"
   tick: =>
-    if not @isStarted
-      if @players.length
-        @isStarted = true
-        @startGame()
-      else
+    if not @gameOver
+      if not @isStarted
+        if @players.length
+          @isStarted = true
+          @startGame()
+        else
+          return
+      else if @players.length == 0
+        @isStarted = false
+        @endGame()
         return
-    else if @players.length == 0
-      @isStarted = false
-      @endGame()
-      return
     
     if @sheeps.length == 0 and not @isGameOver
       @gameOver()
-      return
 
     time = +new Date / 1000
     world = @states.new(timestamp: time)

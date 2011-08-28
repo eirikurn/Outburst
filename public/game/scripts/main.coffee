@@ -1,5 +1,5 @@
 class Game
-  constructor: ->
+  constructor: (@twitterUser)->
     @lastFrame = +new Date / 1000
     @lastTick = +new Date / 1000
     @lastSentInputs = +new Date / 1000
@@ -39,13 +39,15 @@ class Game
     now = +new Date / 1000
     delta = now - @lastFrame
     @lastFrame = now
+    
+    @input.onFrame()
 
     if @player
       # Capture input state
       while @lastTick + constants.TIME_PER_TICK <= now
-        input = @input.getState()
-        @inputs.push input
-        @player.applyInput input
+        oneState = @input.getState()
+        @inputs.push oneState
+        @player.applyInput oneState
         @lastTick += constants.TIME_PER_TICK
 
       # Send input to server
@@ -57,8 +59,9 @@ class Game
     # Update entities
     for k, e of @entities
       e.onFrame(delta) if e.onFrame
-
+    
     @renderer.render @scene, @camera
+    @camera.onFrame()
     @cursor.onFrame()
     @stats.update()
 
@@ -114,11 +117,28 @@ class Game
     @stats.domElement.style.zIndex = 100
     document.getElementById('container').appendChild(@stats.domElement)
 
-document.addEventListener 'DOMContentLoaded', ->
-  window.game = new Game()
-
+document.addEventListener 'DOMContentLoaded', =>
+  # If user was just redirected from twitter
+  if document.location.href.indexOf("loggedIn") != -1
+    # Try to authenticate user
+    microAjax "/oauth/user", (res) ->
+      if res == "error" 
+        window.location = "/oauth/authenticate"
+      else
+        twitterUser = JSON.parse res
+        initGame(twitterUser)
+  else
+    # Anonymous lame-o
+    initGame()
+      
+      
+initGame = (twitterUser = null) ->
+  window.game = new Game(twitterUser)
+  
   # Chat messages
   chat = new Chat()
+  
+  
 
 trace = (message) ->
   console?.log message

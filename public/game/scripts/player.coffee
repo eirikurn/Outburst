@@ -20,7 +20,7 @@ class PlayerUnit extends THREE.Object3D
     @removeChild @nick if @nick
     @nick = new Text2D @nicktext
     @nick.position.y = -100
-    @nick.position.z = 100
+    @nick.position.z = 20
     @addChild @nick
 
   onFrame: (delta) ->

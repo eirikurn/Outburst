@@ -136,7 +136,8 @@
       minLength = constants.SHOT_DISTANCE
       hitEnemy = null
       
-      for enemy in world.enemies
+      for enemyId of world.enemies
+        enemy = world.enemies[enemyId]
         hitLength = @shotHitsObject({ x: enemy.x, y: enemy.y }, constants.ENEMY_RADIUS, shotStart, direction)
         if hitLength != -1
           if hitLength < minLength

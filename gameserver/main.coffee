@@ -59,12 +59,12 @@ class exports.Server
     socket.broadcast.emit 'chat', packets
     
   player_nick: (player, nick) ->
-    if player.nick
-      player.socket.broadcast.emit "chat", [ player: "server", msg: player.nick + " is now called " + nick]
+    if player.state.nick
+      player.socket.broadcast.emit "chat", [ player: "server", msg: player.state.nick + " is now called " + nick]
     else
       player.socket.emit "chat", [ player: "server", msg: "Welcome to Outburst, gl n hf!"].concat @chatlog
       player.socket.broadcast.emit "chat", [ player: "server", msg: nick + " joined the game"]
-    player.nick = nick
+    player.state.nick = nick
 
   startGame: ->
     console.log "Game starting"
@@ -105,7 +105,8 @@ class exports.Server
     for p in @players
       newState = p.state.clone()
       for i in p.inputs
-        newState.applyInput i
+        state = @states.item(i.tick - world.tick - 1)
+        newState.applyInput i, state
       p.inputs.length = 0
       world.players.push p.state = newState
     return
@@ -138,6 +139,7 @@ class exports.Server
     time = +new Date / 1000
     world = @states.new(timestamp: time)
     @states.item(-2)?.clone(world)
+    world.tick++
 
     @updatePlayers(world)
     @updateGame(world)

@@ -5,21 +5,21 @@
     constructor: (@cls, @capacity=20) ->
       @array = new Array @capacity
       @start = 0
-      @count = 0
+      @length = 0
 
     item: (index) ->
-      index = @count + index if index < 0
-      return undefined unless 0 <= index < @count
+      index = @length + index if index < 0
+      return undefined unless 0 <= index < @length
       return @array[(@start + index)%@capacity]
 
     new: ->
-      index = (@start + @count) % @capacity
+      index = (@start + @length) % @capacity
       item = @array[index]
       if item
         @start = (@start + 1) % @capacity
       else
         @array[index] = item = new @cls(false)
-        @count++
+        @length++
 
       item.init.apply item, arguments
       return item

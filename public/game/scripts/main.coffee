@@ -25,8 +25,9 @@ class Game
   joinedServer: (data) =>
     @player = new Player(new states.PlayerState(data.player), @camera)
     @addEntity(data.player.id, @player)
-    @user.username = "Anonymous " + data.player.id if @user.username == "Anonymous"
-    @socket.emit 'nick', @user.username
+    @user.nick = "Anonymous " + data.player.id if @user.nick == "Anonymous"
+    @player.state.nick = @user.nick
+    @socket.emit 'nick', @user.nick
 
   addEntity: (id, entity) ->
     @entities[id] = entity
@@ -56,7 +57,15 @@ class Game
         @addEntity(s.id, new Sheep(s))
       else
         @entities[s.id].addState(s)
-    return
+
+    @removeNullEntities(world)
+  
+  removeNullEntities: (world) ->
+    worldEntityIds = (wEntity.id.toString() for wEntity in world.players.concat world.sheeps, world.enemies)
+    for localId of @entities
+      if localId not in worldEntityIds
+        @scene.removeChild @entities[localId]
+        delete @entities[localId]
 
   onFrame: =>
     now = +new Date / 1000
@@ -65,12 +74,15 @@ class Game
     
     @input.onFrame delta
 
-    if @player
+    if @player and @worlds.head()
+      world = @worlds.head()
       # Capture input state
       while @lastTick + constants.TIME_PER_TICK <= now
         oneState = @input.getState()
+        oneState.tick = world.tick
+        @player.applyInput oneState, world
+
         @inputs.push oneState
-        @player.applyInput oneState
         @lastTick += constants.TIME_PER_TICK
 
       # Send input to server
@@ -104,7 +116,7 @@ class Game
     @scene = new THREE.Scene()
     @camera = new Camera(@targetWidth, @targetHeight)
     @entities = {}
-
+    
     @scene.addChild @map = new Map()
     @scene.addChild @cursor = new Cursor()
     @hud = new Hud()
@@ -159,14 +171,13 @@ document.addEventListener 'DOMContentLoaded', =>
         window.location = "/oauth/authenticate"
       else
         twitterUser = JSON.parse res
-        twitterUser.username = twitterUser.screen_name
-        initGame(twitterUser)
+        initGame(nick: twitterUser.screen_name)
   else
     # Anonymous lame-o
     initGame()
       
       
-initGame = (user = username: "Anonymous") ->
+initGame = (user = nick: "Anonymous") ->
   window.game = new Game(user)
   
 

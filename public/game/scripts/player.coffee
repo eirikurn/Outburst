@@ -9,8 +9,9 @@ class PlayerUnit extends THREE.Object3D
     @position.x = state.x
     @position.y = state.y
     @aimerContainer.rotation.z = state.aimDirection
-    for shot in state.shots?
-      game.addShot @, shot
+    if state.shots
+      for shot in state.shots
+        game.addShot @, shot
       
     if @model
       @model.rotation.y = state.walkDirection + Math.PI / 2

@@ -46,9 +46,7 @@ app.configure('production', function(){
 
 // Routes
 app.get('/', function(req, res){
-  res.render('index', {
-    title: 'Aranja'
-  });
+  res.render('index');
 });
 
 app.get('/oauth/user', function(req, res){

@@ -95,12 +95,13 @@ class Game
 
     @scene.addChild @map = new Map()
     @scene.addChild @cursor = new Cursor()
+    @hud = new Hud()
 
   initRenderer: ->
     @targetWidth = 1024
     @targetHeight = 576
 
-    @renderer = new THREE.WebGLRenderer()
+    @renderer = new THREE.WebGLRenderer({ antialias: true })
     @renderer.setSize(@targetWidth, @targetHeight)
     @renderer.setClearColorHex 0xFFFFFF
     wrapper = document.getElementById 'wrapper'

@@ -28,7 +28,6 @@ class exports.Server
     @tickTimer = setInterval @tick, 1000 / constants.TICKS_PER_SECOND
 
   player_connect: (socket) ->
-    console.log "Player connected..."
     startX = Math.random() * 400 - 200
     startY = Math.random() * 400 - 200
     state = new states.PlayerState x: startX, y: startY, id: ++@playerIds, seed: (+new Date + @playerIds)

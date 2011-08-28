@@ -51,7 +51,7 @@ class Game
     delta = now - @lastFrame
     @lastFrame = now
     
-    @input.onFrame()
+    @input.onFrame delta
 
     if @player
       # Capture input state
@@ -80,8 +80,8 @@ class Game
     # Discard dead shots, TODO: Factory, pool
     @renderShots = (shot for shot in @renderShots when shot.isAlive)
     
-    @renderer.render @scene, @camera
     @camera.onFrame()
+    @renderer.render @scene, @camera
     @cursor.onFrame()
     @stats.update() if constants.DISPLAY_STATS
 

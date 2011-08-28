@@ -58,7 +58,7 @@ class Player extends PlayerUnit
     @state.applyInput input
     Player.__super__.addState.call this, @state
     @camera.position.x = @state.x
-    @camera.position.y = @state.y - 500
+    @camera.position.y = @state.y - 800
 
 # export
 @PlayerUnit = PlayerUnit

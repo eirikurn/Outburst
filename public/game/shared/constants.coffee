@@ -13,7 +13,8 @@
   exports.INTERPOLATE_FRAMES = 2
 
   # Gameplay constants
-  exports.PLAYER_SPEED = 200
+  exports.PLAYER_SPEED = 300
+  exports.SHOT_DISTANCE = 2000
 
   exports.WEAPONS =
     pistol:

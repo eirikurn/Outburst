@@ -144,7 +144,7 @@ class exports.Server
     for e in @enemies
       state = e.onTick()
       if state
-        world.enemies[state.id] = state if state
+        world.enemies[state.id] = state
       else
         if @sheeps.length > 0
           @sheeps.pop() # DIE DIE

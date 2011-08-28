@@ -4,6 +4,7 @@ class Game
     @lastTick = +new Date / 1000
     @lastSentInputs = +new Date / 1000
     @inputs = []
+    @renderShots = []
 
     worldCount = constants.INTERPOLATE_FRAMES + 1
     @worlds = new utils.StatePool(states.WorldState, worldCount)
@@ -25,6 +26,11 @@ class Game
   addEntity: (id, entity) ->
     @entities[id] = entity
     @scene.addObject entity
+    
+  addShot: (sourcePlayer, direction) ->
+    shot = new Shot(sourcePlayer.position.x, sourcePlayer.position.y, direction)
+    @scene.addObject shot
+    @renderShots.push shot
 
   updateFromServer: (data) =>
     world = @worlds.new data
@@ -59,6 +65,15 @@ class Game
     # Update entities
     for k, e of @entities
       e.onFrame(delta) if e.onFrame
+    
+    # Update shots
+    for shot in @renderShots
+      shot.onFrame delta
+      if not shot.isAlive
+        @scene.removeObject shot
+      
+    # Discard dead shots, TODO: Factory, pool
+    @renderShots = (shot for shot in @renderShots when shot.isAlive)
     
     @renderer.render @scene, @camera
     @camera.onFrame()

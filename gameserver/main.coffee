@@ -22,6 +22,7 @@ class exports.Server
     @enemies = []
     @sheeps = []
     @isStarted = false
+    @isGameOver = false
     @spawnTimer = 0
     @remainingSpawns = 0
     @entityIds = 1000
@@ -87,8 +88,28 @@ class exports.Server
     @spawnTimer = 0
     if @players.length
       setTimeout (=> @startGame()), 3000
+      
+  gameOver: ->
+    console.log "Game over"
+    @isGameOver = yes
+    @enemies.length = 0
+    @spawnTimer = 0
+    @io.sockets.emit "chat", [ player: "server", msg: "GAME OVER :(" ]
+    @io.sockets.emit "gameover" 
+    
+    setTimeout =>
+      @io.sockets.emit "chat", [ player: "server", msg: "Restarting in 10 seconds" ]
+    , 5000
+    
+    setTimeout =>
+      @isGameOver = no
+      @startGame()
+    , 10000
+    
+    
 
   updateGame: (world) ->
+    if @isGameOver then return
     @spawnTimer = Math.max(0, @spawnTimer - constants.TIME_PER_TICK)
     if @spawnTimer == 0
       if @remainingSpawns == 0
@@ -114,7 +135,11 @@ class exports.Server
   updateEnemies: (world) ->
     for e in @enemies
       state = e.onTick()
-      world.enemies.push state if state
+      if state
+        world.enemies.push state
+      else
+        if @sheeps.length > 0
+          @sheeps.pop() # DIE DIE
     return
   
   updateSheep: (world) ->
@@ -134,6 +159,10 @@ class exports.Server
     else if @players.length == 0
       @isStarted = false
       @endGame()
+      return
+    
+    if @sheeps.length == 0 and not @isGameOver
+      @gameOver()
       return
 
     time = +new Date / 1000

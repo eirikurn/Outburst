@@ -1,5 +1,5 @@
-{EnemyState} = require './shared/states'
-constants = require '/shared/constants'
+{EnemyState} = require './shared/states.coffee'
+constants = require './shared/constants.coffee'
 
 class Enemy
   constructor: (data) ->
@@ -18,7 +18,7 @@ class Enemy
     @velocity = [@target.x - @state.x, @target[1] - @state.y]
     @target
 
-  update: (world)
+  onTick: (world) ->
     newState = @state.clone()
     newState.x += @velocity[0]
     newState.y += @velocity[1]

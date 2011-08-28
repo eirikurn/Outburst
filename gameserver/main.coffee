@@ -1,5 +1,7 @@
+require './threejs'
 io = require('socket.io')
 Player = require './player'
+Enemy = require './enemy'
 utils = require './shared/utils.coffee'
 constants = require './shared/constants.coffee'
 states = require './shared/states.coffee'
@@ -29,7 +31,7 @@ class exports.Server
     console.log "Player connected..."
     startX = Math.random() * 400 - 200
     startY = Math.random() * 400 - 200
-    state = new states.PlayerState x: startX, y: startY, id: @playerIds++, seed: (+new Date + @playerIds)
+    state = new states.PlayerState x: startX, y: startY, id: ++@playerIds, seed: (+new Date + @playerIds)
     # console.log state
     player = new Player(socket, state)
     @players.push player
@@ -65,9 +67,9 @@ class exports.Server
 
   startGame: ->
     console.log "Game starting"
-    @spawnTimer = constants.START_WAVE
+    @spawnTimer = constants.FIRST_WAVE
     setTimeout =>
-      @io.sockets.emit "chat", [ player: "server", msg: "Game starts in " + (constants.START_WAVE - 2) + " seconds" ]
+      @io.sockets.emit "chat", [ player: "server", msg: "Game starts in " + (constants.FIRST_WAVE - 2) + " seconds" ]
     , 2000
 
   endGame: ->
@@ -77,25 +79,15 @@ class exports.Server
     if @players.length
       setTimeout (=> @startGame()), 3000
 
-  spawnEnemy: (wave) ->
-    direction = Math.random() * Math.PI * 2
-    distance = Math.random() * constants.MAP.weypointSize
-    waypointDelta = [
-      Math.sin(direction) * distance
-      Math.cos(direction) * distance
-    ]
-    startX = constants.MAP.enemySpawn[0] + waypointDelta[0]
-    startY = constants.MAP.enemySpawn[1] + waypointDelta[1]
-    hp = constants.ENEMY_BASE_HP + constants.ENEMY_HP_PER_WAVE * wave
-    new Enemy(x: startX, y: startY, hp: hp, waypointDistance: distance, waypointDirection: direction)
-
   updateGame: (world) ->
     @spawnTimer = Math.max(0, @spawnTimer - constants.TIME_PER_TICK)
-    if not @spawnTimer and @remainingSpawns
-      @spawnTimer = constants.WAVE_INTERVAL
-      @enemies.push spawnEnemy()
-      @remainingSpawns--
-      if @remainingSpawns
+    if @spawnTimer == 0
+      if @remainingSpawns == 0
+        ++world.wave
+        @remainingSpawns = constants.ENEMIES_PER_WAVE
+        console.log "Starting wave #{world.state}"
+      @spawnEnemy()
+      if --@remainingSpawns
         @spawnTimer = constants.SPAWN_RATE
       else
         @spawnTimer = constants.WAVE_INTERVAL
@@ -111,7 +103,7 @@ class exports.Server
 
   updateEnemies: (world) ->
     for e in @enemies
-      state = @enemies.update()
+      state = e.onTick()
       world.enemies.push state if state
 
   # The main "Game Loop"
@@ -138,3 +130,18 @@ class exports.Server
       if p.lastUpdate + constants.TIME_BETWEEN_UPDATES <= time
         p.lastUpdate = Math.max time, p.lastUpdate + constants.TIME_BETWEEN_UPDATES
         p.socket.emit 'world', world
+
+  spawnEnemy: (wave) ->
+    direction = Math.random() * Math.PI * 2
+    distance = Math.random() * constants.MAP.weypointSize
+    delta = [
+      Math.sin(direction) * distance
+      Math.cos(direction) * distance
+    ]
+    startX = constants.MAP.enemySpawn[0] + delta[0]
+    startY = constants.MAP.enemySpawn[1] + delta[1]
+    hp = constants.ENEMY_BASE_HP + constants.ENEMY_HP_PER_WAVE * wave
+
+    enemy = new Enemy(x: startX, y: startY, hp: hp, id: ++@enemyIds, waypointDelta: delta)
+    @enemies.push enemy
+    return enemy

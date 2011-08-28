@@ -21,6 +21,11 @@
 
     @fields = ['x', 'y', 'id']
 
+  class exports.EnemyState extends exports.UnitState
+    @fields = ['x', 'y', 'id', 'hp']
+
+
+
   class exports.PlayerState extends exports.UnitState
     init: ->
       @walkDirection = 0
@@ -119,6 +124,6 @@
       @enemies = (new exports.UnitState(e) for e in data.enemies or [])
       @nextWave = data.nextWave
       @lives = data.lives or constants.START_LIVES
-      @wave = data.wave = 1
+      @wave = data.wave = 0
 
 )(if exports? then exports else window["states"] = {})

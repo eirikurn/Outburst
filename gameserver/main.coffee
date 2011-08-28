@@ -81,6 +81,12 @@ class exports.Server
     setTimeout =>
       @io.sockets.emit "chat", [ player: "server", msg: "Game starts in " + (constants.FIRST_WAVE - 2) + " seconds" ]
     , 2000
+    
+    setTimeout =>
+      if @players.length
+        @io.sockets.emit "chat", [ player: "server", msg: "Let the game begin!" ]
+        @io.sockets.emit "start", {}
+    , constants.FIRST_WAVE * 1000
 
   endGame: ->
     console.log "Game ending"

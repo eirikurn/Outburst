@@ -28,4 +28,18 @@
 
     tail: -> @item 0
 
+  class exports.DeltaCompressor
+    compressPacket: (json) ->
+      if not @lastOut
+        return @lastOut = json
+      json = {}
+
+      return @lastOut = json
+
+    uncompressPacket: (json) ->
+      if not @lastIn
+        return @lastIn = json
+
+      return @lastIn = json
+
 )(if exports? then exports else window["utils"] = {})

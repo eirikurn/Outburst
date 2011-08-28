@@ -107,7 +107,7 @@ class exports.Server
       newState = p.state.clone()
       for i in p.inputs
         state = @states.item(i.tick - world.tick - 1)
-        newState.applyInput i, state
+        newState.applyInput i, world, state
       p.inputs.length = 0
       world.players[newState.id] = p.state = newState
     return

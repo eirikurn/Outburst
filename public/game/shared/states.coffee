@@ -187,7 +187,6 @@
           else
             sca = t2
             
-          console.log "COLLISION!", sca
           distance = constants.SHOT_DISTANCE * sca
           return distance
         else

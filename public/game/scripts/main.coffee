@@ -47,7 +47,8 @@ class Game
 
     for e in world.enemies
       if not @entities[e.id]
-        @addEntity(e.id, new PlayerUnit(e)) # TODO: EnemyUnit?
+        # TODO
+        # @addEntity(e.id, new EnemyUnit(e))
       else
         @entities[e.id].addState(e)
     return

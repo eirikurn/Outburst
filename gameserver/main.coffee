@@ -22,7 +22,9 @@ class exports.Server
 
   player_connect: (socket) ->
     console.log "Player connected..."
-    state = new states.PlayerState x: 0, y: 0, id: @playerIds++, seed: (+new Date + @playerIds)
+    startX = Math.random() * 400 - 200
+    startY = Math.random() * 400 - 200
+    state = new states.PlayerState x: startX, y: startY, id: @playerIds++, seed: (+new Date + @playerIds)
     # console.log state
     player = new Player(socket, state)
     @players.push player

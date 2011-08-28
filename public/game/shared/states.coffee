@@ -62,24 +62,30 @@
       target.isMoving = input.right or input.left or input.up or input.down
 
       # Update shots/weapons
+      oldWeapon = @weapon
+      oldSpread = @spread
+      oldReload = @reload
+
       target.weapon =
         if input.weapon1      then "pistol"
         else if input.weapon2 then "machinegun"
         else if input.weapon3 then "shotgun"
         else                       @weapon
+      activeWeapon = constants.WEAPONS[target.weapon]
 
-      oldSpread = @spread
-      oldReload = @reload
+      if target.weapon != oldWeapon
+        target.ammo = activeWeapon.ammo
+      else
+        target.ammo = @ammo
+
       target.seed = @seed
-      target.ammo = @ammo
       target.shots = []
       target.recoil = Math.max @recoil - constants.TIME_PER_TICK, 0
       target.reload = Math.max @reload - constants.TIME_PER_TICK, 0
-      activeWeapon = constants.WEAPONS[target.weapon]
       if not target.reload and oldReload
         target.ammo = activeWeapon.ammo
       if activeWeapon.automatic and @spread
-        deltaSpread = activeWeapon.spreadMax * activeWeapon.spreadTime / constants.TIME_PER_TICK
+        deltaSpread = activeWeapon.spreadMax / (activeWeapon.spreadTime / constants.TIME_PER_TICK)
         target.spread = Math.max @spread - deltaSpread, 0
         target.spread
 
@@ -91,8 +97,8 @@
         # Create shot
         rnd = random.generator(@seed)
         spread = activeWeapon.spread
-        # createShot = -> target.aimDirection + rnd() * spread
-        createShot = -> d = target.aimDirection + rnd() * spread; console.log d; d
+        createShot = -> target.aimDirection + rnd() * spread
+        # createShot = -> d = target.aimDirection + rnd() * spread; console.log d; d
         if activeWeapon.shards
           target.shots.push createShot() for i in [0...activeWeapon.shards]
         else if activeWeapon.automatic

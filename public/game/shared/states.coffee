@@ -11,7 +11,7 @@
 
   class exports.UnitState extends exports.State
     init: (data = {}) ->
-      for k in @constructor.fields
+      for k in @constructor.fields when data[k]?
         @[k] = data[k]
 
     clone: (target = new @constructor()) ->
@@ -62,6 +62,8 @@
       target.isMoving = input.right or input.left or input.up or input.down
 
       # Update shots/weapons
+      oldSpread = @spread
+      oldReload = @reload
       activeWeapon = constants.WEAPONS[@weapon]
       target.seed = @seed
       target.weapon = @weapon
@@ -69,33 +71,37 @@
       target.shots = []
       target.recoil = Math.max @recoil - constants.TIME_PER_TICK, 0
       target.reload = Math.max @reload - constants.TIME_PER_TICK, 0
-      if not target.reload and @reload
+      if not target.reload and oldReload
         target.ammo = activeWeapon.ammo
       if activeWeapon.automatic and @spread
         deltaSpread = activeWeapon.spreadMax * activeWeapon.spreadTime / constants.TIME_PER_TICK
-        target.spread = activeWeapon.spreadMax Math.max @reload - constants.TIME_PER_TICK
+        target.spread = Math.max @spread - deltaSpread, 0
         target.spread
 
       if input.mouseDown and not target.recoil and target.ammo
-        target.recoil = activeWeapon.recoil
+        target.recoil = activeWeapon.recoilTime
         target.ammo--
-        target.reload = activeWeapon.reload if not target.ammo
+        target.reload = activeWeapon.reloadTime if not target.ammo
 
         # Create shot
         rnd = random.generator(@seed)
         spread = activeWeapon.spread
-        createShot = -> direction = aimDirection + rnd() * activeWeapon.spread
+        createShot = -> 
+          direction = target.aimDirection + rnd() * activeWeapon.spread
+          console.log direction
+          direction
         if activeWeapon.shards
           target.shots.push createShot() for i in [0...activeWeapon.shards]
         else if activeWeapon.automatic
-          spread = target.spread = Math.min(activeWeapon.spread + (@spread or 0), activeWeapon.maxSpread)
+          spread = target.spread = Math.min(activeWeapon.spread + (oldSpread or 0), activeWeapon.maxSpread)
           target.shots.push createShot()
         else
           target.shots.push createShot()
 
       target
 
-    @fields = ['x', 'y', 'id', 'walkDirection', 'aimDirection', 'isMoving']
+    @fields = ['x', 'y', 'id', 'walkDirection', 'aimDirection', 'isMoving',
+      'seed', 'weapon', 'recoil', 'reload', 'spread', 'ammo', 'shots']
 
   class exports.WorldState extends exports.State
     init: (data = {}) ->

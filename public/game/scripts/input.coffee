@@ -50,7 +50,7 @@ class Input
     s.right = @right
     s.mouseX = @mouse.x
     s.mouseY = @mouse.y
-    s.mouseDown = @mouse.down
+    s.mouseDown = @mouse.isDown
     s
     
   mousemove: (event) ->

@@ -19,6 +19,7 @@ class Game
     @onFrame()
 
   joinedServer: (data) =>
+    console.log data
     @player = new Player(new states.PlayerState(data.player), @camera)
     @addEntity(data.player.id, @player)
 

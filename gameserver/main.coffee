@@ -16,6 +16,11 @@ class exports.Server
     @states.new(timestamp: +new Date / 1000)
     @chatlog = []
     @players = []
+    @enemies = []
+    @isStarted = false
+    @spawnTimer = 0
+    @remainingSpawns = 0
+    @enemyIds = 0
     @playerIds = 0
 
     @tickTimer = setInterval @tick, 1000 / constants.TICKS_PER_SECOND
@@ -58,9 +63,38 @@ class exports.Server
       player.socket.broadcast.emit "chat", [ player: "server", msg: nick + " joined the game"]
     player.nick = nick
 
+  startGame: ->
+    @spawnTimer = constants.START_WAVE
+    setTimeout =>
+      @io.sockets.emit "chat", [ player: "server", msg: "Game starts in " + (constants.START_WAVE - 2) + " seconds" ]
+    , 2000
+
+  endGame: ->
+    @enemies.length = 0
+    @spawnTimer = 0
+    if @players.length
+      setTimeout (=> @startGame()), 3000
+
+  updateGame: (world) ->
+    @spawnTimer = Math.max(0, @spawnTimer - constants.TIME_PER_TICK)
+    if not @spawnTimer
+      @spawnTimer = constants.WAVE_INTERVAL
+      @enemies.push new UnitState()
+
+
 
   # The main "Game Loop"
   tick: =>
+    if not @isStarted
+      if @players.length
+        @isStarted = true
+        @startGame()
+      else
+        return
+    else if @players.length == 0
+      @isStarted = false
+      @endGame()
+
     time = +new Date / 1000
     world = @states.new(timestamp: time)
 
@@ -72,9 +106,10 @@ class exports.Server
       p.inputs.length = 0
       world.players.push p.state = newState
 
+    @updateGame()
+
     # Send updates to due players
     for p in @players
       if p.lastUpdate + constants.TIME_BETWEEN_UPDATES <= time
         p.lastUpdate = Math.max time, p.lastUpdate + constants.TIME_BETWEEN_UPDATES
         p.socket.emit 'world', world
-

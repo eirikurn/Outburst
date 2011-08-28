@@ -116,5 +116,8 @@
     init: (data = {}) ->
       @timestamp = data.timestamp
       @players = (new exports.PlayerState(p) for p in data.players or [])
+      @enemies = (new exports.UnitState(e) for e in data.enemies or [])
+      @nextWave = data.nextWave
+      @lives = data.lives or constants.START_LIVES
 
 )(if exports? then exports else window["states"] = {})

@@ -124,8 +124,8 @@ class Game
     
     @camera.onFrame()
     @renderer.render @scene, @camera
-    @cursor.onFrame()
-    @stats.update() if constants.DISPLAY_STATS
+    @cursor.onFrame @camera, if @player then @player.state else null
+    #@stats.update() if constants.DISPLAY_STATS
 
     requestAnimFrame(@onFrame, @container)
 
@@ -143,7 +143,7 @@ class Game
     @targetWidth = 1024
     @targetHeight = 576
 
-    @renderer = new THREE.WebGLRenderer({ antialias: true })
+    @renderer = new THREE.WebGLRenderer(antialias: true)
     @renderer.setSize(@targetWidth, @targetHeight)
     @renderer.setClearColorHex 0xFFFFFF
     wrapper = document.getElementById 'wrapper'
@@ -174,6 +174,7 @@ class Game
     @container.style.height = setHeight + "px"
 
   initStats: ->
+    return
     @stats = new Stats()
     @stats.domElement.style.position = 'absolute'
     @stats.domElement.style.top = '0px'

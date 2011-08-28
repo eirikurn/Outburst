@@ -1,6 +1,6 @@
 class Camera extends THREE.Camera
   constructor: (width, height) ->
-    super 45, 16 / 9, 1, 10000
+    super 45, 16 / 9, 100, 5000
     @position.z = 2000
   
   onFrame: ->

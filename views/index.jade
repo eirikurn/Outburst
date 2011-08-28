@@ -1,34 +1,51 @@
-#wrapper
-  #box
-    h1 Outburst
-    h2.by by 
-      a(href="http://nodeknockout.com/teams/aranja") Aranja
-    p Outburst is a multiplayer game that combines the best of a tower defense and a shooter. It is a co op game where players assist defending their base from enemies.
-    p The game uses WebGL and WebSockets and is currently optimized for Chrome Stable.
+!!!
+html(lang="en", manifest="/cache.manifest")
+  head
+    title Outburst by Aranja
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    #wrapper
+      #box
+        h1 Outburst
+        h2.by by 
+          a(href="http://nodeknockout.com/teams/aranja") Aranja
+        p Outburst is a multiplayer game that combines the best of a tower defense and a shooter. It is a co op game where players assist defending their base from enemies.
+        p The game uses WebGL and WebSockets and is currently optimized for Chrome Stable.
 
-    h2 The Team
-    ul(class="people")
-      li
-        img(src="http://gravatar.com/avatar/9bee4c3cbb5f7610b21d1583a21968bd?s=30&amp;d=retro", class="avatar")
-        a(href="http://flassari.is") Ari Þór Arnbjörnsson
-        span &nbsp;- Tampere, Finland
-      li
-        img(src="http://gravatar.com/avatar/6e98b58467d1c836a0e2ca29e5b74086?s=30&amp;d=retro", class="avatar")
-        a(href="http://nilsson.is") Eiríkur Heiðar Nilsson
-        span &nbsp;- Reykjavík, Iceland
-      li
-        img(src="http://gravatar.com/avatar/b9812d42f0b21b0652537387e02eebdb?s=30&amp;d=retro", class="avatar")
-        a(href="http://nodeknockout.com/people/4e5570c45176ed471a0002c2") Sveinn Björnsson
-        span &nbsp;- Reykjavík, Iceland
-      li
-        img(src="http://gravatar.com/avatar/8874fd8c614c61a592afa7d28e129a5c?s=30&amp;d=retro", class="avatar")
-        a(href="http://thorsteinsson.is") Ægir Þorsteinsson
-        span &nbsp;- Reykjavik, Iceland
+        h2 The Team
+        ul(class="people")
+          li
+            img(src="http://gravatar.com/avatar/9bee4c3cbb5f7610b21d1583a21968bd?s=30&amp;d=retro", class="avatar")
+            a(href="http://flassari.is") Ari Þór Arnbjörnsson
+            span &nbsp;- Tampere, Finland
+          li
+            img(src="http://gravatar.com/avatar/6e98b58467d1c836a0e2ca29e5b74086?s=30&amp;d=retro", class="avatar")
+            a(href="http://nilsson.is") Eiríkur Heiðar Nilsson
+            span &nbsp;- Reykjavík, Iceland
+          li
+            img(src="http://gravatar.com/avatar/b9812d42f0b21b0652537387e02eebdb?s=30&amp;d=retro", class="avatar")
+            a(href="http://nodeknockout.com/people/4e5570c45176ed471a0002c2") Sveinn Björnsson
+            span &nbsp;- Reykjavík, Iceland
+          li
+            img(src="http://gravatar.com/avatar/8874fd8c614c61a592afa7d28e129a5c?s=30&amp;d=retro", class="avatar")
+            a(href="http://thorsteinsson.is") Ægir Þorsteinsson
+            span &nbsp;- Reykjavik, Iceland
     
-    h2 Play Outburst
-    p.play
-      a(href="/oauth/authenticate")
-        img(src="game/images/twitter-logon.png")
-      span or
-      a(href="/game") Play as anonymous
+        h2 Controls
+        ul
+          li W, A, S, D or arrows to move player
+          li Mouse to aim
+          li Mouse wheel to zoom
+          li Enter or y to chat
+          li Esc to exit chat
+          li 1 to use pistol
+          li 2 to use machine gun
+          li 3 to use shotgun
+    
+        h2 Play Outburst
+        p.play
+          a(href="/oauth/authenticate")
+            img(src="game/images/twitter-logon.png")
+          span or
+          a(href="/game") Play as anonymous
   

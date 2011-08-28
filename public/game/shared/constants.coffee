@@ -64,7 +64,7 @@
   exports.MAP_SIZE = [10000, 10000]
   exports.MAP =
     base: [0, -1500]           #bottom center
-    playerSpawn: [500, -1500]  #at base entrance
+    playerSpawn: [-1500, 1500] #[500, -1500]  #at base entrance
     enemySpawn: [-1500, 1500]  #top left
     waypointSize: 500
     waypoints: [

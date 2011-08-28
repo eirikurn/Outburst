@@ -36,17 +36,34 @@ app.configure(function(){
 });
 
 app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+
+  // Cache manifest
+  app.get('/cache.manifest', function(req, res) {
+    res.send('dev', 404);
+  });
 });
 
 app.configure('production', function(){
-  app.use(express.errorHandler()); 
-});
+  app.use(express.errorHandler());
 
+  // Cache manifest
+  app.get('/cache.manifest', function(req, res) {
+    fs.readFile('./files.manifest', function(err, data) {
+      if(err) {
+        res.send("Oops! Couldn't find that file.");
+      } else {
+        res.contentType('text/cache-manifest');
+        res.send(data);
+      }   
+      res.end();
+    }); 
+  });
+});
 
 // Routes
 app.get('/', function(req, res){
-  res.render('index');
+  res.render('index', { layout: false });
 });
 
 app.get('/oauth/user', function(req, res){

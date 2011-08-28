@@ -44,6 +44,12 @@ class Game
         @addEntity(p.id, new PlayerUnit(p))
       else
         @entities[p.id].addState(p)
+
+    for e in world.enemies
+      if not @entities[e.id]
+        @addEntity(e.id, new PlayerUnit(e)) # TODO: EnemyUnit?
+      else
+        @entities[e.id].addState(e)
     return
 
   onFrame: =>

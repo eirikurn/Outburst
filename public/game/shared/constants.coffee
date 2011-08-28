@@ -14,6 +14,7 @@
 
   # Gameplay constants
   exports.PLAYER_SPEED = 300
+  exports.SHOT_DISTANCE = 2000
 
   exports.WEAPONS =
     pistol:

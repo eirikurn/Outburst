@@ -37,7 +37,7 @@ class Input
     x: 0
     y: 0
     isDown: no
-    scroll: 1000
+    scroll: 2000
     
   keydown: (event) ->
     @[@keys[event.keyCode]] = on if @keysEnabled
@@ -86,7 +86,7 @@ class Input
   mousescroll: (event) ->
     event.preventDefault()
     val = @mouse.scroll + (event.wheelDeltaY / 10)
-    @mouse.scroll = val if val > 300 and val <= 1000
+    @mouse.scroll = val if val > 400 and val <= 2000
     
   handle: (keyCode, callback) ->
     @handlers[keyCode] = callback

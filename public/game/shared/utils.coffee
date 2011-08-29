@@ -52,6 +52,7 @@
         if k not of json
           delta._r or= []
           delta._r.push k.toString()
+          changed = true
 
       for k, new_v of json
         old_v = old[k]

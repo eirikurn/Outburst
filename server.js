@@ -5,7 +5,6 @@
  */
 
 var coffee = require('coffee-script')
-  , nko = require('nko')('Vzhctm/pgoeQd99c')
   , app = require('./app')
   , port = process.env.PORT || 8000;
 

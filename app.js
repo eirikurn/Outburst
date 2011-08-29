@@ -60,7 +60,6 @@ app.configure('production', function(){
 
 // Routes
 app.get('/', function(req, res) {
-  console.log (req.headers);
   // Redirect old domain
   if (req.headers.host == "outburst.thorsteinsson.is") {
     res.redirect(serverPath);

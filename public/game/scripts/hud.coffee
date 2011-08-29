@@ -27,7 +27,7 @@ class Hud
       @stats.ammo = state.ammo
     
   onGameStarted: () ->
-    @gameover.style.display = "hidden"
+    @gameover.style.display = "none"
     @gameover.innerHTML = ""
     @startcheck = yes
     

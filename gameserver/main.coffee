@@ -131,12 +131,24 @@ class exports.Server
       else
         @spawnTimer = constants.WAVE_INTERVAL
 
+  hurtEnemy: ({id}, howMuch) =>
+    enemy = null
+    for e in @enemies
+      enemy = e if e.state.id == id
+    return unless enemy
+
+    enemy.hp = Math.max 0, enemy.hp - howMuch
+    if enemy.hp == 0
+      index = @enemies.indexOf enemy
+      if index != -1
+        @enemies.splice index, 1
+
   updatePlayers: (world) ->
     for p in @players
       newState = p.state.clone()
       for i in p.inputs
         state = @states.item(i.tick - world.tick - 1)
-        newState.applyInput i, world, state
+        newState.applyInput i, state, newState, @hurtEnemy
       p.inputs.length = 0
       world.players[newState.id] = p.state = newState
     return

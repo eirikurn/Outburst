@@ -37,10 +37,11 @@
       @shots = []
       super
 
-    applyInput: (input, world, target = @) ->
+    applyInput: (input, world, target = @, hurtEnemy = ->) ->
       if !world
         console.log "world IS NULL in appyInput in states.coffee!!"
         return
+
       velocity = constants.PLAYER_SPEED * constants.TIME_PER_TICK
       deltaX = 0; deltaY = 0
       deltaX += velocity if input.right
@@ -104,33 +105,33 @@
         rnd = random.generator(@seed)
         spread = activeWeapon.spread
         if activeWeapon.shards
-          target.shots.push @createShot(world, target, spread, rnd) for i in [0...activeWeapon.shards]
+          target.shots.push @createShot(world, target, spread, rnd, activeWeapon.damage, hurtEnemy) for i in [0...activeWeapon.shards]
         else if activeWeapon.automatic
           spread = target.spread = Math.min(activeWeapon.spreadPerShot + (oldSpread or 0), activeWeapon.spreadMax)
-          target.shots.push @createShot(world, target, spread, rnd)
+          target.shots.push @createShot(world, target, spread, rnd, activeWeapon.damage, hurtEnemy)
         else
-          target.shots.push @createShot(world, target, spread, rnd)
+          target.shots.push @createShot(world, target, spread, rnd, activeWeapon.damage, hurtEnemy)
 
       target
       
     vecDot: (vec1, vec2) ->
       vec1.x * vec2.x + vec1.y * vec2.y;
     
-    createShot: (world, target, spread, rnd) ->
+    createShot: (world, target, spread, rnd, damage, hurtEnemy) ->
       direction = target.aimDirection + (rnd() * spread) - (spread/2)
       start =
         x: target.x + constants.SHOT_OFFSET_FROM_PLAYER_CENTER * Math.cos direction
         y: target.y + constants.SHOT_OFFSET_FROM_PLAYER_CENTER * Math.sin direction
 
-      distance = @calculateIntersection start, direction, world
+      [distance, enemy] = @calculateIntersection start, direction, world
+
+      hurtEnemy(enemy, damage) if enemy
         
       returnData = 
         direction: direction
         length: distance
         x: start.x
         y: start.y
-    
-    
     
     calculateIntersection: (shotStart, direction, world) ->
       minLength = constants.SHOT_DISTANCE
@@ -143,12 +144,8 @@
           if hitLength < minLength
             minLength = hitLength
             hitEnemy = enemy
-       
-      if hitEnemy
-        hitEnemy.hp -= 10 # or some constant
-        # EIKI TODO!! þetta er ekki að virka
         
-      return minLength
+      return [minLength, hitEnemy]
         
       
     shotHitsObject: (targetLocation, targetRadius, shotStart, direction) ->

@@ -8,7 +8,7 @@ var express = require('express')
   //, nko = require('nko')('Vzhctm/pgoeQd99c')
   , OAuth= require('oauth').OAuth;
 
-var serverPath = "http://outburst.thorsteinsson.is";
+var serverPath = "http://www.outburstgame.com";
 
 var oa = new OAuth("https://twitter.com/oauth/request_token",
         "https://twitter.com/oauth/access_token", 
@@ -16,7 +16,6 @@ var oa = new OAuth("https://twitter.com/oauth/request_token",
         "1.0A", serverPath + "/oauth/callback", "HMAC-SHA1");
 
 var app = module.exports = express.createServer();
-
 
 // Configuration
 
@@ -60,7 +59,13 @@ app.configure('production', function(){
 });
 
 // Routes
-app.get('/', function(req, res){
+app.get('/', function(req, res) {
+  console.log (req.headers);
+  // Redirect old domain
+  if (req.headers.host == "outburst.thorsteinsson.is") {
+    res.redirect(serverPath);
+    return;
+  }
   res.render('index', { layout: false });
 });
 

@@ -21,8 +21,8 @@
 
   exports.WEAPONS =
     pistol:
-      damage: 50
-      recoilTime: .5
+      damage: 150
+      recoilTime: .35
       ammo: 12
       reloadTime: 1.5
       spread: 3 * (Math.PI / 180)
@@ -47,8 +47,8 @@
   exports.DISPLAY_STATS = false
 
   # Server constants
-  exports.FIRST_WAVE = 4 # 12?
-  exports.WAVE_INTERVAL = 25 # 30?
+  exports.FIRST_WAVE = 4
+  exports.WAVE_INTERVAL = 20
   exports.SPAWN_RATE = 0.4
   exports.START_LIVES = 6
 

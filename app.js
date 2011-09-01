@@ -111,7 +111,7 @@ app.get('/oauth/callback', function(req, res, next){
 
     oa.getOAuthAccessToken(req.session.oauthtoken,req.session.oauthtoken_secret,req.session.oauthverifier, 
       function(error, oauth_access_token, oauth_access_token_secret, results){
-        if (error) new Error(error)
+        if (error) console.log(error)
         console.log(results)
         if (!results) {
         	console.log("User did not authenticate.")

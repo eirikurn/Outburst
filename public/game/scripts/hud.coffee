@@ -16,6 +16,8 @@ class Hud
   stats:
     weapon: 0
     ammo: 0
+
+  gamestart: +new Date
     
   onPlayerState: (state) ->
     if @stats != state.weapon

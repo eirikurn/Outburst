@@ -6,7 +6,8 @@
 var express = require('express')
   , sys = require('sys')
   //, nko = require('nko')('Vzhctm/pgoeQd99c')
-  , OAuth= require('oauth').OAuth;
+  , OAuth= require('oauth').OAuth
+  , fs = require('fs');
 
 var serverPath = "http://www.outburstgame.com";
 

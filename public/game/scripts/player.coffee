@@ -25,7 +25,6 @@ class PlayerUnit extends THREE.Object3D
 
   onFrame: (delta) ->
     @splitModel.onFrame delta
-    @nick.onFrame delta if @nick
 
 class Player extends PlayerUnit
   constructor: (state, @camera) ->

@@ -52,8 +52,8 @@ app.configure('production', function(){
       if(err) {
         res.send("Oops! Couldn't find that file.");
       } else {
-        res.contentType('text/cache-manifest');
-        res.send(data);
+      	res.writeHead(200, {'Content-Type': 'text/cache-manifest'});
+        res.end(data);
       }
     }); 
   });

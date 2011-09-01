@@ -47,14 +47,13 @@ app.configure('production', function(){
 
   // Cache manifest
   app.get('/cache.manifest', function(req, res) {
-    fs.readFile('./files.manifest', function(err, data) {
+    fs.readFile('./files.manifest', 'utf8', function(err, data) {
       if(err) {
         res.send("Oops! Couldn't find that file.");
       } else {
         res.contentType('text/cache-manifest');
         res.send(data);
-      }   
-      res.end();
+      }
     }); 
   });
 });

@@ -19,17 +19,17 @@ class Map extends THREE.Object3D
     )
     @addChild @map
     
-    # Draw roads
+    # Load textures
     @roadTexture = THREE.ImageUtils.loadTexture "images/road.png"
     @roadTexture.wrapT = @roadTexture.wrapS = THREE.RepeatWrapping
     @cornerTexture = THREE.ImageUtils.loadTexture "images/road-corner.png"
     @waypointSize = constants.MAP.waypointSize
     
     # Add roads
-    #previous = constants.MAP.enemySpawn
-    #for waypoint in constants.MAP.waypoints
-    #  @addRoad previous, waypoint
-    #  previous = waypoint
+    previous = constants.MAP.enemySpawn
+    for waypoint in constants.MAP.waypoints
+      @addRoad previous, waypoint
+      previous = waypoint
       
     # Add corners
     @addCorner constants.MAP.enemySpawn
@@ -47,7 +47,7 @@ class Map extends THREE.Object3D
     @addChild mesh
     
   addRoad: (from, to) ->
-    z = if @odd = !@odd then 4 else 3
+    z = if @odd = !@odd then 1 else 3
     road = new Road @roadTexture, from, to, z
     @addChild road
     

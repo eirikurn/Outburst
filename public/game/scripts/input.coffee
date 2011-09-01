@@ -13,6 +13,12 @@ class Input
     @ray = new THREE.Ray( @camera.position, null );
     @targetScroll = 2000
     
+    @handle 90, => #z
+      @targetScroll = 400
+      
+    @handle 88, => #x
+      @targetScroll = 2000
+    
   handlers: {}
   
   keysEnabled: yes

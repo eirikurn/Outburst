@@ -25,6 +25,7 @@ app.configure(function(){
   app.use(express.session({secret: "mysuperdupahsicretekeeey!"}));
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
+  app.set('view options', { layout: false });
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.compiler({src: __dirname + '/public', enable: ['coffeescript']}));
@@ -47,7 +48,7 @@ app.configure('production', function(){
 
   // Cache manifest
   app.get('/cache.manifest', function(req, res) {
-    fs.readFile('./files.manifest', 'utf8', function(err, data) {
+    fs.readFile(__dirname + '/files.manifest', 'utf8', function(err, data) {
       if(err) {
         res.send("Oops! Couldn't find that file.");
       } else {

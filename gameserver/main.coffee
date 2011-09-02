@@ -10,7 +10,7 @@ states = require './shared/states.coffee'
 class exports.Server
   constructor: (app) ->
     @io = io.listen app,
-      'transports': ['websocket']
+      'transports': ['websocket', 'flashsocket']
       'log level': 2
     @io.sockets.on 'connection', (s) => @player_connect(s)
 

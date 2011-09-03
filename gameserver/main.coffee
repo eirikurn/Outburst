@@ -29,7 +29,7 @@ class exports.Server
     @playerIds = 0
     @spawnSheep()
 
-    @tickTimer = setInterval @tick, 1000 / constants.TICKS_PER_SECOND
+    @tickTimer = setInterval (=> @tick()), 1000 / constants.TICKS_PER_SECOND
 
   player_connect: (socket) ->
     utils.addCompression socket
@@ -154,13 +154,19 @@ class exports.Server
     return
 
   updateEnemies: (world) ->
-    for e in @enemies
+    remove = []
+    for e, i in @enemies
       state = e.onTick()
       if state
         world.enemies[state.id] = state
       else
         if @sheeps.length > 0
+          remove.push i
           @sheeps.pop() # DIE DIE
+    
+    # kill enemies that killed the sheep
+    for i in remove
+      @enemies.splice i, 1
     return
   
   updateSheep: (world) ->
@@ -170,9 +176,7 @@ class exports.Server
     return
 
   # The main "Game Loop"
-  tick: =>
-    
-    
+  tick: ->
     if not @isStarted
       if @players.length
         @isStarted = true
@@ -186,8 +190,6 @@ class exports.Server
       
     if @sheeps.length == 0 and not @isGameOver
       @gameOver()
-    
-    
 
     time = +new Date / 1000
     world = @states.new(timestamp: time)

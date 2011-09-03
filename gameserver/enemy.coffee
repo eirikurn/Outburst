@@ -28,7 +28,8 @@ class Enemy
     @target
 
   onTick: (world) ->
-    return null if not @target
+    if not @target
+      return null
 
     newState = @state.clone()
     newState.x += @velocity.x

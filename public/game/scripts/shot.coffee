@@ -15,7 +15,7 @@ class Shot extends THREE.Object3D
     
     @line.rotation.x = Math.PI / 2
     @line.rotation.y = Math.PI / 2
-    @line.position.y = @state.length / 2 + constants.SHOT_OFFSET_FROM_PLAYER_CENTER
+    @line.position.y = @state.length / 2
     @line.position.z = 195
     
     lineContainer.rotation.z = -Math.PI / 2 + @state.direction

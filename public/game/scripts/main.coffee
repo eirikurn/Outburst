@@ -9,13 +9,8 @@ class Game
     worldCount = constants.INTERPOLATE_FRAMES + 1
     @worlds = new utils.StatePool(states.WorldState, worldCount)
 
-    @socket = io.connect()
-    utils.addCompression(@socket)
-
-    @socket.on 'welcome', @joinedServer
-    @socket.compressed.on 'world', @updateFromServer
-
     @initRenderer()
+    @initSocket()
     @initGraphics()
     @initStats() if constants.DISPLAY_STATS
     window.input = @input = new Input @camera, @map.map
@@ -147,6 +142,13 @@ class Game
     window.addEventListener 'resize', => @resizeToFit()
     @resizeToFit()
 
+  initSocket: ->
+    @socket = io.connect()
+    utils.addCompression(@socket)
+
+    @socket.on 'welcome', @joinedServer
+    @socket.compressed.on 'world', @updateFromServer
+
   resizeToFit: ->
     setWidth = window.innerWidth
     setHeight = Math.floor setWidth * (@targetHeight / @targetWidth)
@@ -177,7 +179,9 @@ document.addEventListener 'DOMContentLoaded', =>
     # Try to authenticate user
     microAjax "/oauth/user", (res) ->
       if res == "error" 
-        window.location = "/oauth/authenticate"
+        # Can cause endless loop...
+        # window.location = "/oauth/authenticate"
+        initGame()
       else
         twitterUser = JSON.parse res
         initGame(nick: twitterUser.screen_name)

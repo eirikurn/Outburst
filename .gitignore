@@ -3,3 +3,4 @@ node_modules
 logs
 pids
 .project
+masterserver/locals.json

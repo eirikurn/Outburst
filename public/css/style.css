@@ -55,9 +55,23 @@ ul {
 ul.people a {
   font-weight: bold;
 }
-#theteam,
-#controls {
-  display: table-cell;
+.row {
+  margin-left: -20px;
+/* Refactor to use nib */
+  zoom: 1;
+}
+.row:before,
+.row:after {
+  content: "";
+  display: table;
+}
+.row:after {
+  clear: both;
+}
+.col50 {
+  float: left;
+  width: 390px;
+  margin-left: 20px;
 }
 #controls {
   padding-left: 70px;
@@ -75,11 +89,10 @@ a {
   color: #369;
 }
 .play {
-  font: 24px/36px Verdana;
+  font: 18px/30px Verdana;
 }
 .play span {
   margin: 0 20px;
-  font-weight: bold;
 }
 .requirements li {
   font-size: 1.1em;

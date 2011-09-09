@@ -29,7 +29,7 @@ class Game
   addEntity: (id, entity) ->
     @entities[id] = entity
     @scene.addObject entity
-    
+
   addShot: (sourcePlayer, state) ->
     shot = new Shot(state)
     @scene.addObject shot

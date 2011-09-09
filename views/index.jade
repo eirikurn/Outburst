@@ -2,7 +2,7 @@
 html(lang="en", manifest="/cache.manifest")
   head
     title Outburst by Aranja
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/css/style.css')
   body
     #wrapper
       #box
@@ -43,6 +43,11 @@ html(lang="en", manifest="/cache.manifest")
             li 1 to use pistol
             li 2 to use machine gun
             li 3 to use shotgun
+        h2 Requirements
+        ul.requirements
+          li(data-bind="css: {ok: supportsWebgl, no: !supportsWebgl}") WebGL support
+          li(data-bind="css: {ok: supportsWebsockets, no: !supportsWebsockets}") Websocket support
+          li(data-bind="css: {pending: connection() == null, ok: connection() == true, no: connection() == false}") Connection
 
         h2 Play Outburst
         p.play
@@ -50,4 +55,22 @@ html(lang="en", manifest="/cache.manifest")
             img(src="game/images/twitter-logon.png")
           span or
           a(href="/game") Play as anonymous
+
+    script(src="js/libs/modernizr.js")
+    script(src="js/libs/knockout.js")
+    script(src="/socket.io/socket.io.js")
+    :coffeescript
+      vm =
+        supportsWebgl: Modernizr.webgl
+        supportsWebsockets: Modernizr.websockets
+        connection: ko.observable(null)
+      ko.applyBindings vm
+
+      @socket = io.connect()
+      @socket.on 'connect', ->
+        console.log "ROFL?"
+      @socket.on 'error', (err) ->
+        console.log err
+
+      
 

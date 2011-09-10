@@ -3,4 +3,5 @@ node_modules
 logs
 pids
 .project
+public/css/*.css
 masterserver/locals.json

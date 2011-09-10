@@ -10,17 +10,27 @@ html(lang="en", manifest="/cache.manifest")
         h2.by by 
           a(href="http://nodeknockout.com/teams/aranja") Aranja
         p Outburst is a multiplayer game that combines the best of a tower defense and a shooter. It is a co op game where players assist defending their base from enemies.
-        p The game uses WebGL and WebSockets and is currently optimized for Chrome Stable.
 
         .row
           .col50
             h2 Requirements
             ul.requirements
-              li(data-bind="css: {ok: supportsWebgl, no: !supportsWebgl}") WebGL support
+              li(data-bind="css: {ok: supportsWebgl, no: !supportsWebgl}") WebGL 3D support
               li(data-bind="css: {ok: supportsWebsockets, no: !supportsWebsockets}") Websocket support
               li(data-bind="css: {pending: connection() == null, ok: connection() == true, no: connection() == false}") Connection
+            p(data-bind="visible: failingWebglContext", style="display: none;")
+              | It seems your browser is unable to display 3D graphics using WebGL.
+              | For more information, visit <a href="http://get.webgl.org">get.webgl.org</a>.
+            p(data-bind="visible: supportsWebsockets && connection() == false", style="display: none;")
+              | Even though your browser supports websockets, we were unable to connect to the
+              | game servers. There is likely some firewall or other software blocking your
+              | websocket connetions.
+            p(data-bind="visible: needsBetterBrowser", style="display: none;")
+              | Your browser is missing some requirements. Please try another browser. We reccomend
+              a(href="http://www.google.com/chrome") Google Chrome
+              | .
 
-            h2 Play Outburst
+            h2 Start Game
             p.play
               a(href="/oauth/authenticate")
                 img(src="game/images/twitter-logon.png")
@@ -62,9 +72,11 @@ html(lang="en", manifest="/cache.manifest")
 
       # ViewModel for page
       vm =
-        supportsWebgl: Modernizr.webglcontext
+        supportsWebgl: Modernizr.webgl and Modernizr.webglcontext
         supportsWebsockets: Modernizr.websockets
-        connection: ko.observable(null)
+        failingWebglContext: Modernizr.webgl and not Modernizr.webglcontext
+        needsBetterBrowser: not (Modernizr.websockets and Modernizr.webgl)
+        connection: ko.observable(Modernizr.websockets and null)
 
       ko.applyBindings vm
       testConnection()

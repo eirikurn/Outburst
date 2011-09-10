@@ -32,7 +32,7 @@ class exports.Server
       for k, val of JSON.parse(json)
         @app.set k, val
     catch e # Ignore errors if locals doesn't exist
-      throw e if e.code != "ENOENT"
+      throw e if e.code not in ["EBADF", "ENOENT"]
 
     # Middleware
     @app.use express.bodyParser()

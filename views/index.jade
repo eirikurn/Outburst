@@ -42,15 +42,30 @@ html(lang="en", manifest="/cache.manifest")
     script(src="js/libs/knockout.js")
     script(src="/socket.io/socket.io.js")
     :coffeescript
+      # A better test for webgl support
+      Modernizr.addTest "webglcontext", ->
+        canvas = document.createElement("canvas")
+        for c in ["webgl", "experimental-webgl", "moz-webgl", "o-webgl", "webkit-3d", "3d"]
+          try
+            return true if canvas.getContext c
+          catch e
+            console.log e
+        return false
+
+      # Test if we can connect to server using socket.io
+      testConnection = ->
+        @socket = io.connect()
+        @socket.on 'connect', ->
+          vm.connection true
+        @socket.on 'error', (err) ->
+          vm.connection false
+
+      # ViewModel for page
       vm =
-        supportsWebgl: Modernizr.webgl
+        supportsWebgl: Modernizr.webglcontext
         supportsWebsockets: Modernizr.websockets
         connection: ko.observable(null)
-      ko.applyBindings vm
 
-      @socket = io.connect()
-      @socket.on 'connect', ->
-        vm.connection true
-      @socket.on 'error', (err) ->
-        vm.connection false
+      ko.applyBindings vm
+      testConnection()
 

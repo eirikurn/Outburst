@@ -64,10 +64,11 @@ html(lang="en", manifest="/cache.manifest")
 
       # Test if we can connect to server using socket.io
       testConnection = ->
-        @socket = io.connect()
-        @socket.on 'connect', ->
+        socket = io.connect()
+        socket.on 'connect', ->
           vm.connection true
-        @socket.on 'error', (err) ->
+          socket.disconnect()
+        socket.on 'error', (err) ->
           vm.connection false
 
       # ViewModel for page

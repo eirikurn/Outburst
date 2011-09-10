@@ -143,7 +143,7 @@ class Game
     @resizeToFit()
 
   initSocket: ->
-    @socket = io.connect()
+    @socket = io.connect('/game')
     utils.addCompression(@socket)
 
     @socket.on 'welcome', @joinedServer

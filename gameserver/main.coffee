@@ -8,7 +8,7 @@ states = require './shared/states.coffee'
 
 class exports.Server
   constructor: (@io) ->
-    @io.sockets.on 'connection', (s) => @player_connect(s)
+    @io.of('/game').on 'connection', (s) => @player_connect(s)
 
     stateCount = Math.round(constants.ROLLBACK_TIME * constants.TICKS_PER_SECOND) + 1
     @states = new utils.StatePool(states.WorldState, stateCount)

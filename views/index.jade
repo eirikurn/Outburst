@@ -26,7 +26,7 @@ html(lang="en", manifest="/cache.manifest")
               | game servers. There is likely some firewall or other software blocking your
               | websocket connetions.
             p(data-bind="visible: needsBetterBrowser", style="display: none;")
-              | Your browser is missing some requirements. Please try another browser. We reccomend
+              | Your browser is missing some requirements. Please try another browser. We recommend
               a(href="http://www.google.com/chrome") Google Chrome
               | .
 
@@ -81,4 +81,14 @@ html(lang="en", manifest="/cache.manifest")
 
       ko.applyBindings vm
       testConnection()
+
+    script
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-25659758-1']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
 

@@ -2,6 +2,7 @@
 # Dependencies
 ##
 express = require('express')
+RedisStore = require('connect-redis')(express)
 OAuth = require('oauth').OAuth
 fs    = require('fs')
 
@@ -38,7 +39,9 @@ class exports.Server
     @app.use express.bodyParser()
     @app.use express.methodOverride()
     @app.use express.cookieParser()
-    @app.use express.session({secret: "mysuperdupahsicretekeeey!"})
+
+    # Store session in Redis
+    @app.use express.session({store: new RedisStore, secret: "mysuperdupahsicretekeeey!"})
 
     @app.use express.compiler({src: __dirname + '/../public', enable: ['coffeescript']})
     @app.use require('stylus').middleware({ src: __dirname + '/../public' })

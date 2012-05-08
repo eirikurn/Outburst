@@ -60,7 +60,7 @@ class exports.Server
   index: (req, res) ->
     # Redirect old domain
     if req.headers.host == "outburst.thorsteinsson.is"
-      return res.redirect(serverPath)
+      return res.redirect(@app.set('serverPath'))
 
     res.render 'index', { layout: false }
 

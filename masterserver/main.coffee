@@ -5,6 +5,7 @@ express = require('express')
 RedisStore = require('connect-redis')(express)
 OAuth = require('oauth').OAuth
 fs    = require('fs')
+path  = require('path')
 
 class exports.Server
   constructor: (@app) ->
@@ -67,10 +68,10 @@ class exports.Server
             "1.0A", @app.set('serverPath') + "/oauth/callback", "HMAC-SHA1")
 
   cacheManifest: (req, res) =>
-    if @app.set('env') == 'development'
-      res.send 'dev', 404
+    if @app.set('env') == 'production'
+      res.sendfile path.join(__dirname, '../files.manifest')
     else
-      res.sendfile __dirname + '/files.manifest'
+      res.send 'dev', 404
 
   index: (req, res) ->
     # Redirect old domain

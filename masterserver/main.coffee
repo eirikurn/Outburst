@@ -42,19 +42,26 @@ class exports.Server
     @app.use express.cookieParser()
 
     # Store session in Redis
+    store = null
     if process.env.REDISTOGO_URL
       # Read redis configuration from env
       redisConfig = /redis:\/\/(\w+):(.*)@(.*):(\d+)/.exec(process.env.REDISTOGO_URL)
-      @app.use express.session(
-        store: new RedisStore(
-            host: redisConfig[3]
-            port: redisConfig[4]
-            pass: redisConfig[2]
-          )
-        secret: "mysuperdupahsicretekeeey!"
+      store = new RedisStore(
+        host: redisConfig[3]
+        port: redisConfig[4]
+        pass: redisConfig[2]
       )
     else
-      @app.use express.session({store: new RedisStore, secret: "mysuperdupahsicretekeeey!"})
+      store = new RedisStore()
+
+    @app.use express.session(
+      store: store
+      secret: "mysuperdupahsicretekeeey!"
+      cookie:
+        path: '/'
+        domain: 'outburstgame.com'
+        maxAge: 24 * 60 * 60 * 1000
+    )
 
     @app.use express.compiler({src: __dirname + '/../public', enable: ['coffeescript']})
     @app.use require('stylus').middleware({ src: __dirname + '/../public' })

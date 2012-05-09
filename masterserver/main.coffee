@@ -61,6 +61,7 @@ class exports.Server
         path: '/'
         domain: 'outburstgame.com'
         maxAge: 24 * 60 * 60 * 1000
+        httpOnly: false
     )
 
     @app.use express.compiler({src: __dirname + '/../public', enable: ['coffeescript']})

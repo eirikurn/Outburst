@@ -49,7 +49,7 @@ class exports.Server
       @app.use express.session(
         store: new RedisStore(
             host: redisConfig[3]
-            post: redisConfig[4]
+            port: redisConfig[4]
             pass: redisConfig[2]
           )
         secret: "mysuperdupahsicretekeeey!"

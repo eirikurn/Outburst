@@ -174,20 +174,13 @@ class Game
     document.getElementById('container').appendChild(@stats.domElement)
 
 document.addEventListener 'DOMContentLoaded', =>
-  # If user was just redirected from twitter
-  if document.location.href.indexOf("loggedIn") != -1
-    # Try to authenticate user
-    microAjax "/oauth/user", (res) ->
-      if res == "error" 
-        # Can cause endless loop...
-        # window.location = "/oauth/authenticate"
-        initGame()
-      else
-        twitterUser = JSON.parse res
-        initGame(nick: twitterUser.screen_name)
-  else
-    # Anonymous lame-o
-    initGame()
+  # Try to authenticate user
+  microAjax "/oauth/user", (res) ->
+    if res == "error"
+      initGame()
+    else
+      twitterUser = JSON.parse res
+      initGame(nick: twitterUser.screen_name)
       
       
 initGame = (user = nick: "Anonymous") ->

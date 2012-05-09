@@ -23,7 +23,7 @@ class exports.Server
     @app.set 'views', __dirname + '/../views'
     @app.set 'view engine', 'jade'
     @app.set 'view options', { layout: false }
-    @app.set 'serverPath', "http://www.outburstgame.com"
+    @app.set 'serverPath', "http://outburstgame.com"
     @app.configure 'development', =>
       @app.set 'errorHandler', { dumpExceptions: true, showStack: true }
     @app.configure 'production', =>
@@ -135,4 +135,4 @@ class exports.Server
         req.session.uname = results.screen_name
         req.session.accesstoken = token
         req.session.accesstokensecret = secret
-        res.redirect('/game/?loggedIn')
+        res.redirect('/game/')

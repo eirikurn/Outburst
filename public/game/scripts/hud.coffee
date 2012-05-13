@@ -36,12 +36,12 @@ class Hud
   onGameOver: () ->
     @gameover.style.display = "inline"
     p = document.createElement 'p'
-    p.innerText = "You lasted " + @getTime()
+    p.innerText = "You defended the sheeps for " + @getTime()
     @gameover.appendChild p
     
     a = document.createElement 'a'
     a.className = 'twitter-share-button'
-    a.dataset["text"] = "I lasted " + @getTime() + " in @outburstgame"
+    a.dataset["text"] = "I defended my sheeps from the killer robots for " + @getTime() + " in @outburstgame (outburstgame.com)"
     a.dataset["count"] = "vertical"
     a.innerText = "Tweet" 
     po = document.createElement('script')

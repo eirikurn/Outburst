@@ -65,6 +65,9 @@ class exports.Server
       player.socket.broadcast.emit "chat", [ player: "server", msg: nick + " joined the game"]
     player.state.nick = nick
 
+  notifyAll: (message) ->
+    @io.of('/game').emit "chat", [ player: "server", msg: message ]
+
   startGame: ->
     console.log "Game starting"
     @spawnTimer = constants.FIRST_WAVE
@@ -77,13 +80,13 @@ class exports.Server
       @spawnSheep()
 
     setTimeout =>
-      @io.sockets.emit "chat", [ player: "server", msg: "Game starts in " + (constants.FIRST_WAVE - 2) + " seconds" ]
+      @notifyAll "Game starts in " + (constants.FIRST_WAVE - 2) + " seconds"
     , 2000
-    
+
     setTimeout =>
       if @players.length
-        @io.sockets.emit "chat", [ player: "server", msg: "Let the game begin!" ]
-        @io.sockets.emit "start", {}
+        @notifyAll "Let the game begin!"
+        @io.of('/game').emit "start", {}
     , constants.FIRST_WAVE * 1000
 
   endGame: ->
@@ -98,15 +101,14 @@ class exports.Server
     @isGameOver = yes
     @enemies.length = 0
     @spawnTimer = 0
-    @io.sockets.emit "chat", [ player: "server", msg: "GAME OVER :(" ]
-    @io.sockets.emit "gameover" 
+    @notifyAll "GAME OVER :("
+    @io.of('/game').emit "gameover" 
     
     setTimeout =>
-      @io.sockets.emit "chat", [ player: "server", msg: "Restarting in 10 seconds" ]
+      @notifyAll "Restarting in 10 seconds"
     , 5000
     
     setTimeout =>
-      console.log "game no longer over"
       @isGameOver = no
       @startGame()
     , 10000
@@ -173,16 +175,17 @@ class exports.Server
 
   # The main "Game Loop"
   tick: ->
-    if not @isStarted
-      if @players.length
-        @isStarted = true
-        @startGame()
-      else
+    if not @isGameOver
+      if not @isStarted
+        if @players.length
+          @isStarted = true
+          @startGame()
+        else
+          return
+      else if @players.length == 0
+        @isStarted = false
+        @endGame()
         return
-    else if @players.length == 0
-      @isStarted = false
-      @endGame()
-      return
       
     if @sheeps.length == 0 and not @isGameOver
       @gameOver()

@@ -41,7 +41,7 @@ class Hud
     
     a = document.createElement 'a'
     a.className = 'twitter-share-button'
-    a.dataset["text"] = "I defended my sheeps from the killer robots for " + @getTime() + " in @outburstgame (outburstgame.com)"
+    a.dataset["text"] = "I defended my sheeps from the killer robots for " + @getTime() + " in @outburstgame"
     a.dataset["count"] = "vertical"
     a.innerText = "Tweet" 
     po = document.createElement('script')

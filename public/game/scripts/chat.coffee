@@ -42,8 +42,6 @@ class Chat
     input.keysEnabled = yes
     
   add: (packets) ->
-    console.log "CHAT RECEIVED"
-    console.dir packets
     for packet in packets
       li = document.createElement 'li'
       if packet.player == "server"

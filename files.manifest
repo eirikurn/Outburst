@@ -1,7 +1,7 @@
 CACHE MANIFEST
 #rev 8
 /game/libs/requestanimframe.js
-/socket.io/socket.io.js
+/game/libs/socket.io.js
 /game/libs/three-min.js
 /game/libs/microajax.js
 /game/shared/constants.js

@@ -5,14 +5,18 @@
 
 var express = require('express')
   , sys = require('sys')
-  , io = require('socket.io');
+  , io = require('socket.io')
+  , socketPort = require('./gameserver/shared/constants').SOCKET_PORT;
 
 /**
  * Create express server
  */
 var app = module.exports = express.createServer();
 
-var io = io.listen(app, {
+if (!socketPort)
+  socketPort = app;
+
+var io = io.listen(socketPort, {
   'transports': ['websocket'],
   'log level': 2
 });

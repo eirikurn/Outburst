@@ -50,7 +50,8 @@ html(lang="en", manifest="/cache.manifest")
 
     script(src="js/libs/modernizr.js")
     script(src="js/libs/knockout.js")
-    script(src="/socket.io/socket.io.js")
+    script(src="game/libs/socket.io.js")
+    script(src="game/shared/constants.js")
     :coffeescript
       # A better test for webgl support
       Modernizr.addTest "webglcontext", ->
@@ -64,7 +65,10 @@ html(lang="en", manifest="/cache.manifest")
 
       # Test if we can connect to server using socket.io
       testConnection = ->
-        socket = io.connect()
+        if constants.SOCKET_PORT
+          socket = io.connect("#{location.protocol}//#{location.hostname}:#{constants.SOCKET_PORT}")
+        else
+          socket = io.connect()
         socket.on 'connect', ->
           vm.connection true
           socket.disconnect()

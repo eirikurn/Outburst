@@ -143,7 +143,10 @@ class Game
     @resizeToFit()
 
   initSocket: ->
-    @socket = io.connect('/game')
+    if constants.SOCKET_PORT
+      @socket = io.connect("#{location.protocol}//#{location.hostname}:#{constants.SOCKET_PORT}/game")
+    else
+      @socket = io.connect('/game')
     utils.addCompression(@socket)
 
     @socket.on 'welcome', @joinedServer

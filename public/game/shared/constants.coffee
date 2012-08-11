@@ -1,6 +1,8 @@
 ((exports)->
 
   # Game loop and network constants
+  exports.SOCKET_PORT = 8080
+
   exports.TICKS_PER_SECOND = 50
   exports.TIME_PER_TICK = 1 / exports.TICKS_PER_SECOND
 
